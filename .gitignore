@@ -1,0 +1,23 @@
+# 비밀/키 (절대 커밋 금지)
+.env
+*.key
+*.pem
+secrets*
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Obsidian 로컬 캐시 (워크스페이스 상태만 제외, 설정은 공유 가능)
+.obsidian/workspace*
+.obsidian/cache
+
+# 브레인스토밍 임시 산출물
+.superpowers/
+
+# 파이썬 등 빌드 산출물
+__pycache__/
+*.pyc
+.venv/
+node_modules/
