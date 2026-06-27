@@ -20,7 +20,8 @@ def run_wiki(items_store: str = "state/items.jsonl",
     new = [it for it in items if seen.is_new(it.id)]
     for it in new:
         try:
-            topics = classify(it, known)
+            # 파이프라인 결합 호출로 이미 분류된 항목은 LLM 재호출 없이 재사용
+            topics = it.categories if it.categories else classify(it, known)
         except Exception as e:
             print(f"[skip] 분류 실패 {it.title[:30]}: {e}")
             continue
