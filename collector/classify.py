@@ -2,17 +2,20 @@ from typing import List
 from .models import Item
 from .summarize import _default_clients, _is_quota_error
 
+CATEGORIES = ["AI 모델·기술", "AI 비즈니스·투자", "AI 활용·도구",
+              "한국 AI·스타트업", "인프라·에너지", "인재·일의 미래", "기타"]
+
 CLASSIFY_PROMPT = (
-    "다음 글을 1~3개의 주제로 분류해라. 기존 주제 목록에 맞는 게 있으면 가능한 그 중에서 고르고, "
-    "없으면 새 주제명을 만들어라. 주제명은 짧은 한국어 명사구. "
-    "쉼표로 구분해 주제명만 출력해라(설명·번호 금지).\n\n"
-    "기존 주제: {known}\n제목: {title}\n요약: {summary}"
+    "다음 카테고리 중 가장 맞는 것 1개(최대 2개)만 골라라. 목록에 없으면 '기타'. "
+    "카테고리명만 쉼표로 출력.\n\n"
+    "카테고리: {categories}\n제목: {title}\n요약: {summary}"
 )
 
 def classify_item(item: Item, known_topics: List[str], client=None, clients=None,
                   model: str = "gemini-2.5-flash-lite") -> List[str]:
+    categories = known_topics or CATEGORIES
     prompt = CLASSIFY_PROMPT.format(
-        known=", ".join(known_topics) or "(없음)",
+        categories=", ".join(categories),
         title=item.title, summary=item.summary or item.raw_text[:500])
     cands = [client] if client is not None else (clients if clients is not None else _default_clients())
     last = None
@@ -22,7 +25,8 @@ def classify_item(item: Item, known_topics: List[str], client=None, clients=None
                 model=model, messages=[{"role": "user", "content": prompt}])
             text = resp.choices[0].message.content.strip()
             parts = [p.strip().lstrip("#").strip() for p in text.replace("\n", ",").split(",")]
-            return [p for p in parts if p][:3]
+            valid = [p for p in parts if p in CATEGORIES][:2]
+            return valid or ["기타"]
         except Exception as e:
             last = e
             if _is_quota_error(e):
