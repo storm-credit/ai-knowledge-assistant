@@ -12,3 +12,4 @@ class Item:
     raw_text: str = ""     # 요약 대상 원문(설명/자막)
     summary: str = ""      # 채워질 요약
     tags: List[str] = field(default_factory=list)
+    categories: List[str] = field(default_factory=list)   # 고정 카테고리 분류 결과

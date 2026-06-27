@@ -16,3 +16,13 @@ def test_append_and_load_roundtrip(tmp_path):
 
 def test_load_missing_returns_empty(tmp_path):
     assert load_items(str(tmp_path / "none.jsonl")) == []
+
+def test_load_old_style_line_defaults_categories(tmp_path):
+    # 구버전 jsonl 줄은 categories 키가 없음 → 기본값 [] 적용 (하위호환)
+    p = tmp_path / "items.jsonl"
+    p.write_text(
+        '{"source_name":"조코딩","source_type":"youtube","id":"a","title":"제목",'
+        '"link":"http://a","published":"","raw_text":"","summary":"요약","tags":[]}\n',
+        encoding="utf-8")
+    out = load_items(str(p))
+    assert len(out) == 1 and out[0].categories == []
