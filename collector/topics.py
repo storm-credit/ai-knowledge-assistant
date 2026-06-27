@@ -61,12 +61,22 @@ def render_page(topic: str, t: dict) -> str:
 def write_pages(store: "TopicStore", out_dir: str) -> list:
     os.makedirs(out_dir, exist_ok=True)
     paths = []
+    current = set()
     for topic, t in store.data.items():
         safe = _re.sub(r'[\\/:*?"<>|]', "_", topic).strip() or "untitled"
-        p = os.path.join(out_dir, f"{safe}.md")
+        fname = f"{safe}.md"
+        current.add(fname)
+        p = os.path.join(out_dir, fname)
         with open(p, "w", encoding="utf-8") as f:
             f.write(render_page(topic, t))
         paths.append(p)
+    # 스테일 정리: 현재 주제도, 목차(00-목차.md)도 아닌 .md 파일 삭제 (분류 체계 바뀔 때 고아 파일 방지)
+    for fn in os.listdir(out_dir):
+        if fn.endswith(".md") and fn not in current and fn != "00-목차.md":
+            try:
+                os.remove(os.path.join(out_dir, fn))
+            except OSError:
+                pass
     return paths
 
 def render_index(store: "TopicStore") -> str:
