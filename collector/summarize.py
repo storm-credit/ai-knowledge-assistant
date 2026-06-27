@@ -14,16 +14,17 @@ def _load_env():
         pass
 
 def _api_keys():
-    """GEMINI_API_KEY, GEMINI_API_KEY_2, _3 ... 순서로 모든 키 수집 (로테이션용)."""
+    """GEMINI_API_KEY 및 GEMINI_API_KEY_1.._N 을 모두 수집 (로테이션용).
+    빈 값은 건너뛰고 중복은 제거한다."""
     _load_env()
-    keys = []
-    base = os.environ.get("GEMINI_API_KEY")
-    if base:
-        keys.append(base)
-    i = 2
-    while os.environ.get(f"GEMINI_API_KEY_{i}"):
-        keys.append(os.environ[f"GEMINI_API_KEY_{i}"])
-        i += 1
+    candidates = [os.environ.get("GEMINI_API_KEY")]
+    for i in range(1, 11):
+        candidates.append(os.environ.get(f"GEMINI_API_KEY_{i}"))
+    keys, seen = [], set()
+    for v in candidates:
+        if v and v.strip() and v.strip() not in seen:
+            seen.add(v.strip())
+            keys.append(v.strip())
     return keys
 
 def _default_clients():
