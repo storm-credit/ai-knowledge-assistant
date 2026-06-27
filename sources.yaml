@@ -1,0 +1,23 @@
+# 수집 출처 설정 — 추가/삭제는 여기 한 곳만 수정하면 됨.
+# 유튜브: channel_id(UC...)는 채널 페이지에서 확인. (현재 값은 검증됨)
+youtube:
+  - name: 노정석
+    channel_id: UCz-BiVywYdO6iXhjXkw_Kgw
+  - name: 윤자동
+    channel_id: UCYg51KBo-UcA4QILcYl5LEw
+  - name: 조코딩
+    channel_id: UCQNE2JmbasNYbjGAcuBiRRg
+  - name: TTimesTV
+    channel_id: UCelFN6fJ6OY6v8pbc_SLiXA
+  - name: 안될공학
+    channel_id: UCeN2YeJcBCRJoXgzF_OU3qw
+
+newsletters:
+  - name: SaaStr
+    rss: https://www.saastr.com/feed
+  - name: Lenny's Newsletter
+    rss: https://www.lennysnewsletter.com/feed
+  - name: a16z
+    rss: https://a16z.com/feed/
+  # - name: All Star SaaS (일본어)   # RSS 주소 확인되면 추가
+  #   rss: https://...
