@@ -4,6 +4,11 @@ from .models import Item
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
 
 def _default_client():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()  # 프로젝트 루트의 .env에서 GEMINI_API_KEY 로드 (있으면)
+    except ImportError:
+        pass
     from openai import OpenAI
     return OpenAI(api_key=os.environ["GEMINI_API_KEY"], base_url=GEMINI_BASE)
 
