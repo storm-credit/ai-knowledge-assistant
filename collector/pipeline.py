@@ -6,14 +6,14 @@ from .models import Item
 from .state import StateStore
 from .feeds import fetch_feed
 from .enrich import enrich_youtube
-from .summarize import summarize_item
+from .summarize import summarize_item, summarize_and_classify
 from .digest import write_digest
 from .store import append_items
 
 def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
         fetch: Callable[[Source], List[Item]] = fetch_feed,
         enrich: Callable[[Item], Item] = enrich_youtube,
-        summarize: Callable[[Item], Item] = summarize_item,
+        summarize: Callable[[Item], Item] = summarize_and_classify,
         limit_per_feed: int = 5,
         sleep: Callable[[float], None] = time.sleep,
         throttle_seconds: float = 5.0,
