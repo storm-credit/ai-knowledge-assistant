@@ -68,3 +68,18 @@ def write_pages(store: "TopicStore", out_dir: str) -> list:
             f.write(render_page(topic, t))
         paths.append(p)
     return paths
+
+def render_index(store: "TopicStore") -> str:
+    lines = ["# 📚 목차", ""]
+    topics = sorted(store.data.items(), key=lambda kv: len(kv[1]["items"]), reverse=True)
+    for topic, t in topics:
+        lines.append(f"- [[{topic}]] — {len(t['items'])}건 · {len(t['sources'])}개 출처")
+    lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
+
+def write_index(store: "TopicStore", out_dir: str) -> str:
+    os.makedirs(out_dir, exist_ok=True)
+    p = os.path.join(out_dir, "00-목차.md")
+    with open(p, "w", encoding="utf-8") as f:
+        f.write(render_index(store))
+    return p
