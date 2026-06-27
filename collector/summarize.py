@@ -22,7 +22,7 @@ PROMPT = (
     "제목: {title}\n출처: {source}\n내용:\n{body}"
 )
 
-def summarize_item(item: Item, client=None, model: str = "gemini-2.5-flash") -> Item:
+def summarize_item(item: Item, client=None, model: str = "gemini-2.5-flash-lite") -> Item:
     client = client or _default_client()
     body = (item.raw_text or item.title)[:6000]
     resp = client.chat.completions.create(
