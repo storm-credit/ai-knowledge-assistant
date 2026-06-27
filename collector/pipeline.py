@@ -8,6 +8,7 @@ from .feeds import fetch_feed
 from .enrich import enrich_youtube
 from .summarize import summarize_item
 from .digest import write_digest
+from .store import append_items
 
 def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
         fetch: Callable[[Source], List[Item]] = fetch_feed,
@@ -15,7 +16,8 @@ def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
         summarize: Callable[[Item], Item] = summarize_item,
         limit_per_feed: int = 5,
         sleep: Callable[[float], None] = time.sleep,
-        throttle_seconds: float = 5.0) -> str:
+        throttle_seconds: float = 5.0,
+        items_store: str = "state/items.jsonl") -> str:
     new_items: List[Item] = []
     for src in (cfg.youtube + cfg.newsletters):
         try:
@@ -39,6 +41,7 @@ def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
             state.mark_seen(it.id)
 
     if new_items:
+        append_items(new_items, items_store)
         path = write_digest(new_items, date=date, out_dir=out_dir)
     else:
         # 새 항목 0건이면 기존 다이제스트를 덮어쓰지 않음

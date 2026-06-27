@@ -23,7 +23,7 @@ def test_run_skips_seen_and_writes_only_new(tmp_path):
 
     path = run(cfg, state, out_dir=str(tmp_path / "out"), date="2026-06-27",
                fetch=fake_fetch, summarize=fake_summarize, enrich=lambda i: i,
-               sleep=lambda *_: None)
+               sleep=lambda *_: None, items_store=str(tmp_path / "items.jsonl"))
 
     with open(path, encoding="utf-8") as f:
         content = f.read()
@@ -52,7 +52,8 @@ def test_limit_per_feed_only_processes_newest(tmp_path):
 
     path = run(cfg, state, out_dir=str(tmp_path / "out"), date="2026-06-27",
                fetch=fake_fetch, summarize=fake_summarize, enrich=lambda i: i,
-               limit_per_feed=1, sleep=lambda *_: None)
+               limit_per_feed=1, sleep=lambda *_: None,
+               items_store=str(tmp_path / "items.jsonl"))
 
     with open(path, encoding="utf-8") as f:
         content = f.read()
@@ -88,7 +89,8 @@ def test_throttle_sleep_called_once_per_summarized_item(tmp_path):
 
     run(cfg, state, out_dir=str(tmp_path / "out"), date="2026-06-27",
         fetch=fake_fetch, summarize=fake_summarize, enrich=lambda i: i,
-        sleep=fake_sleep, throttle_seconds=5.0)
+        sleep=fake_sleep, throttle_seconds=5.0,
+        items_store=str(tmp_path / "items.jsonl"))
 
     assert calls["n"] == 2   # 새 항목 2개만 요약됨 → sleep 2회 (skip 항목 제외)
 
