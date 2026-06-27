@@ -71,3 +71,54 @@ def summarize_item(item: Item, client=None, model: str = "gemini-2.5-flash-lite"
                 continue          # 쿼터 초과 → 다음 키로 로테이션
             raise                 # 다른 에러는 즉시 중단
     raise last_err                # 모든 키가 쿼터 초과
+
+SUMMARIZE_CLASSIFY_PROMPT = (
+    "다음 콘텐츠를 한국어로 3줄 이내로 핵심만 요약하라. "
+    "원문에 있는 내용만 사용하고, 없는 사실은 절대 지어내지 마라. "
+    "그리고 마지막 줄에 '카테고리: '로 시작해 아래 목록 중 가장 맞는 것 1개(최대 2개)만 쉼표로 적어라. "
+    "목록에 없으면 '기타'.\n\n"
+    "카테고리 목록: {categories}\n\n"
+    "제목: {title}\n출처: {source}\n내용:\n{body}"
+)
+
+def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-flash-lite",
+                           clients=None, categories=None) -> Item:
+    """요약과 카테고리 분류를 한 번의 LLM 호출로 처리한다 (호출 수 절감)."""
+    from .classify import CATEGORIES
+    cats = categories if categories is not None else CATEGORIES
+    body = (item.raw_text or item.title)[:6000]
+    messages = [{"role": "user", "content": SUMMARIZE_CLASSIFY_PROMPT.format(
+        categories=", ".join(cats), title=item.title,
+        source=item.source_name, body=body)}]
+    if client is not None:
+        candidates = [client]
+    elif clients is not None:
+        candidates = clients
+    else:
+        candidates = _default_clients()
+    if not candidates:
+        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
+
+    last_err = None
+    for c in candidates:
+        try:
+            resp = c.chat.completions.create(model=model, messages=messages)
+            text = resp.choices[0].message.content.strip()
+            summary_lines, found = [], []
+            for line in text.splitlines():
+                s = line.strip()
+                if s.startswith("카테고리:"):
+                    found = [x.strip().lstrip("#").strip()
+                             for x in s[len("카테고리:"):].split(",")]
+                else:
+                    summary_lines.append(line)
+            item.summary = "\n".join(summary_lines).strip()
+            valid = [p for p in found if p in CATEGORIES][:2]
+            item.categories = valid or ["기타"]
+            return item
+        except Exception as e:
+            last_err = e
+            if _is_quota_error(e):
+                continue          # 쿼터 초과 → 다음 키로 로테이션
+            raise                 # 다른 에러는 즉시 중단
+    raise last_err                # 모든 키가 쿼터 초과
