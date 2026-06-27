@@ -1,7 +1,7 @@
 from typing import Callable, List
 from .store import load_items
 from .state import StateStore
-from .topics import TopicStore, write_pages
+from .topics import TopicStore, write_pages, write_index
 from .classify import classify_item
 from .wikisynth import synthesize_overview
 
@@ -41,5 +41,6 @@ def run_wiki(items_store: str = "state/items.jsonl",
     store.save()
     seen.save()
     paths = write_pages(store, out_dir)
+    write_index(store, out_dir)
     print(f"[wiki] {len(new)}건 분류, {len(paths)}개 주제 페이지 → {out_dir}")
     return paths

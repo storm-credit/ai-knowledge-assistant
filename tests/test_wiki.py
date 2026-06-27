@@ -31,3 +31,22 @@ def test_run_wiki_classifies_and_writes(tmp_path):
     import json
     cl = json.load(open(str(tmp_path/"classified.json"), encoding="utf-8"))
     assert set(cl["seen"]) == {"a", "b"}
+
+def test_run_wiki_writes_index(tmp_path):
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk("a","에이전트 글"), mk("b","Claude 글")], items_store)
+
+    def fake_classify(item, known):
+        return ["AI 에이전트"] if "에이전트" in item.title else ["Claude"]
+    def fake_synth(topic, items): return (f"{topic} 개요", ["기타"])
+
+    run_wiki(items_store=items_store,
+             classified_state=str(tmp_path/"classified.json"),
+             topics_path=str(tmp_path/"topics.json"),
+             out_dir=str(tmp_path/"topics"),
+             classify=fake_classify, synthesize=fake_synth, resynth_threshold=1)
+
+    import os
+    index = tmp_path/"topics"/"00-목차.md"
+    assert os.path.exists(str(index))
+    assert "# 📚 목차" in index.read_text(encoding="utf-8")
