@@ -1,5 +1,4 @@
-# 수집 출처 설정 — 추가/삭제는 여기 한 곳만 수정하면 됨.
-# 유튜브: channel_id(UC...)는 채널 페이지에서 확인. (현재 값은 검증됨)
+# 수집 출처 설정 — 추가/삭제는 여기 한 곳만 수정.
 youtube:
   - name: 노정석
     channel_id: UCz-BiVywYdO6iXhjXkw_Kgw
@@ -19,5 +18,3 @@ newsletters:
     rss: https://www.lennysnewsletter.com/feed
   - name: a16z
     rss: https://a16z.com/feed/
-  # - name: All Star SaaS (일본어)   # RSS 주소 확인되면 추가
-  #   rss: https://...

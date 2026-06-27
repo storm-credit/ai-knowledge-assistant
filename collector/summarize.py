@@ -3,17 +3,36 @@ from .models import Item
 
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
 
-def _default_client():
+def _load_env():
     try:
         from dotenv import load_dotenv
-        load_dotenv()  # 1순위: 프로젝트 루트의 .env (있으면)
+        load_dotenv()  # 1순위: 프로젝트 루트 .env
         if "GEMINI_API_KEY" not in os.environ:
-            # 2순위: Hermes 설정의 기존 키 재사용 (별도 입력 불필요)
+            # 2순위: Hermes 설정의 기존 키 재사용
             load_dotenv(os.path.expanduser("~/.hermes/.env"))
     except ImportError:
         pass
+
+def _api_keys():
+    """GEMINI_API_KEY, GEMINI_API_KEY_2, _3 ... 순서로 모든 키 수집 (로테이션용)."""
+    _load_env()
+    keys = []
+    base = os.environ.get("GEMINI_API_KEY")
+    if base:
+        keys.append(base)
+    i = 2
+    while os.environ.get(f"GEMINI_API_KEY_{i}"):
+        keys.append(os.environ[f"GEMINI_API_KEY_{i}"])
+        i += 1
+    return keys
+
+def _default_clients():
     from openai import OpenAI
-    return OpenAI(api_key=os.environ["GEMINI_API_KEY"], base_url=GEMINI_BASE)
+    return [OpenAI(api_key=k, base_url=GEMINI_BASE) for k in _api_keys()]
+
+def _is_quota_error(e) -> bool:
+    s = str(e).lower()
+    return "429" in s or "resource_exhausted" in s or "quota" in s
 
 PROMPT = (
     "다음 콘텐츠를 한국어로 3줄 이내로 핵심만 요약하고, 마지막 줄에 "
@@ -22,13 +41,30 @@ PROMPT = (
     "제목: {title}\n출처: {source}\n내용:\n{body}"
 )
 
-def summarize_item(item: Item, client=None, model: str = "gemini-2.5-flash-lite") -> Item:
-    client = client or _default_client()
+def summarize_item(item: Item, client=None, model: str = "gemini-2.5-flash-lite",
+                   clients=None) -> Item:
     body = (item.raw_text or item.title)[:6000]
-    resp = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": PROMPT.format(
-            title=item.title, source=item.source_name, body=body)}],
-    )
-    item.summary = resp.choices[0].message.content.strip()
-    return item
+    messages = [{"role": "user", "content": PROMPT.format(
+        title=item.title, source=item.source_name, body=body)}]
+    # 후보 키(클라이언트): 주입 client 우선(테스트) → clients → 환경의 모든 키
+    if client is not None:
+        candidates = [client]
+    elif clients is not None:
+        candidates = clients
+    else:
+        candidates = _default_clients()
+    if not candidates:
+        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
+
+    last_err = None
+    for c in candidates:
+        try:
+            resp = c.chat.completions.create(model=model, messages=messages)
+            item.summary = resp.choices[0].message.content.strip()
+            return item
+        except Exception as e:
+            last_err = e
+            if _is_quota_error(e):
+                continue          # 쿼터 초과 → 다음 키로 로테이션
+            raise                 # 다른 에러는 즉시 중단
+    raise last_err                # 모든 키가 쿼터 초과
