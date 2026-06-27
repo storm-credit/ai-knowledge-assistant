@@ -1,3 +1,4 @@
+import os
 from collector.config import SourcesConfig, Source
 from collector.models import Item
 from collector.state import StateStore
@@ -90,3 +91,47 @@ def test_throttle_sleep_called_once_per_summarized_item(tmp_path):
         sleep=fake_sleep, throttle_seconds=5.0)
 
     assert calls["n"] == 2   # 새 항목 2개만 요약됨 → sleep 2회 (skip 항목 제외)
+
+
+def test_summarize_failure_keeps_item_retryable(tmp_path):
+    cfg = SourcesConfig(
+        youtube=[],
+        newsletters=[Source(name="SaaStr", rss="x", type="newsletter")])
+    state = StateStore(str(tmp_path / "seen.json"))
+
+    def fake_fetch(src):
+        return [Item(source_name=src.name, source_type=src.type, id="q1",
+                     title="쿼터초과예정", link="l1", published="", raw_text="원문")]
+
+    def boom(item):
+        raise RuntimeError("429 quota exceeded")
+
+    path = run(cfg, state, out_dir=str(tmp_path / "out"), date="2026-06-27",
+               fetch=fake_fetch, summarize=boom, enrich=lambda i: i,
+               sleep=lambda *_: None)
+
+    assert state.is_new("q1") is True          # 실패 항목은 seen 처리 안 됨 → 재시도 가능
+    assert not os.path.exists(path)            # 성공 0건 → 다이제스트 안 만듦
+
+
+def test_no_new_items_does_not_overwrite_existing_digest(tmp_path):
+    cfg = SourcesConfig(
+        youtube=[],
+        newsletters=[Source(name="SaaStr", rss="x", type="newsletter")])
+    state = StateStore(str(tmp_path / "seen.json"))
+    state.mark_seen("a")
+    out = tmp_path / "out"
+    out.mkdir()
+    existing = out / "2026-06-27.md"
+    existing.write_text("# 기존 다이제스트\n소중한 내용", encoding="utf-8")
+
+    def fake_fetch(src):
+        return [Item(source_name=src.name, source_type=src.type, id="a",
+                     title="이미봄", link="l", published="")]
+
+    run(cfg, state, out_dir=str(out), date="2026-06-27",
+        fetch=fake_fetch, summarize=lambda i: i, enrich=lambda i: i,
+        sleep=lambda *_: None)
+
+    # 0건 재실행이 기존 내용을 덮어쓰지 않음
+    assert existing.read_text(encoding="utf-8") == "# 기존 다이제스트\n소중한 내용"
