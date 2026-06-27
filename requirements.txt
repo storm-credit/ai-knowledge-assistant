@@ -1,6 +1,6 @@
 feedparser==6.0.11
 youtube-transcript-api==0.6.2
-openai==1.51.0
+openai==2.44.0
 PyYAML==6.0.2
 python-dotenv==1.0.1
 pytest==8.3.3
