@@ -1,4 +1,12 @@
 import sys, datetime
+
+# Windows 콘솔(cp949)에서 이모지/특수문자 print 시 죽는 것 방지
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 from .config import load_sources
 from .state import StateStore
 from .pipeline import run
