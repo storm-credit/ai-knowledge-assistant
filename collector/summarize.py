@@ -6,7 +6,10 @@ GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
 def _default_client():
     try:
         from dotenv import load_dotenv
-        load_dotenv()  # 프로젝트 루트의 .env에서 GEMINI_API_KEY 로드 (있으면)
+        load_dotenv()  # 1순위: 프로젝트 루트의 .env (있으면)
+        if "GEMINI_API_KEY" not in os.environ:
+            # 2순위: Hermes 설정의 기존 키 재사용 (별도 입력 불필요)
+            load_dotenv(os.path.expanduser("~/.hermes/.env"))
     except ImportError:
         pass
     from openai import OpenAI
