@@ -6,7 +6,7 @@
 - **한 줄 정의:** AI 관련 정보를 매일 자동 수집·요약·저장하고, 아침 요약·Q&A·위키로 활용하는 나만의 지식 시스템
 - **엔진:** Hermes Agent (로컬 Docker)
 - **작성 시작:** 2026-06-26
-- **현재 단계:** 구현 계획(3단계) ✅ 작성됨 → 구현(4단계) 실행 대기
+- **현재 단계:** 🎉 1단계 **가동 중(LIVE)** — 매일 05:00 자동 수집·요약. 첫 실행 34건 요약 성공.
 - **GitHub:** https://github.com/storm-credit/ai-knowledge-assistant
 
 > 📘 **[`PLAYBOOK.md`](PLAYBOOK.md)** — 이 진행 방식을 일반화한 **재사용 템플릿**. 다음 프로젝트 때 이걸 복사해서 쓰면 됨.
@@ -18,7 +18,7 @@
 | 1 | 컨셉 / 아키텍처 | [`01-concept-and-architecture.md`](01-concept-and-architecture.md) | ✅ 확정 |
 | 2 | 요구사항 정의서 | [`02-requirements-spec.md`](02-requirements-spec.md) | ✅ 확정 (결정 5개 완료) |
 | 3 | 구현 계획 (구성요소표·작업분해) | [`03-implementation-plan.md`](03-implementation-plan.md) | ✅ 작성됨 (11개 태스크, TDD) |
-| 4 | 구현 / 개발 | (collector 패키지 + 스케줄) | ⏳ 실행 대기 |
+| 4 | 구현 / 개발 | (collector 패키지 + 스케줄) | ✅ 완료·가동 중 (16 테스트, 3키 로테이션, 새벽5시 스케줄) |
 
 ## 핵심 원칙 (왜 이렇게 가나)
 
