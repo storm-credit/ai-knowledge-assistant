@@ -98,6 +98,9 @@ def render_page(topic: str, t: dict) -> str:
     if themes:
         used = set()
         for th in themes:
+            resolved = [by_id[iid] for iid in th.get("item_ids", []) if iid in by_id]
+            if not resolved:
+                continue   # 해결되는 항목이 하나도 없으면 헤딩 생략
             lines.append(f"## {th['name']}")
             if th.get("intro"):
                 lines.append(th["intro"]); lines.append("")
@@ -143,7 +146,7 @@ def write_pages(store: "TopicStore", out_dir: str) -> list:
             with open(p, encoding="utf-8") as f:
                 old = f.read()
             old_memo = _extract_memo(old)
-            if old_memo and old_memo != DEFAULT_MEMO:
+            if old_memo is not None and old_memo != DEFAULT_MEMO:
                 content = _replace_memo(content, old_memo)
         with open(p, "w", encoding="utf-8") as f:
             f.write(content)
@@ -151,8 +154,22 @@ def write_pages(store: "TopicStore", out_dir: str) -> list:
     # 스테일 정리: 현재 주제도, 목차(00-목차.md)도 아닌 .md 파일 삭제 (분류 체계 바뀔 때 고아 파일 방지)
     for fn in os.listdir(out_dir):
         if fn.endswith(".md") and fn not in current and fn != "00-목차.md":
+            fp = os.path.join(out_dir, fn)
             try:
-                os.remove(os.path.join(out_dir, fn))
+                with open(fp, encoding="utf-8") as f:
+                    text = f.read()
+            except OSError:
+                continue
+            # 외부/사용자 파일(메모 마커 없음)은 건드리지 않음
+            if MEMO_START not in text:
+                continue
+            # 사용자가 편집한 메모(기본/빈값 아님)가 있으면 보존
+            memo = _extract_memo(text)
+            if memo not in (None, "", DEFAULT_MEMO):
+                continue
+            # 우리가 생성했고 메모가 기본/빈값인 스테일 페이지만 삭제
+            try:
+                os.remove(fp)
             except OSError:
                 pass
     return paths

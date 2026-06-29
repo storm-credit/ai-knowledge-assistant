@@ -34,3 +34,19 @@ def test_render_themed_page(tmp_path):
     assert "[글1](http://1)" in md and "요약1" in md       # 테마 안 항목+내용
     assert "## 짚어둘 단신" in md and "[글2](http://2)" in md  # 단신
     assert "[[Claude]]" in md
+
+
+def test_render_skips_empty_theme_heading(tmp_path):
+    # item_ids가 전부 미해결인 테마는 헤딩을 내보내지 않는다 (Fix 9)
+    from collector.models import Item
+    from collector.topics import TopicStore, render_page
+    s = TopicStore(str(tmp_path/"t.json"))
+    s.add_item("AI", Item(source_name="s", source_type="x", id="real",
+        title="진짜글", link="http://r", published="2026-06-29", summary="요약"))
+    s.data["AI"]["themes"] = [
+        {"name":"실재테마", "intro":"있음", "item_ids":["real"]},
+        {"name":"빈테마", "intro":"없음", "item_ids":["없는id1","없는id2"]},
+    ]
+    md = render_page("AI", s.data["AI"])
+    assert "## 실재테마" in md        # 항목이 있는 테마는 표시
+    assert "## 빈테마" not in md      # 미해결 항목뿐인 테마는 헤딩 없음
