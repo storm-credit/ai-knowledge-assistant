@@ -52,7 +52,7 @@ def complete_text(messages, client=None, clients=None, model: str = "gemini-2.5-
     last = None
     for c in cands:
         try:
-            return c.chat.completions.create(model=model, messages=messages).choices[0].message.content
+            return c.chat.completions.create(model=model, messages=messages).choices[0].message.content or ""
         except Exception as e:
             last = e
             if _is_quota_error(e):
