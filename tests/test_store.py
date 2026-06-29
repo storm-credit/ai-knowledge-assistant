@@ -26,3 +26,14 @@ def test_load_old_style_line_defaults_categories(tmp_path):
         encoding="utf-8")
     out = load_items(str(p))
     assert len(out) == 1 and out[0].categories == []
+
+def test_load_ignores_unknown_keys(tmp_path):
+    # 알 수 없는 키가 있어도 크래시 없이 로드 (Fix 5)
+    p = tmp_path / "items.jsonl"
+    p.write_text(
+        '{"source_name":"조코딩","source_type":"youtube","id":"a","title":"제목",'
+        '"link":"http://a","published":"","raw_text":"","summary":"요약","tags":[],'
+        '"bogus":1}\n',
+        encoding="utf-8")
+    out = load_items(str(p))
+    assert len(out) == 1 and out[0].id == "a"
