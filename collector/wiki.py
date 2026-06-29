@@ -32,7 +32,7 @@ def run_wiki(items_store: str = "state/items.jsonl",
         seen.mark_seen(it.id)
 
     for tp in store.topic_names():
-        if store.needs_resynth(tp, resynth_threshold) or not store.data[tp].get("themes"):
+        if store.needs_resynth(tp, resynth_threshold) or not store.data[tp].get("synthesized"):
             try:
                 r = synthesize(tp, store.data[tp]["items"])
                 store.set_structure(tp, r["overview"], r["themes"], r["orphans"], r["related"])

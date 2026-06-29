@@ -95,3 +95,26 @@ def test_run_wiki_builds_themes(tmp_path):
     assert d["themes"][0]["name"] == "테마"
     assert d["themes"][0]["item_ids"] == ["id1"]
     assert d["orphans"] == ["id2"]
+
+
+def test_run_wiki_no_resynth_when_zero_themes(tmp_path):
+    # 테마가 0개로 합성돼도 synthesized 플래그가 서므로 다음 실행에서 재합성 안 함 (쿼터 절약)
+    from collector.models import Item
+    from collector.store import append_items
+    from collector.wiki import run_wiki
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([Item(source_name="s", source_type="x", id="id1", title="T1",
+                       link="http://1", published="2026-06-29", summary="s1",
+                       categories=["AI"])], items_store)
+    calls = {"n": 0}
+    def fake_struct(topic, items):
+        calls["n"] += 1
+        return {"overview":"개요","themes":[],"orphans":[],"related":[]}
+    kw = dict(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+              topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+              classify=lambda it,k: it.categories, synthesize=fake_struct,
+              resynth_threshold=99)   # needs_resynth 비활성
+    run_wiki(**kw)
+    assert calls["n"] == 1            # 첫 실행에 1회 합성
+    run_wiki(**kw)
+    assert calls["n"] == 1            # 두 번째 실행에선 재합성 안 함 (플래그 가드)
