@@ -40,7 +40,7 @@ def classify_item(item: Item, known_topics: List[str], client=None, clients=None
                 model=model, messages=[{"role": "user", "content": prompt}])
             text = resp.choices[0].message.content.strip()
             parts = [p.strip().lstrip("#").strip() for p in text.replace("\n", ",").split(",")]
-            valid = [p for p in parts if p in cats][:2]
+            valid = [p for p in parts if p in categories][:2]
             return valid or ["기타"]
         except Exception as e:
             last = e
