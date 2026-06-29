@@ -50,10 +50,16 @@ def render_page(topic: str, t: dict) -> str:
     if t.get("overview"):
         lines += ["## 개요", t["overview"], ""]
     lines.append("## 관련 소식")
+    lines.append("")
     for it in reversed(t["items"]):   # 최신 먼저
         date = (it.get("date") or "")[:10]
-        lines.append(f"- {date} · {it['source']}: [{it['title']}]({it['link']})")
-    lines.append("")
+        lines.append(f"### [{it['title']}]({it['link']})")
+        lines.append(f"{it['source']} · {date}")
+        summ = (it.get("summary") or "").strip()
+        if summ:
+            lines.append("")
+            lines.append(summ)
+        lines.append("")
     if t.get("related"):
         lines += ["## 관련 주제", " · ".join(f"[[{r}]]" for r in t["related"]), ""]
     return "\n".join(lines).rstrip() + "\n"
