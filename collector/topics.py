@@ -37,6 +37,19 @@ class TopicStore:
         t["related"] = related
         t["new_since_synth"] = 0
 
+    def set_structure(self, topic: str, overview: str, themes: list,
+                      orphans: list, related: list) -> None:
+        t = self.data[topic]
+        items = t["items"]
+        def to_ids(idxs):
+            return [items[i-1]["id"] for i in idxs if isinstance(i, int) and 1 <= i <= len(items)]
+        t["overview"] = overview
+        t["themes"] = [{"name": th["name"], "intro": th.get("intro", ""),
+                        "item_ids": to_ids(th.get("indexes", []))} for th in themes]
+        t["orphans"] = to_ids(orphans)
+        t["related"] = related
+        t["new_since_synth"] = 0
+
     def save(self) -> None:
         os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
         with open(self.path, "w", encoding="utf-8") as f:
