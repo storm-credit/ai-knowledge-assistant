@@ -14,6 +14,8 @@ def synthesize_overview(topic: str, items: List[dict], client=None, clients=None
     body = "\n".join(f"- {i.get('title','')}: {i.get('summary','')}" for i in items)[:8000]
     prompt = SYNTH_PROMPT.format(topic=topic, items=body)
     cands = [client] if client is not None else (clients if clients is not None else _default_clients())
+    if not cands:
+        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
     last = None
     for c in cands:
         try:
@@ -68,10 +70,10 @@ def _parse_struct_json(text: str) -> dict:
     실패하거나 키가 없으면 빈 구조를 반환(호출부가 가드)."""
     empty = {"overview": "", "themes": [], "orphans": [], "related": []}
     s = (text or "").strip()
-    # ```json ... ``` / ``` ... ``` 펜스 제거
-    m = re.search(r"```(?:json)?\s*(.*?)\s*```", s, re.DOTALL)
-    if m:
-        s = m.group(1).strip()
+    # 펜스 제거 (열고 닫는 쌍이 안 맞아도 각각 독립적으로 제거)
+    s = re.sub(r'^```(?:json)?\s*', '', s)
+    s = re.sub(r'\s*```$', '', s)
+    s = s.strip()
     try:
         data = json.loads(s)
     except (json.JSONDecodeError, ValueError):
@@ -102,6 +104,8 @@ def synthesize_structure(topic: str, items: List[dict], client=None, clients=Non
                          for i, it in enumerate(items))[:8000]
     prompt = SYNTH_STRUCT_PROMPT.format(topic=topic, items=numbered)
     cands = [client] if client is not None else (clients if clients is not None else _default_clients())
+    if not cands:
+        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
     last = None
     for c in cands:
         try:

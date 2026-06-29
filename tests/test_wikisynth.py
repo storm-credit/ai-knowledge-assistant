@@ -52,6 +52,30 @@ def test_synthesize_structure_handles_fenced_json():
     assert out["orphans"] == [2]
 
 
+def test_synthesize_structure_handles_unclosed_fence():
+    # 닫는 펜스가 없어도 JSON을 파싱해야 한다 (Fix 2)
+    from collector.wikisynth import synthesize_structure
+    items = [{"title":"A","summary":"a"}]
+    out = synthesize_structure("AI", items, client=_FC(
+        '```json\n{"overview":"x","themes":[],"orphans":[],"related":[]}'))
+    assert out["overview"] == "x"
+
+
+def test_synthesize_structure_no_clients_raises_runtimeerror():
+    # 후보 클라이언트가 비면 RuntimeError (TypeError 아님) (Fix 6)
+    import pytest
+    from collector.wikisynth import synthesize_structure
+    with pytest.raises(RuntimeError):
+        synthesize_structure("AI", [{"title":"A","summary":"a"}], clients=[])
+
+
+def test_synthesize_overview_no_clients_raises_runtimeerror():
+    import pytest
+    from collector.wikisynth import synthesize_overview
+    with pytest.raises(RuntimeError):
+        synthesize_overview("AI", [{"title":"A","summary":"a"}], clients=[])
+
+
 def test_synthesize_structure_garbage_yields_empty():
     from collector.wikisynth import synthesize_structure
     items = [{"title":"A","summary":"a"}]
