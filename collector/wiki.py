@@ -3,14 +3,14 @@ from .store import load_items
 from .state import StateStore
 from .topics import TopicStore, write_pages, write_index
 from .classify import classify_item
-from .wikisynth import synthesize_overview
+from .wikisynth import synthesize_structure
 
 def run_wiki(items_store: str = "state/items.jsonl",
              classified_state: str = "state/classified.json",
              topics_path: str = "state/topics.json",
              out_dir: str = "notes/topics",
              classify: Callable = classify_item,
-             synthesize: Callable = synthesize_overview,
+             synthesize: Callable = synthesize_structure,
              resynth_threshold: int = 5) -> List[str]:
     items = load_items(items_store)
     seen = StateStore(classified_state)
@@ -32,12 +32,12 @@ def run_wiki(items_store: str = "state/items.jsonl",
         seen.mark_seen(it.id)
 
     for tp in store.topic_names():
-        if store.needs_resynth(tp, resynth_threshold) or not store.data[tp]["overview"]:
+        if store.needs_resynth(tp, resynth_threshold) or not store.data[tp].get("themes"):
             try:
-                ov, rel = synthesize(tp, store.data[tp]["items"])
-                store.set_overview(tp, ov, rel)
+                r = synthesize(tp, store.data[tp]["items"])
+                store.set_structure(tp, r["overview"], r["themes"], r["orphans"], r["related"])
             except Exception as e:
-                print(f"[skip] 개요 합성 실패 {tp}: {e}")
+                print(f"[skip] 구조 합성 실패 {tp}: {e}")
 
     store.save()
     seen.save()
