@@ -16,3 +16,4 @@ def test_set_structure_maps_indexes_to_ids(tmp_path):
     assert d["themes"][0]["item_ids"] == ["id1","id3"]   # 번호→id 매핑
     assert d["orphans"] == ["id4"]
     assert d["new_since_synth"] == 0                      # 카운터 리셋
+    assert d["synthesized"] is True                       # 합성 완료 플래그

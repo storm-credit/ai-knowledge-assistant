@@ -49,6 +49,7 @@ class TopicStore:
         t["orphans"] = to_ids(orphans)
         t["related"] = related
         t["new_since_synth"] = 0
+        t["synthesized"] = True
 
     def save(self) -> None:
         os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
