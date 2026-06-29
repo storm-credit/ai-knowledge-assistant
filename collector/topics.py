@@ -140,7 +140,9 @@ def write_pages(store: "TopicStore", out_dir: str) -> list:
         p = os.path.join(out_dir, fname)
         content = render_page(topic, t)
         if os.path.exists(p):
-            old_memo = _extract_memo(open(p, encoding="utf-8").read())
+            with open(p, encoding="utf-8") as f:
+                old = f.read()
+            old_memo = _extract_memo(old)
             if old_memo and old_memo != DEFAULT_MEMO:
                 content = _replace_memo(content, old_memo)
         with open(p, "w", encoding="utf-8") as f:
