@@ -59,6 +59,22 @@ class TopicStore:
 
 import re as _re
 
+MEMO_START = "<!-- memo:start -->"
+MEMO_END = "<!-- memo:end -->"
+DEFAULT_MEMO = "여기에 메모·정정을 적으세요. 자동 갱신해도 보존됩니다."
+
+def _extract_memo(text: str):
+    i = text.find(MEMO_START); j = text.find(MEMO_END)
+    if i != -1 and j != -1 and j > i:
+        return text[i + len(MEMO_START):j].strip()
+    return None
+
+def _replace_memo(text: str, memo: str) -> str:
+    i = text.find(MEMO_START); j = text.find(MEMO_END)
+    if i != -1 and j != -1 and j > i:
+        return text[:i + len(MEMO_START)] + "\n" + memo + "\n" + text[j:]
+    return text
+
 def _render_item(lines: list, it: dict) -> None:
     date = (it.get("date") or "")[:10]
     lines.append(f"### [{it['title']}]({it['link']})")
@@ -107,6 +123,8 @@ def render_page(topic: str, t: dict) -> str:
         for it in reversed(t["items"]):
             _render_item(lines, it)
 
+    lines += ["## ✍️ 내 메모", MEMO_START, DEFAULT_MEMO, MEMO_END, ""]
+
     if t.get("related"):
         lines += ["## 관련 주제", " · ".join(f"[[{r}]]" for r in t["related"]), ""]
     return "\n".join(lines).rstrip() + "\n"
@@ -120,8 +138,15 @@ def write_pages(store: "TopicStore", out_dir: str) -> list:
         fname = f"{safe}.md"
         current.add(fname)
         p = os.path.join(out_dir, fname)
+        content = render_page(topic, t)
+        if os.path.exists(p):
+            with open(p, encoding="utf-8") as f:
+                old = f.read()
+            old_memo = _extract_memo(old)
+            if old_memo and old_memo != DEFAULT_MEMO:
+                content = _replace_memo(content, old_memo)
         with open(p, "w", encoding="utf-8") as f:
-            f.write(render_page(topic, t))
+            f.write(content)
         paths.append(p)
     # 스테일 정리: 현재 주제도, 목차(00-목차.md)도 아닌 .md 파일 삭제 (분류 체계 바뀔 때 고아 파일 방지)
     for fn in os.listdir(out_dir):

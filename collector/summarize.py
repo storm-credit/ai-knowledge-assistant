@@ -85,8 +85,8 @@ SUMMARIZE_CLASSIFY_PROMPT = (
 def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-flash-lite",
                            clients=None, categories=None) -> Item:
     """요약과 카테고리 분류를 한 번의 LLM 호출로 처리한다 (호출 수 절감)."""
-    from .classify import CATEGORIES
-    cats = categories if categories is not None else CATEGORIES
+    from .classify import load_categories
+    cats = categories if categories is not None else load_categories()
     body = (item.raw_text or item.title)[:6000]
     messages = [{"role": "user", "content": SUMMARIZE_CLASSIFY_PROMPT.format(
         categories=", ".join(cats), title=item.title,
@@ -114,7 +114,7 @@ def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-fla
                 else:
                     summary_lines.append(line)
             item.summary = "\n".join(summary_lines).strip()
-            valid = [p for p in found if p in CATEGORIES][:2]
+            valid = [p for p in found if p in cats][:2]
             item.categories = valid or ["기타"]
             return item
         except Exception as e:
