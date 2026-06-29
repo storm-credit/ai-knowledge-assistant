@@ -24,6 +24,24 @@ def test_no_valid_category_defaults_to_etc():
     assert "요약만 있고" in out.summary
     assert out.categories == ["기타"]
 
+def test_categories_yaml_drives_validation(tmp_path, monkeypatch):
+    # categories.yaml의 커스텀 카테고리가 검증을 주도해야 한다 (production path)
+    (tmp_path / "categories.yaml").write_text(
+        "categories:\n  - 커스텀카테고리\n", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+    fake = FakeClient("요약 한 줄\n카테고리: 커스텀카테고리")
+    out = summarize_and_classify(_item(), client=fake)
+    assert out.categories == ["커스텀카테고리"]   # 파일 카테고리가 통과
+
+
+def test_falls_back_to_defaults_without_file(tmp_path, monkeypatch):
+    # categories.yaml 없으면 기본 상수로 폴백
+    monkeypatch.chdir(tmp_path)   # 빈 디렉터리 (categories.yaml 없음)
+    fake = FakeClient("요약 한 줄\n카테고리: 커스텀카테고리")
+    out = summarize_and_classify(_item(), client=fake)
+    assert out.categories == ["기타"]            # 기본 목록에 없으니 기타
+
+
 def test_combined_keeps_multiline_bullet_summary():
     from collector.models import Item
     from collector.summarize import summarize_and_classify
