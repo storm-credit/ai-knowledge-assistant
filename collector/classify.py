@@ -28,11 +28,13 @@ CLASSIFY_PROMPT = (
 def classify_item(item: Item, known_topics: List[str], client=None, clients=None,
                   model: str = "gemini-2.5-flash-lite") -> List[str]:
     cats = load_categories()
-    categories = known_topics or cats
+    body = (item.summary or item.raw_text or item.title or "")[:500]
     prompt = CLASSIFY_PROMPT.format(
-        categories=", ".join(categories),
-        title=item.title, summary=item.summary or item.raw_text[:500])
+        categories=", ".join(cats),
+        title=item.title, summary=body)
     cands = [client] if client is not None else (clients if clients is not None else _default_clients())
+    if not cands:
+        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
     last = None
     for c in cands:
         try:
@@ -40,7 +42,7 @@ def classify_item(item: Item, known_topics: List[str], client=None, clients=None
                 model=model, messages=[{"role": "user", "content": prompt}])
             text = resp.choices[0].message.content.strip()
             parts = [p.strip().lstrip("#").strip() for p in text.replace("\n", ",").split(",")]
-            valid = [p for p in parts if p in categories][:2]
+            valid = [p for p in parts if p in cats][:2]
             return valid or ["기타"]
         except Exception as e:
             last = e
