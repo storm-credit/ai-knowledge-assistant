@@ -6,7 +6,7 @@ def test_render_and_write(tmp_path):
     s.add_item("AI 에이전트", Item(source_name="조코딩", source_type="x", id="a",
                title="글a", link="http://a", published="2026-06-27",
                summary="- 핵심 포인트 A\n- 핵심 포인트 B"))
-    s.set_overview("AI 에이전트", "이 주제 개요입니다", ["Claude"])
+    s.set_structure("AI 에이전트", "이 주제 개요입니다", themes=[], orphans=[], related=["Claude"])
     md = render_page("AI 에이전트", s.data["AI 에이전트"])
     assert "> [!abstract] 개요" in md and "이 주제 개요입니다" in md  # 개요 콜아웃
     assert "## 관련 소식" in md                     # 테마 없으면 평면 폴백

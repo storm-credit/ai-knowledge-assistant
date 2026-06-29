@@ -31,12 +31,6 @@ class TopicStore:
     def needs_resynth(self, topic: str, threshold: int = 5) -> bool:
         return self.data.get(topic, {}).get("new_since_synth", 0) >= threshold
 
-    def set_overview(self, topic: str, overview: str, related: List[str]) -> None:
-        t = self.data[topic]
-        t["overview"] = overview
-        t["related"] = related
-        t["new_since_synth"] = 0
-
     def set_structure(self, topic: str, overview: str, themes: list,
                       orphans: list, related: list) -> None:
         t = self.data[topic]
