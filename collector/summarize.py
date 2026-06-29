@@ -37,6 +37,29 @@ def _is_quota_error(e) -> bool:
     s = str(e).lower()
     return "429" in s or "resource_exhausted" in s or "quota" in s
 
+def complete_text(messages, client=None, clients=None, model: str = "gemini-2.5-flash-lite") -> str:
+    """키 로테이션으로 chat completion을 실행하고 응답 텍스트를 반환한다.
+    후보 클라이언트: 주입 client 우선 → clients → 환경의 모든 키.
+    후보가 비면 RuntimeError. 쿼터 초과(429)면 다음 키로 로테이션, 다른 에러는 즉시 전파."""
+    if client is not None:
+        cands = [client]
+    elif clients is not None:
+        cands = clients
+    else:
+        cands = _default_clients()
+    if not cands:
+        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
+    last = None
+    for c in cands:
+        try:
+            return c.chat.completions.create(model=model, messages=messages).choices[0].message.content
+        except Exception as e:
+            last = e
+            if _is_quota_error(e):
+                continue
+            raise
+    raise last
+
 PROMPT = (
     "다음 콘텐츠를 한국어로 핵심 포인트 5~7개 불릿('- '로 시작)으로 자세히 요약하라. "
     "원문에 있는 내용만 사용하고, 없는 사실은 절대 지어내지 마라. "
@@ -91,35 +114,16 @@ def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-fla
     messages = [{"role": "user", "content": SUMMARIZE_CLASSIFY_PROMPT.format(
         categories=", ".join(cats), title=item.title,
         source=item.source_name, body=body)}]
-    if client is not None:
-        candidates = [client]
-    elif clients is not None:
-        candidates = clients
-    else:
-        candidates = _default_clients()
-    if not candidates:
-        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
-
-    last_err = None
-    for c in candidates:
-        try:
-            resp = c.chat.completions.create(model=model, messages=messages)
-            text = resp.choices[0].message.content.strip()
-            summary_lines, found = [], []
-            for line in text.splitlines():
-                s = line.strip()
-                if s.startswith("카테고리:"):
-                    found = [x.strip().lstrip("#").strip()
-                             for x in s[len("카테고리:"):].split(",")]
-                else:
-                    summary_lines.append(line)
-            item.summary = "\n".join(summary_lines).strip()
-            valid = [p for p in found if p in cats][:2]
-            item.categories = valid or ["기타"]
-            return item
-        except Exception as e:
-            last_err = e
-            if _is_quota_error(e):
-                continue          # 쿼터 초과 → 다음 키로 로테이션
-            raise                 # 다른 에러는 즉시 중단
-    raise last_err                # 모든 키가 쿼터 초과
+    text = complete_text(messages, client=client, clients=clients, model=model).strip()
+    summary_lines, found = [], []
+    for line in text.splitlines():
+        s = line.strip()
+        if s.startswith("카테고리:"):
+            found = [x.strip().lstrip("#").strip()
+                     for x in s[len("카테고리:"):].split(",")]
+        else:
+            summary_lines.append(line)
+    item.summary = "\n".join(summary_lines).strip()
+    valid = [p for p in found if p in cats][:2]
+    item.categories = valid or ["기타"]
+    return item

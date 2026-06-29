@@ -1,6 +1,6 @@
 import json, re
 from typing import List, Tuple
-from .summarize import _default_clients, _is_quota_error
+from .summarize import _default_clients, _is_quota_error, complete_text
 
 SYNTH_PROMPT = (
     "다음은 '{topic}' 주제로 모인 항목들이다. 이를 바탕으로 한국어로 정리하라.\n"
@@ -103,18 +103,6 @@ def synthesize_structure(topic: str, items: List[dict], client=None, clients=Non
     numbered = "\n".join(f"[{i+1}] {it.get('title','')} — {it.get('summary','')}"
                          for i, it in enumerate(items))[:8000]
     prompt = SYNTH_STRUCT_PROMPT.format(topic=topic, items=numbered)
-    cands = [client] if client is not None else (clients if clients is not None else _default_clients())
-    if not cands:
-        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
-    last = None
-    for c in cands:
-        try:
-            resp = c.chat.completions.create(model=model, messages=[{"role":"user","content":prompt}])
-            text = resp.choices[0].message.content.strip()
-            return _parse_struct_json(text)
-        except Exception as e:
-            last = e
-            if _is_quota_error(e):
-                continue
-            raise
-    raise last
+    text = complete_text([{"role": "user", "content": prompt}],
+                         client=client, clients=clients, model=model).strip()
+    return _parse_struct_json(text)
