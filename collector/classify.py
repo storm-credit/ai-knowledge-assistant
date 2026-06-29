@@ -1,7 +1,7 @@
 import os, yaml
 from typing import List
 from .models import Item
-from .summarize import _default_clients, _is_quota_error
+from .summarize import complete_text
 
 CATEGORIES = ["AI 모델·기술", "AI 비즈니스·투자", "AI 활용·도구",
               "한국 AI·스타트업", "인프라·에너지", "인재·일의 미래", "기타"]
@@ -28,23 +28,12 @@ CLASSIFY_PROMPT = (
 def classify_item(item: Item, known_topics: List[str], client=None, clients=None,
                   model: str = "gemini-2.5-flash-lite") -> List[str]:
     cats = load_categories()
-    categories = known_topics or cats
+    body = (item.summary or item.raw_text or item.title or "")[:500]
     prompt = CLASSIFY_PROMPT.format(
-        categories=", ".join(categories),
-        title=item.title, summary=item.summary or item.raw_text[:500])
-    cands = [client] if client is not None else (clients if clients is not None else _default_clients())
-    last = None
-    for c in cands:
-        try:
-            resp = c.chat.completions.create(
-                model=model, messages=[{"role": "user", "content": prompt}])
-            text = resp.choices[0].message.content.strip()
-            parts = [p.strip().lstrip("#").strip() for p in text.replace("\n", ",").split(",")]
-            valid = [p for p in parts if p in categories][:2]
-            return valid or ["기타"]
-        except Exception as e:
-            last = e
-            if _is_quota_error(e):
-                continue
-            raise
-    raise last
+        categories=", ".join(cats),
+        title=item.title, summary=body)
+    text = complete_text([{"role": "user", "content": prompt}],
+                         client=client, clients=clients, model=model).strip()
+    parts = [p.strip().lstrip("#").strip() for p in text.replace("\n", ",").split(",")]
+    valid = [p for p in parts if p in cats][:2]
+    return valid or ["기타"]

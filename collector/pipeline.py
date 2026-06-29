@@ -6,7 +6,7 @@ from .models import Item
 from .state import StateStore
 from .feeds import fetch_feed
 from .enrich import enrich_youtube
-from .summarize import summarize_item, summarize_and_classify
+from .summarize import summarize_and_classify
 from .digest import write_digest
 from .store import append_items
 

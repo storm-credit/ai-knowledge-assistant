@@ -35,7 +35,9 @@ def run_wiki(items_store: str = "state/items.jsonl",
         if store.needs_resynth(tp, resynth_threshold) or not store.data[tp].get("synthesized"):
             try:
                 r = synthesize(tp, store.data[tp]["items"])
-                store.set_structure(tp, r["overview"], r["themes"], r["orphans"], r["related"])
+                if r.get("overview") or r.get("themes"):
+                    store.set_structure(tp, r["overview"], r["themes"], r["orphans"], r["related"])
+                # else: 기존 데이터 보존, synthesized 미표시 → 다음 실행에 재시도
             except Exception as e:
                 print(f"[skip] 구조 합성 실패 {tp}: {e}")
 

@@ -1,7 +1,9 @@
-import json, os
+import json, os, dataclasses
 from dataclasses import asdict
 from typing import List
 from .models import Item
+
+_FIELDS = {f.name for f in dataclasses.fields(Item)}
 
 def append_items(items: List[Item], path: str) -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
@@ -17,5 +19,5 @@ def load_items(path: str) -> List[Item]:
         for line in f:
             line = line.strip()
             if line:
-                out.append(Item(**json.loads(line)))
+                out.append(Item(**{k: v for k, v in json.loads(line).items() if k in _FIELDS}))
     return out

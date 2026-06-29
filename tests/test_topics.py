@@ -14,7 +14,7 @@ def test_add_dedup_sources_and_resynth(tmp_path):
     assert len(d["items"]) == 2
     assert sorted(d["sources"]) == ["SaaStr", "조코딩"]   # 출처 2개
     assert s.needs_resynth("AI 에이전트", threshold=2) is True
-    s.set_overview("AI 에이전트", "개요글", ["Claude"])
+    s.set_structure("AI 에이전트", "개요글", themes=[], orphans=[], related=["Claude"])
     assert s.needs_resynth("AI 에이전트", threshold=2) is False  # 카운터 리셋
     s.save()
     assert TopicStore(str(tmp_path / "topics.json")).data["AI 에이전트"]["overview"] == "개요글"

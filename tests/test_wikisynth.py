@@ -1,19 +1,3 @@
-from collector.wikisynth import synthesize_overview
-
-class FakeResp:
-    def __init__(self,c): self.choices=[type("C",(),{"message":type("M",(),{"content":c})})]
-class FakeClient:
-    def __init__(self,c): self._c=c; self.chat=type("Ch",(),{"completions":self})()
-    def create(self,**k): return FakeResp(self._c)
-
-def test_synthesize_parses_overview_and_related():
-    items = [{"title":"글a","summary":"요약a"},{"title":"글b","summary":"요약b"}]
-    fake = FakeClient("개요: 이것은 정리된 개요다.\n관련주제: Claude, SaaS")
-    ov, rel = synthesize_overview("AI 에이전트", items, client=fake)
-    assert "정리된 개요" in ov
-    assert rel == ["Claude", "SaaS"]
-
-
 class _R:
     def __init__(s,c): s.choices=[type("C",(),{"message":type("M",(),{"content":c})})]
 class _FC:
@@ -50,6 +34,23 @@ def test_synthesize_structure_handles_fenced_json():
     assert out["overview"] == "개요."
     assert out["themes"][0]["indexes"] == [1]
     assert out["orphans"] == [2]
+
+
+def test_synthesize_structure_handles_unclosed_fence():
+    # 닫는 펜스가 없어도 JSON을 파싱해야 한다 (Fix 2)
+    from collector.wikisynth import synthesize_structure
+    items = [{"title":"A","summary":"a"}]
+    out = synthesize_structure("AI", items, client=_FC(
+        '```json\n{"overview":"x","themes":[],"orphans":[],"related":[]}'))
+    assert out["overview"] == "x"
+
+
+def test_synthesize_structure_no_clients_raises_runtimeerror():
+    # 후보 클라이언트가 비면 RuntimeError (TypeError 아님) (Fix 6)
+    import pytest
+    from collector.wikisynth import synthesize_structure
+    with pytest.raises(RuntimeError):
+        synthesize_structure("AI", [{"title":"A","summary":"a"}], clients=[])
 
 
 def test_synthesize_structure_garbage_yields_empty():
