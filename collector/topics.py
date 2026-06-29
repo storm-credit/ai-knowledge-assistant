@@ -37,6 +37,20 @@ class TopicStore:
         t["related"] = related
         t["new_since_synth"] = 0
 
+    def set_structure(self, topic: str, overview: str, themes: list,
+                      orphans: list, related: list) -> None:
+        t = self.data[topic]
+        items = t["items"]
+        def to_ids(idxs):
+            return [items[i-1]["id"] for i in idxs if isinstance(i, int) and 1 <= i <= len(items)]
+        t["overview"] = overview
+        t["themes"] = [{"name": th["name"], "intro": th.get("intro", ""),
+                        "item_ids": to_ids(th.get("indexes", []))} for th in themes]
+        t["orphans"] = to_ids(orphans)
+        t["related"] = related
+        t["new_since_synth"] = 0
+        t["synthesized"] = True
+
     def save(self) -> None:
         os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
         with open(self.path, "w", encoding="utf-8") as f:
@@ -45,21 +59,54 @@ class TopicStore:
 
 import re as _re
 
-def render_page(topic: str, t: dict) -> str:
-    lines = [f"# {topic}", "", f"> 📌 {len(t['sources'])}개 출처에서 언급", ""]
-    if t.get("overview"):
-        lines += ["## 개요", t["overview"], ""]
-    lines.append("## 관련 소식")
-    lines.append("")
-    for it in reversed(t["items"]):   # 최신 먼저
-        date = (it.get("date") or "")[:10]
-        lines.append(f"### [{it['title']}]({it['link']})")
-        lines.append(f"{it['source']} · {date}")
-        summ = (it.get("summary") or "").strip()
-        if summ:
-            lines.append("")
-            lines.append(summ)
+def _render_item(lines: list, it: dict) -> None:
+    date = (it.get("date") or "")[:10]
+    lines.append(f"### [{it['title']}]({it['link']})")
+    lines.append(f"{it['source']} · {date}")
+    summ = (it.get("summary") or "").strip()
+    if summ:
         lines.append("")
+        lines.append(summ)
+    lines.append("")
+
+def render_page(topic: str, t: dict) -> str:
+    lines = [f"# {topic}", "", "> [!abstract] 개요"]
+    ov = (t.get("overview") or "").strip()
+    for ln in (ov.splitlines() or [""]):
+        lines.append(f"> {ln}" if ln else ">")
+    lines.append(f"> 📌 {len(t['sources'])}개 출처 · {len(t['items'])}건")
+    lines.append("")
+
+    by_id = {it["id"]: it for it in t["items"]}
+    themes = t.get("themes") or []
+    if themes:
+        used = set()
+        for th in themes:
+            lines.append(f"## {th['name']}")
+            if th.get("intro"):
+                lines.append(th["intro"]); lines.append("")
+            for iid in th.get("item_ids", []):
+                it = by_id.get(iid)
+                if it:
+                    used.add(iid); _render_item(lines, it)
+        orphan_ids = t.get("orphans") or []
+        orphans = [by_id[i] for i in orphan_ids if i in by_id and i not in used]
+        # themes/orphans에서 빠진 항목도 단신으로 흡수
+        for iid, it in by_id.items():
+            if iid not in used and it not in orphans and iid not in orphan_ids:
+                orphans.append(it)
+        if orphans:
+            lines.append("## 짚어둘 단신")
+            for it in orphans:
+                date = (it.get("date") or "")[:10]
+                lines.append(f"- [{it['title']}]({it['link']}) · {it['source']} · {date}")
+            lines.append("")
+    else:
+        # 테마 없으면 기존 평면 렌더(폴백)
+        lines.append("## 관련 소식"); lines.append("")
+        for it in reversed(t["items"]):
+            _render_item(lines, it)
+
     if t.get("related"):
         lines += ["## 관련 주제", " · ".join(f"[[{r}]]" for r in t["related"]), ""]
     return "\n".join(lines).rstrip() + "\n"
