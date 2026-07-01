@@ -16,6 +16,8 @@ ai-knowledge-assistant/
 
 - **PM 문서:** `docs/00-overview.md`(진행 보드)부터 보기.
 - **Obsidian:** 이 폴더(`ai-knowledge-assistant`)를 Obsidian 볼트로 열면 `notes/`의 지식 그래프를 탐색 가능.
+- **웹 뷰어(다크 UI):** `python -m web.app` 실행 후 http://127.0.0.1:5000 접속.
+  주제별 정리형 위키 + 날짜별 데일리 요약을 브라우저에서 열람. (Flask, 로컬 전용)
 
 ## 진행 상태
 

@@ -1,0 +1,157 @@
+"""Pure rendering helpers for the web viewer.
+
+Turns the Obsidian-flavoured markdown in ``notes/topics`` and ``notes/daily``
+into HTML the Flask layer can drop into a template. Kept free of Flask so it
+stays unit-testable, matching the ``collector`` package's split of pure logic
+from I/O glue.
+"""
+from __future__ import annotations
+
+import html
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Optional, Tuple
+from urllib.parse import quote
+
+import markdown as _md
+
+ROOT = Path(__file__).resolve().parent.parent
+TOPICS_DIR = ROOT / "notes" / "topics"
+DAILY_DIR = ROOT / "notes" / "daily"
+
+_TOC_NAME = "00-목차"
+_WIKILINK = re.compile(r"\[\[([^\]]+?)\]\]")
+_TOC_LINE = re.compile(r"^-\s*\[\[(?P<name>.+?)\]\]\s*[—-]\s*(?P<body>.+)$")
+_CALLOUT_HEAD = re.compile(r"^>\s*\[!(?P<kind>\w+)\]\s*(?P<title>.*)$")
+_DAILY_FILE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+# emoji shown on abstract-style callouts; falls back to a neutral marker
+_CALLOUT_ICON = {"abstract": "📄", "note": "📝", "info": "ℹ️", "tip": "💡"}
+
+
+@dataclass
+class TopicCard:
+    name: str
+    count: str  # free-form label, e.g. "42건 · 7개 출처"
+
+
+@dataclass
+class DailyEntry:
+    date: str
+    title: str
+
+
+def _safe_name(name: str) -> Optional[str]:
+    """Reject anything that could escape the notes dir (path traversal)."""
+    if not name or "/" in name or "\\" in name or ".." in name:
+        return None
+    return name
+
+
+def _replace_wikilinks(text: str) -> str:
+    """``[[Topic]]`` -> markdown link into the topic route."""
+    return _WIKILINK.sub(
+        lambda m: f"[{m.group(1)}](/topic/{quote(m.group(1))})", text
+    )
+
+
+def _transform_callouts(text: str) -> str:
+    """Convert Obsidian callout blocks into styled raw-HTML divs.
+
+    A callout is a run of ``>`` lines whose first line is ``> [!kind] title``.
+    Bodies are plain prose here, so they are HTML-escaped and joined with
+    ``<br>`` rather than re-parsed as markdown.
+    """
+    lines = text.split("\n")
+    out: List[str] = []
+    i = 0
+    while i < len(lines):
+        head = _CALLOUT_HEAD.match(lines[i])
+        if not head:
+            out.append(lines[i])
+            i += 1
+            continue
+        kind = head.group("kind").lower()
+        title = head.group("title").strip()
+        body: List[str] = []
+        i += 1
+        while i < len(lines) and lines[i].startswith(">"):
+            body.append(lines[i].lstrip(">").strip())
+            i += 1
+        icon = _CALLOUT_ICON.get(kind, "📌")
+        body_html = "<br>".join(html.escape(b) for b in body if b)
+        title_html = html.escape(title) if title else kind
+        out.append(
+            f'<div class="callout callout-{html.escape(kind)}">'
+            f'<div class="callout-title">{icon} {title_html}</div>'
+            f'<div class="callout-body">{body_html}</div></div>'
+        )
+    return "\n".join(out)
+
+
+def render_markdown(text: str) -> str:
+    """Obsidian markdown -> HTML (wikilinks + callouts handled)."""
+    text = _replace_wikilinks(text)
+    text = _transform_callouts(text)
+    return _md.markdown(text, extensions=["extra", "sane_lists"])
+
+
+def _split_title(text: str) -> Tuple[str, str]:
+    """Peel the leading ``# Title`` line off; return (title, remaining body)."""
+    lines = text.split("\n")
+    if lines and lines[0].startswith("# "):
+        return lines[0][2:].strip(), "\n".join(lines[1:]).lstrip("\n")
+    return "", text
+
+
+def list_topics(topics_dir: Path = TOPICS_DIR) -> List[TopicCard]:
+    """Topics in 목차 order; falls back to scanning the directory."""
+    toc = topics_dir / f"{_TOC_NAME}.md"
+    cards: List[TopicCard] = []
+    if toc.exists():
+        for line in toc.read_text(encoding="utf-8").split("\n"):
+            m = _TOC_LINE.match(line.strip())
+            if m:
+                cards.append(TopicCard(name=m.group("name"), count=m.group("body").strip()))
+    if cards:
+        return cards
+    for path in sorted(topics_dir.glob("*.md")):
+        if path.stem == _TOC_NAME:
+            continue
+        cards.append(TopicCard(name=path.stem, count=""))
+    return cards
+
+
+def load_topic(name: str, topics_dir: Path = TOPICS_DIR) -> Optional[Tuple[str, str]]:
+    """Return (title, html) for a topic, or None if missing/unsafe."""
+    safe = _safe_name(name)
+    if safe is None:
+        return None
+    path = topics_dir / f"{safe}.md"
+    if not path.exists():
+        return None
+    title, body = _split_title(path.read_text(encoding="utf-8"))
+    return title or safe, render_markdown(body)
+
+
+def list_dailies(daily_dir: Path = DAILY_DIR) -> List[DailyEntry]:
+    """Daily notes, newest first."""
+    entries: List[DailyEntry] = []
+    for path in sorted(daily_dir.glob("*.md"), reverse=True):
+        if not _DAILY_FILE.match(path.stem):
+            continue
+        title, _ = _split_title(path.read_text(encoding="utf-8"))
+        entries.append(DailyEntry(date=path.stem, title=title or path.stem))
+    return entries
+
+
+def load_daily(date: str, daily_dir: Path = DAILY_DIR) -> Optional[Tuple[str, str]]:
+    """Return (title, html) for a daily note, or None if missing/unsafe."""
+    if not _DAILY_FILE.match(date):
+        return None
+    path = daily_dir / f"{date}.md"
+    if not path.exists():
+        return None
+    title, body = _split_title(path.read_text(encoding="utf-8"))
+    return title or date, render_markdown(body)
