@@ -20,4 +20,6 @@
 - 영어: Y Combinator, Lex Fridman, Two Minute Papers, AI Explained, Matthew Berman
 
 **뉴스레터**
-- The Batch (Andrew Ng / DeepLearning.AI), Ben's Bites, TLDR AI, Latent Space(swyx), The Rundown AI, Import AI(Jack Clark)
+- The Batch (Andrew Ng / DeepLearning.AI) — ⚠️ 공식 RSS 없음. RSSHub(`/deeplearning/thebatch`) 경유만 가능하나 공개 인스턴스 403. 자체 호스팅 시 학습형으로 추가 검토.
+- TLDR AI(`https://tldr.tech/api/rss/ai`, 검증됨, 뉴스형) — 학습형 아님. 일반 뉴스로 추가할지 검토.
+- Ben's Bites, Latent Space(swyx), The Rundown AI, Import AI(Jack Clark)

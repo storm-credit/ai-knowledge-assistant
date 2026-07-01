@@ -10,6 +10,16 @@ youtube:
     channel_id: UCelFN6fJ6OY6v8pbc_SLiXA
   - name: 안될공학
     channel_id: UCeN2YeJcBCRJoXgzF_OU3qw
+  # 학습형(learning: true) — 요약 대신 학습 카드(핵심개념·코드·실습)로 재가공
+  - name: 노마드 코더
+    channel_id: UCUpJs89fSBXNolQGOYKn0YQ
+    learning: true
+  - name: 코딩애플
+    channel_id: UCSLrpBAzr-ROVGHQ5EmxnUg
+    learning: true
+  - name: freeCodeCamp
+    channel_id: UC8butISFwT-Wl7EV0hUK0BQ
+    learning: true
 
 newsletters:
   - name: SaaStr

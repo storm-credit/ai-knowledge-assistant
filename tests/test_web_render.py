@@ -59,6 +59,22 @@ def test_articles_are_wrapped_in_cards():
     assert '<div class="article"><h3' in html
 
 
+def test_learning_card_stays_one_article_with_code_block():
+    # 학습 카드는 헤딩 대신 굵은 라벨 + 코드펜스 → 기사 카드 하나로 유지돼야
+    md = (
+        "## 개발\n테마 설명\n\n"
+        "### [파이썬 기초](http://a)\n노마드코더 · 2026-07-01\n\n"
+        "**핵심 개념**\n- 변수와 타입\n\n"
+        "```python\nx = 1\nprint(x)\n```\n\n"
+        "**한 줄 정리**\n기초를 다진다\n"
+    )
+    html = render.render_markdown(md)
+    assert html.count('<div class="article">') == 1   # 카드 분리 안 깨짐
+    assert "<pre>" in html and "<code" in html          # 코드블록 렌더
+    assert "<strong>핵심 개념</strong>" in html          # 굵은 라벨
+    assert "x = 1" in html
+
+
 def test_wrap_articles_noop_without_h3():
     html = render.render_markdown("## 짚어둘 단신\n- [a](http://a) · src · 2026-06-27\n")
     assert '<div class="article">' not in html

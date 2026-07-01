@@ -68,6 +68,13 @@ h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
 .doc .article h3+p{color:var(--muted);font-size:12.5px;margin:0 0 10px;
   font-variant-numeric:tabular-nums}
 .doc .article p,.doc .article li{color:#c8ccd4;font-size:14.5px}
+/* learning-card labels + code */
+.doc .article strong{color:var(--text);font-weight:700}
+.doc code{background:#12151c;border:1px solid var(--border);border-radius:5px;
+  padding:1px 5px;font-size:13px;font-family:"Cascadia Code",Consolas,monospace;color:#9ece6a}
+.doc pre{background:#12151c;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;overflow-x:auto;margin:10px 0}
+.doc pre code{background:none;border:none;padding:0;color:#d6dae2;font-size:13px;line-height:1.6}
 .callout{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--accent);
   border-radius:10px;padding:14px 16px;margin:14px 0}
 .callout-title{font-weight:650;font-size:14px;margin-bottom:6px}
