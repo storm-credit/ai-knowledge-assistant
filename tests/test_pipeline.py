@@ -116,6 +116,30 @@ def test_summarize_failure_keeps_item_retryable(tmp_path):
     assert not os.path.exists(path)            # 성공 0건 → 다이제스트 안 만듦
 
 
+def test_learning_source_flag_propagates_to_item(tmp_path):
+    cfg = SourcesConfig(
+        youtube=[Source(name="노마드코더", rss="x", type="youtube", learning=True)],
+        newsletters=[Source(name="SaaStr", rss="y", type="newsletter")])
+    state = StateStore(str(tmp_path / "seen.json"))
+
+    def fake_fetch(src):
+        return [Item(source_name=src.name, source_type=src.type, id=src.name,
+                     title="t", link="l", published="", raw_text="원문")]
+
+    seen_flags = {}
+    def fake_summarize(item):
+        seen_flags[item.source_name] = item.learning
+        item.summary = "요약"
+        return item
+
+    run(cfg, state, out_dir=str(tmp_path / "out"), date="2026-06-27",
+        fetch=fake_fetch, summarize=fake_summarize, enrich=lambda i: i,
+        sleep=lambda *_: None, items_store=str(tmp_path / "items.jsonl"))
+
+    assert seen_flags["노마드코더"] is True    # 학습형 출처
+    assert seen_flags["SaaStr"] is False       # 일반 출처
+
+
 def test_no_new_items_does_not_overwrite_existing_digest(tmp_path):
     cfg = SourcesConfig(
         youtube=[],

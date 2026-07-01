@@ -70,13 +70,33 @@ SUMMARIZE_CLASSIFY_PROMPT = (
     "제목: {title}\n출처: {source}\n내용:\n{body}"
 )
 
+# 학습형 출처 전용. 위키의 ### 기사 밑에 그대로 삽입되므로 헤딩(#)을 쓰면
+# 테마 구조가 깨진다 → 굵은 라벨 + 불릿 + 코드펜스만 쓰도록 강제.
+LEARNING_PROMPT = (
+    "다음은 개발·학습 콘텐츠다. 한국어로 '학습 카드'를 만들어라. "
+    "원문에 있는 내용만 사용하고, 없는 사실·코드는 절대 지어내지 마라. "
+    "아래 형식을 그대로 지켜라. 마크다운 헤딩('#')은 절대 쓰지 말고, 굵은 라벨과 불릿만 써라:\n\n"
+    "**핵심 개념**\n- (배워야 할 개념·원리 3~5개, 각 한 줄)\n\n"
+    "**코드·명령**\n(원문에 코드/명령/CLI가 있을 때만. ```로 감싼 코드펜스로 적어라. 없으면 이 섹션 전체를 생략)\n\n"
+    "**실습 포인트**\n- (따라 할 수 있는 단계나 팁 2~4개)\n\n"
+    "**한 줄 정리**\n(한 문장)\n\n"
+    "그 다음 마지막 줄에 '카테고리: '로 시작해 아래 목록 중 1개(최대 2개)만 쉼표로 적어라. 없으면 '개발·학습'.\n"
+    "카테고리 목록: {categories}\n\n"
+    "제목: {title}\n출처: {source}\n내용:\n{body}"
+)
+
+DEV_CATEGORY = "개발·학습"
+
 def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-flash-lite",
                            clients=None, categories=None) -> Item:
-    """요약과 카테고리 분류를 한 번의 LLM 호출로 처리한다 (호출 수 절감)."""
+    """요약과 카테고리 분류를 한 번의 LLM 호출로 처리한다 (호출 수 절감).
+
+    학습형 항목(item.learning)은 LEARNING_PROMPT로 학습 카드를 만든다."""
     from .classify import load_categories
     cats = categories if categories is not None else load_categories()
     body = (item.raw_text or item.title)[:6000]
-    messages = [{"role": "user", "content": SUMMARIZE_CLASSIFY_PROMPT.format(
+    prompt = LEARNING_PROMPT if item.learning else SUMMARIZE_CLASSIFY_PROMPT
+    messages = [{"role": "user", "content": prompt.format(
         categories=", ".join(cats), title=item.title,
         source=item.source_name, body=body)}]
     text = complete_text(messages, client=client, clients=clients, model=model).strip()
@@ -90,5 +110,10 @@ def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-fla
             summary_lines.append(line)
     item.summary = "\n".join(summary_lines).strip()
     valid = [p for p in found if p in cats][:2]
-    item.categories = valid or ["기타"]
+    if valid:
+        item.categories = valid
+    elif item.learning and DEV_CATEGORY in cats:
+        item.categories = [DEV_CATEGORY]   # 학습 항목 기본 분류
+    else:
+        item.categories = ["기타"]
     return item

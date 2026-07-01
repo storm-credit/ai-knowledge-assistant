@@ -9,6 +9,7 @@ class Source:
     name: str
     rss: str
     type: str
+    learning: bool = False   # 학습형 출처 여부 (sources.yaml의 learning: true)
 
 @dataclass
 class SourcesConfig:
@@ -18,8 +19,10 @@ class SourcesConfig:
 def load_sources(path: str) -> SourcesConfig:
     with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
-    yt = [Source(name=e["name"], rss=YT_FEED.format(e["channel_id"]), type="youtube")
+    yt = [Source(name=e["name"], rss=YT_FEED.format(e["channel_id"]), type="youtube",
+                 learning=bool(e.get("learning", False)))
           for e in data.get("youtube", [])]
-    nl = [Source(name=e["name"], rss=e["rss"], type="newsletter")
+    nl = [Source(name=e["name"], rss=e["rss"], type="newsletter",
+                 learning=bool(e.get("learning", False)))
           for e in data.get("newsletters", [])]
     return SourcesConfig(youtube=yt, newsletters=nl)

@@ -28,6 +28,7 @@ def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
         for it in items[:limit_per_feed]:   # 최신 N개만 (dedup 전에 적용)
             if not state.is_new(it.id):
                 continue
+            it.learning = src.learning   # 학습형 출처 여부를 항목에 전파
             if it.source_type == "youtube":
                 it = enrich(it)
             try:
