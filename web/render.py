@@ -90,11 +90,46 @@ def _transform_callouts(text: str) -> str:
     return "\n".join(out)
 
 
+_HEADING = re.compile(r"<(h2|h3)\b")
+
+
+def _wrap_articles(html: str) -> str:
+    """Wrap each ``<h3>`` article (title + byline + summary) in a card div.
+
+    Each ``### [title](url)`` becomes a distinct visual block that closes at
+    the next ``<h3>``/``<h2>``. Theme headings (``<h2>``) and their intro text,
+    plus non-article sections (단신 목록, 메모, 관련 주제), stay uncarded.
+    """
+    tags = [(m.start(), m.group(1)) for m in _HEADING.finditer(html)]
+    if not tags:
+        return html
+    bounds = [t[0] for t in tags] + [len(html)]
+    out = [html[: bounds[0]]]
+    open_article = False
+    for i, (pos, tag) in enumerate(tags):
+        seg = html[pos : bounds[i + 1]]
+        if tag == "h3":
+            if open_article:
+                out.append("</div>")
+            out.append('<div class="article">')
+            out.append(seg)
+            open_article = True
+        else:  # h2: close any open article, leave the theme section uncarded
+            if open_article:
+                out.append("</div>")
+                open_article = False
+            out.append(seg)
+    if open_article:
+        out.append("</div>")
+    return "".join(out)
+
+
 def render_markdown(text: str) -> str:
     """Obsidian markdown -> HTML (wikilinks + callouts handled)."""
     text = _replace_wikilinks(text)
     text = _transform_callouts(text)
-    return _md.markdown(text, extensions=["extra", "sane_lists"])
+    html = _md.markdown(text, extensions=["extra", "sane_lists"])
+    return _wrap_articles(html)
 
 
 def _split_title(text: str) -> Tuple[str, str]:

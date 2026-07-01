@@ -44,6 +44,26 @@ def test_list_topics_falls_back_to_scan(tmp_path):
     assert names == ["Alpha", "Beta"]
 
 
+def test_articles_are_wrapped_in_cards():
+    md = (
+        "## 테마\n테마 설명\n\n"
+        "### [기사1](http://a)\n출처 · 2026-06-27\n\n요약1\n\n"
+        "### [기사2](http://b)\n출처 · 2026-06-28\n\n요약2\n"
+    )
+    html = render.render_markdown(md)
+    # one card per h3 article, theme heading left uncarded
+    assert html.count('<div class="article">') == 2
+    assert html.count("</div>") == 2
+    # theme heading is not inside a card
+    assert '<div class="article"><h2' not in html
+    assert '<div class="article"><h3' in html
+
+
+def test_wrap_articles_noop_without_h3():
+    html = render.render_markdown("## 짚어둘 단신\n- [a](http://a) · src · 2026-06-27\n")
+    assert '<div class="article">' not in html
+
+
 def test_load_topic_strips_title_and_renders(tmp_path):
     _write(tmp_path, "AI 모델·기술.md", "# AI 모델·기술\n\n## 테마\n내용\n")
     title, html = render.load_topic("AI 모델·기술", tmp_path)

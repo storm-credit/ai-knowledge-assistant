@@ -51,14 +51,23 @@ h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
 .daily-list a:hover{text-decoration:none;color:var(--link)}
 .daily-list .d{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;min-width:96px}
 /* rendered markdown */
-.doc h2{font-size:20px;margin:34px 0 6px;padding-top:14px;border-top:1px solid var(--border)}
-.doc h3{font-size:16px;margin:22px 0 2px;font-weight:650}
-.doc h3 a{color:var(--text)}
-.doc h3 a:hover{color:var(--link)}
+.doc h2{font-size:15px;margin:38px 0 10px;padding-bottom:8px;font-weight:700;
+  color:var(--muted);text-transform:none;border-bottom:1px solid var(--border);
+  letter-spacing:.3px}
+.doc h2+p{color:var(--muted);font-size:14px;margin:-2px 0 4px}
 .doc p{margin:8px 0}
 .doc ul{margin:8px 0;padding-left:20px}
-.doc li{margin:4px 0}
-.doc>p:first-of-type,.doc h3+p{color:var(--muted);font-size:13.5px}
+.doc li{margin:5px 0}
+/* each article is its own card */
+.doc .article{background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:15px 18px 16px;margin:12px 0}
+.doc .article:hover{border-color:#39404e}
+.doc .article h3{font-size:16px;margin:0 0 3px;font-weight:650;line-height:1.45}
+.doc .article h3 a{color:var(--text)}
+.doc .article h3 a:hover{color:var(--link)}
+.doc .article h3+p{color:var(--muted);font-size:12.5px;margin:0 0 10px;
+  font-variant-numeric:tabular-nums}
+.doc .article p,.doc .article li{color:#c8ccd4;font-size:14.5px}
 .callout{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--accent);
   border-radius:10px;padding:14px 16px;margin:14px 0}
 .callout-title{font-weight:650;font-size:14px;margin-bottom:6px}
