@@ -35,7 +35,8 @@ def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
                 it = enrich(it)
             pending.append(it)
 
-    # 2) 요약: 주입 시 항목당 1콜(테스트 호환), 미주입(실제 cron)이면 배치 요약
+    # 2) 요약: 주입 시 항목당 1콜(테스트 호환), 미주입(실제 cron)이면 배치 요약.
+    #    성공분은 그 자리에서 items.jsonl+seen에 영속화 — 이후 크래시에도 요약 콜이 증발하지 않음.
     new_items: List[Item] = []
     if summarize is not None:
         for it in pending:
@@ -46,8 +47,10 @@ def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
                 print(f"[retry-later] {it.title[:30]} 요약 실패: {str(e)[:60]}")
                 continue
             sleep(throttle_seconds)   # 요약 성공 후에만 throttle
-            new_items.append(it)
+            append_items([it], items_store)   # 성공 즉시 영속화 (크래시 대비)
             state.mark_seen(it.id)
+            state.save()
+            new_items.append(it)
     elif pending:
         try:
             done = batch_summarize(pending, sleep=sleep,
@@ -56,12 +59,14 @@ def run(cfg: SourcesConfig, state: StateStore, out_dir: str, date: str,
             # 도중 쿼터 소진 → 예외 전에 요약이 채워진 항목만 성공으로 회수
             print(f"[retry-later] 쿼터 소진, 남은 항목은 다음 실행에: {str(e)[:60]}")
             done = [it for it in pending if it.summary]
+        if done:
+            append_items(done, items_store)   # 성공분 즉시 영속화 (크래시 대비)
         for it in done:   # 실패 항목은 seen 미표시 → 다음 실행 때 자동 재시도
-            new_items.append(it)
             state.mark_seen(it.id)
+            new_items.append(it)
+        state.save()
 
     if new_items:
-        append_items(new_items, items_store)
         path = write_digest(new_items, date=date, out_dir=out_dir)
     else:
         # 새 항목 0건이면 기존 다이제스트를 덮어쓰지 않음

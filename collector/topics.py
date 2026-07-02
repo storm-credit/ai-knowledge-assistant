@@ -2,6 +2,7 @@ import json, os
 from typing import Dict, List
 from .models import Item
 from .mdutil import safe_md_link
+from .state import load_json_or_backup
 
 def _empty():
     return {"items": [], "sources": [], "overview": "", "related": [], "new_since_synth": 0}
@@ -9,10 +10,9 @@ def _empty():
 class TopicStore:
     def __init__(self, path: str):
         self.path = path
-        self.data: Dict[str, dict] = {}
-        if os.path.exists(path):
-            with open(path, encoding="utf-8") as f:
-                self.data = json.load(f)
+        # corrupt JSON이면 .bak 백업 후 빈 상태로 시작 (cron 영구 사망 방지)
+        data = load_json_or_backup(path, {})
+        self.data: Dict[str, dict] = data if isinstance(data, dict) else {}
 
     def topic_names(self) -> List[str]:
         return list(self.data.keys())

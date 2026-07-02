@@ -18,3 +18,14 @@ def test_add_dedup_sources_and_resynth(tmp_path):
     assert s.needs_resynth("AI 에이전트", threshold=2) is False  # 카운터 리셋
     s.save()
     assert TopicStore(str(tmp_path / "topics.json")).data["AI 에이전트"]["overview"] == "개요글"
+
+def test_corrupt_topics_json_backs_up_and_starts_empty(tmp_path):
+    # corrupt JSON이어도 크래시 없이 .bak 백업 후 빈 상태로 시작
+    path = tmp_path / "topics.json"
+    path.write_text("[깨진 json", encoding="utf-8")
+    s = TopicStore(str(path))
+    assert s.topic_names() == []                        # 빈 상태
+    assert (tmp_path / "topics.json.bak").exists()      # 원본 백업
+    assert s.add_item("AI 에이전트", mk("a", "조코딩", "글a")) is True
+    s.save()
+    assert TopicStore(str(path)).topic_names() == ["AI 에이전트"]
