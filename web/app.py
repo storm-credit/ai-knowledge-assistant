@@ -51,6 +51,7 @@ h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
 .daily-list a:hover{text-decoration:none;color:var(--link)}
 .daily-list .d{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;min-width:96px}
 /* rendered markdown */
+.doc{overflow-wrap:anywhere}
 .doc h2{font-size:15px;margin:38px 0 10px;padding-bottom:8px;font-weight:700;
   color:var(--muted);text-transform:none;border-bottom:1px solid var(--border);
   letter-spacing:.3px}
@@ -70,6 +71,12 @@ h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
 .doc .article p,.doc .article li{color:#c8ccd4;font-size:14.5px}
 /* learning-card labels + code */
 .doc .article strong{color:var(--text);font-weight:700}
+/* 학습 카드: 좌측 보더 강조 + 우상단 '학습' 뱃지 */
+.doc .article--learning{position:relative;border-left:3px solid #9ece6a}
+.doc .article--learning::before{content:"학습";position:absolute;top:13px;right:14px;
+  font-size:11px;font-weight:650;color:#9ece6a;background:rgba(158,206,106,.12);
+  border:1px solid rgba(158,206,106,.35);border-radius:99px;padding:1px 8px;line-height:1.5}
+.doc .article--learning h3{padding-right:52px}
 .doc code{background:#12151c;border:1px solid var(--border);border-radius:5px;
   padding:1px 5px;font-size:13px;font-family:"Cascadia Code",Consolas,monospace;color:#9ece6a}
 .doc pre{background:#12151c;border:1px solid var(--border);border-radius:10px;
@@ -80,6 +87,9 @@ h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
 .callout-title{font-weight:650;font-size:14px;margin-bottom:6px}
 .callout-body{color:var(--muted);font-size:14px}
 hr{border:none;border-top:1px solid var(--border);margin:24px 0}
+/* 데일리 이전/다음 내비 */
+.daynav{display:flex;justify-content:space-between;gap:12px;margin-top:32px;
+  padding-top:16px;border-top:1px solid var(--border);font-size:14px}
 """
 
 LAYOUT = """<!doctype html>
@@ -90,7 +100,7 @@ LAYOUT = """<!doctype html>
 <body>
 <div class="topbar"><div class="inner">
   <a class="brand" href="/">🧠 AI 지식 비서 <span>wiki</span></a>
-  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a></nav>
+  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="{{ today_href }}">오늘</a></nav>
 </div></div>
 <div class="wrap">{{ content|safe }}</div>
 </body></html>"""
@@ -123,12 +133,25 @@ DOC = """
 <h1 class="page">{{ heading }}</h1>
 {% if sub %}<div class="sub">{{ sub }}</div>{% endif %}
 <div class="doc">{{ body|safe }}</div>
+{% if prev or next %}
+<div class="daynav">
+  <span>{% if prev %}<a href="/daily/{{ prev }}">← {{ prev }}</a>{% endif %}</span>
+  <span>{% if next %}<a href="/daily/{{ next }}">{{ next }} →</a>{% endif %}</span>
+</div>
+{% endif %}
 """
+
+
+def _today_href():
+    """topbar '오늘' 링크: 최신 데일리로, 데일리가 없으면 목록으로."""
+    entries = render.list_dailies()
+    return f"/daily/{entries[0].date}" if entries else "/daily"
 
 
 def _page(title, content, extra_css=""):
     return render_template_string(
-        LAYOUT, title=title, css=BASE_CSS, extra_css=extra_css, content=content
+        LAYOUT, title=title, css=BASE_CSS, extra_css=extra_css,
+        content=content, today_href=_today_href(),
     )
 
 
@@ -166,7 +189,16 @@ def daily(date):
     if result is None:
         abort(404)
     heading, body = result
-    content = render_template_string(DOC, heading=heading, sub="", body=body)
+    # 목록(최신순) 기준 이전날/다음날 — 끝이면 생략
+    dates = [e.date for e in render.list_dailies()]
+    prev_d = next_d = None
+    if date in dates:
+        i = dates.index(date)
+        prev_d = dates[i + 1] if i + 1 < len(dates) else None
+        next_d = dates[i - 1] if i > 0 else None
+    content = render_template_string(
+        DOC, heading=heading, sub="", body=body, prev=prev_d, next=next_d
+    )
     return _page(heading, content)
 
 

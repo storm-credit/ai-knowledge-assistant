@@ -49,11 +49,53 @@ def _safe_name(name: str) -> Optional[str]:
     return name
 
 
+_FENCE = re.compile(r"^\s*(```|~~~)")
+_INLINE_CODE = re.compile(r"(`+[^`]*?`+)")
+
+
+def _apply_outside_code(text: str, fn, skip_quotes: bool = False) -> str:
+    """코드펜스(```)·인라인 코드(`…`) 구간은 건너뛰고 fn을 적용한다.
+
+    ``skip_quotes=True``면 인용/콜아웃(``>``) 줄도 건너뛴다 — 콜아웃 본문은
+    이후 HTML 이스케이프되므로 마크다운 문법을 넣어봐야 깨져 보이기 때문.
+    """
+    out: List[str] = []
+    in_fence = False
+    for line in text.split("\n"):
+        if _FENCE.match(line):
+            in_fence = not in_fence
+            out.append(line)
+            continue
+        if in_fence or (skip_quotes and line.lstrip().startswith(">")):
+            out.append(line)
+            continue
+        # 인라인 코드를 캡처 그룹으로 split → 홀수 인덱스가 코드 구간
+        parts = _INLINE_CODE.split(line)
+        out.append("".join(p if i % 2 else fn(p) for i, p in enumerate(parts)))
+    return "\n".join(out)
+
+
 def _replace_wikilinks(text: str) -> str:
-    """``[[Topic]]`` -> markdown link into the topic route."""
-    return _WIKILINK.sub(
-        lambda m: f"[{m.group(1)}](/topic/{quote(m.group(1))})", text
+    """``[[Topic]]`` -> markdown link into the topic route (코드 구간 제외)."""
+    sub = lambda seg: _WIKILINK.sub(
+        lambda m: f"[{m.group(1)}](/topic/{quote(m.group(1))})", seg
     )
+    return _apply_outside_code(text, sub)
+
+
+# 맨몸 URL: 이미 링크 문법 안에 있는 것(`(`, `[`, `<` 뒤)은 제외
+_BARE_URL = re.compile(r'(?<![(<\[])\bhttps?://[^\s<>"\')\]]+')
+
+
+def _autolink_urls(text: str) -> str:
+    """데일리 요약의 맨몸 URL을 마크다운 링크로 (코드·인용 구간 제외)."""
+
+    def link(m: re.Match) -> str:
+        url = m.group(0).rstrip(".,;:!?")   # 문장부호가 URL에 붙는 것 방지
+        trail = m.group(0)[len(url):]
+        return f"[{url}]({url}){trail}"
+
+    return _apply_outside_code(text, lambda seg: _BARE_URL.sub(link, seg), skip_quotes=True)
 
 
 def _transform_callouts(text: str) -> str:
@@ -111,7 +153,13 @@ def _wrap_articles(html: str) -> str:
         if tag == "h3":
             if open_article:
                 out.append("</div>")
-            out.append('<div class="article">')
+            # 학습형 기사(굵은 '핵심 개념' 라벨 포함)는 뱃지용 클래스 추가
+            cls = (
+                "article article--learning"
+                if "<strong>핵심 개념</strong>" in seg
+                else "article"
+            )
+            out.append(f'<div class="{cls}">')
             out.append(seg)
             open_article = True
         else:  # h2: close any open article, leave the theme section uncarded
@@ -127,6 +175,7 @@ def _wrap_articles(html: str) -> str:
 def render_markdown(text: str) -> str:
     """Obsidian markdown -> HTML (wikilinks + callouts handled)."""
     text = _replace_wikilinks(text)
+    text = _autolink_urls(text)
     text = _transform_callouts(text)
     html = _md.markdown(text, extensions=["extra", "sane_lists"])
     return _wrap_articles(html)
