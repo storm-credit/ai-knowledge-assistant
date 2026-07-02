@@ -1,64 +1,8 @@
-import os
 from .models import Item
-
-GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
-
-def _collect_keys():
-    """현재 환경에서 GEMINI_API_KEY 및 GEMINI_API_KEY_1.._N 수집 (빈 값 제외, 중복 제거)."""
-    candidates = [os.environ.get("GEMINI_API_KEY")]
-    for i in range(1, 11):
-        candidates.append(os.environ.get(f"GEMINI_API_KEY_{i}"))
-    keys, seen = [], set()
-    for v in candidates:
-        if v and v.strip() and v.strip() not in seen:
-            seen.add(v.strip())
-            keys.append(v.strip())
-    return keys
-
-def _api_keys():
-    """프로젝트 .env의 키를 우선 사용. 거기에 하나도 없을 때만 Hermes .env로 폴백
-    (= 프로젝트에 키가 있으면 Hermes와 완전 분리)."""
-    try:
-        from dotenv import load_dotenv
-        load_dotenv()                    # 프로젝트 .env
-        keys = _collect_keys()
-        if not keys:
-            load_dotenv(os.path.expanduser("~/.hermes/.env"))  # 폴백만
-            keys = _collect_keys()
-        return keys
-    except ImportError:
-        return _collect_keys()
-
-def _default_clients():
-    from openai import OpenAI
-    return [OpenAI(api_key=k, base_url=GEMINI_BASE) for k in _api_keys()]
-
-def _is_quota_error(e) -> bool:
-    s = str(e).lower()
-    return "429" in s or "resource_exhausted" in s or "quota" in s
-
-def complete_text(messages, client=None, clients=None, model: str = "gemini-2.5-flash-lite") -> str:
-    """키 로테이션으로 chat completion을 실행하고 응답 텍스트를 반환한다.
-    후보 클라이언트: 주입 client 우선 → clients → 환경의 모든 키.
-    후보가 비면 RuntimeError. 쿼터 초과(429)면 다음 키로 로테이션, 다른 에러는 즉시 전파."""
-    if client is not None:
-        cands = [client]
-    elif clients is not None:
-        cands = clients
-    else:
-        cands = _default_clients()
-    if not cands:
-        raise RuntimeError("GEMINI_API_KEY가 없습니다 (.env 확인)")
-    last = None
-    for c in cands:
-        try:
-            return c.chat.completions.create(model=model, messages=messages).choices[0].message.content or ""
-        except Exception as e:
-            last = e
-            if _is_quota_error(e):
-                continue
-            raise
-    raise last
+# LLM 호출은 게이트웨이(collector/llm.py)로 이동. 기존 import 경로 호환을 위한 재수출.
+from .llm import (GEMINI_BASE, QuotaExhausted, CallBudget, CircuitBreaker,  # noqa: F401
+                  complete_text, _api_keys, _collect_keys, _default_clients,
+                  _is_quota_error, _is_overload_error)
 
 SUMMARIZE_CLASSIFY_PROMPT = (
     "다음 콘텐츠를 한국어로 핵심 포인트 5~7개로 자세히 요약하라. "

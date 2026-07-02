@@ -116,6 +116,29 @@ def test_summarize_failure_keeps_item_retryable(tmp_path):
     assert not os.path.exists(path)            # 성공 0건 → 다이제스트 안 만듦
 
 
+def test_quota_exhausted_keeps_item_retryable(tmp_path):
+    # QuotaExhausted(예산 소진·서킷브레이커)도 기존 [retry-later] 경로로 처리된다
+    from collector.llm import QuotaExhausted
+    cfg = SourcesConfig(
+        youtube=[],
+        newsletters=[Source(name="SaaStr", rss="x", type="newsletter")])
+    state = StateStore(str(tmp_path / "seen.json"))
+
+    def fake_fetch(src):
+        return [Item(source_name=src.name, source_type=src.type, id="b1",
+                     title="예산소진", link="l1", published="", raw_text="원문")]
+
+    def boom(item):
+        raise QuotaExhausted("일일 콜 예산 소진 (18/18)")
+
+    path = run(cfg, state, out_dir=str(tmp_path / "out"), date="2026-07-02",
+               fetch=fake_fetch, summarize=boom, enrich=lambda i: i,
+               sleep=lambda *_: None)
+
+    assert state.is_new("b1") is True          # seen 미표시 → 다음 실행 때 재시도
+    assert not os.path.exists(path)
+
+
 def test_learning_source_flag_propagates_to_item(tmp_path):
     cfg = SourcesConfig(
         youtube=[Source(name="노마드코더", rss="x", type="youtube", learning=True)],

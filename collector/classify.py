@@ -1,7 +1,7 @@
 import os, yaml
 from typing import List
 from .models import Item
-from .summarize import complete_text
+from .llm import complete_text
 
 CATEGORIES = ["AI 모델·기술", "AI 비즈니스·투자", "AI 활용·도구",
               "한국 AI·스타트업", "인프라·에너지", "인재·일의 미래", "기타"]

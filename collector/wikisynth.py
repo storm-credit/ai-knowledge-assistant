@@ -1,6 +1,6 @@
 import json, re
 from typing import List
-from .summarize import complete_text
+from .llm import complete_text
 
 SYNTH_STRUCT_PROMPT = (
     "다음은 '{topic}' 주제로 모인 항목들이다(번호 매김). 한국어로 정리하라.\n"
