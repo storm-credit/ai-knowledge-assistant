@@ -112,6 +112,20 @@ def test_load_daily_validates_date_format(tmp_path):
     assert render.load_daily("bad", tmp_path) is None
 
 
+# --- 카드 D: 렌더 HTML sanitize (XSS 차단) ---
+
+def test_raw_script_tag_is_stripped():
+    # 오염된 요약에 raw HTML이 들어와도 스크립트는 실행되면 안 된다
+    html = render.render_markdown("본문\n\n<script>alert(1)</script>\n")
+    assert "<script" not in html
+    assert "alert(1)" not in html
+
+
+def test_img_onerror_attribute_is_stripped():
+    html = render.render_markdown("본문 <img src=x onerror=alert(1)>\n")
+    assert "onerror" not in html
+
+
 # --- 카드 E: 코드펜스 안전 위키링크 ---
 
 def test_wikilinks_skip_code_fences():

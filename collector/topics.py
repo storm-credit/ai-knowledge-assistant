@@ -1,6 +1,7 @@
 import json, os
 from typing import Dict, List
 from .models import Item
+from .mdutil import safe_md_link
 
 def _empty():
     return {"items": [], "sources": [], "overview": "", "related": [], "new_since_synth": 0}
@@ -71,7 +72,7 @@ def _replace_memo(text: str, memo: str) -> str:
 
 def _render_item(lines: list, it: dict) -> None:
     date = (it.get("date") or "")[:10]
-    lines.append(f"### [{it['title']}]({it['link']})")
+    lines.append(f"### {safe_md_link(it['title'], it['link'])}")
     lines.append(f"{it['source']} · {date}")
     summ = (it.get("summary") or "").strip()
     if summ:
@@ -112,7 +113,7 @@ def render_page(topic: str, t: dict) -> str:
             lines.append("## 짚어둘 단신")
             for it in orphans:
                 date = (it.get("date") or "")[:10]
-                lines.append(f"- [{it['title']}]({it['link']}) · {it['source']} · {date}")
+                lines.append(f"- {safe_md_link(it['title'], it['link'])} · {it['source']} · {date}")
             lines.append("")
     else:
         # 테마 없으면 기존 평면 렌더(폴백)

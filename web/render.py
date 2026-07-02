@@ -15,6 +15,12 @@ from typing import List, Optional, Tuple
 from urllib.parse import quote
 
 import markdown as _md
+import nh3
+
+# sanitize 허용목록: nh3 기본값 + 렌더가 쓰는 class(콜아웃·기사 카드·코드 언어)와 헤딩 id
+_ALLOWED_ATTRIBUTES = {**nh3.ALLOWED_ATTRIBUTES, "*": {"class"}}
+for _h in ("h1", "h2", "h3"):
+    _ALLOWED_ATTRIBUTES[_h] = _ALLOWED_ATTRIBUTES.get(_h, set()) | {"id"}
 
 ROOT = Path(__file__).resolve().parent.parent
 TOPICS_DIR = ROOT / "notes" / "topics"
@@ -178,7 +184,9 @@ def render_markdown(text: str) -> str:
     text = _autolink_urls(text)
     text = _transform_callouts(text)
     html = _md.markdown(text, extensions=["extra", "sane_lists"])
-    return _wrap_articles(html)
+    html = _wrap_articles(html)
+    # 피드·LLM 요약에 섞여 들어온 raw HTML(<script>, onerror 등)을 허용목록으로 차단
+    return nh3.clean(html, attributes=_ALLOWED_ATTRIBUTES, link_rel=None)
 
 
 def _split_title(text: str) -> Tuple[str, str]:

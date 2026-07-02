@@ -2,6 +2,7 @@ import os
 from collections import defaultdict
 from typing import List
 from .models import Item
+from .mdutil import safe_md_link
 
 def render_markdown(items: List[Item], date: str) -> str:
     lines = [f"# {date} AI 요약", "", f"> 총 {len(items)}건", ""]
@@ -11,7 +12,7 @@ def render_markdown(items: List[Item], date: str) -> str:
     for source, group in by_source.items():
         lines.append(f"## {source}")
         for it in group:
-            lines.append(f"### [{it.title}]({it.link})")
+            lines.append(f"### {safe_md_link(it.title, it.link)}")
             lines.append(it.summary or "(요약 없음)")
             lines.append("")
     return "\n".join(lines).rstrip() + "\n"

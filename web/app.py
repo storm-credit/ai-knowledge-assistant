@@ -5,6 +5,8 @@ dark UI. Run with:  ``python -m web.app``  then open http://127.0.0.1:5000
 """
 from __future__ import annotations
 
+import os
+
 from flask import Flask, abort, render_template_string
 
 from web import render
@@ -212,4 +214,6 @@ def not_found(_e):
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    # 디버거(Werkzeug)는 RCE 통로가 될 수 있어 기본 꺼짐 — FLASK_DEBUG=1일 때만
+    app.run(host="127.0.0.1", port=5000,
+            debug=os.environ.get("FLASK_DEBUG") == "1")
