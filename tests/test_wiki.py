@@ -10,7 +10,7 @@ def test_run_wiki_classifies_and_writes(tmp_path):
     items_store = str(tmp_path/"items.jsonl")
     append_items([mk("a","에이전트 글"), mk("b","Claude 글")], items_store)
 
-    def fake_classify(item, known):
+    def fake_classify(item):
         return ["AI 에이전트"] if "에이전트" in item.title else ["Claude"]
     def fake_synth(topic, items):
         return {"overview": f"{topic} 개요", "themes": [], "orphans": [], "related": ["기타"]}
@@ -38,7 +38,7 @@ def test_run_wiki_writes_index(tmp_path):
     items_store = str(tmp_path/"items.jsonl")
     append_items([mk("a","에이전트 글"), mk("b","Claude 글")], items_store)
 
-    def fake_classify(item, known):
+    def fake_classify(item):
         return ["AI 에이전트"] if "에이전트" in item.title else ["Claude"]
     def fake_synth(topic, items):
         return {"overview": f"{topic} 개요", "themes": [], "orphans": [], "related": ["기타"]}
@@ -60,7 +60,7 @@ def test_run_wiki_uses_preclassified_categories_without_calling_classify(tmp_pat
     append_items([mk("a", "어떤 글", categories=["Claude"])], items_store)
 
     calls = {"n": 0}
-    def fake_classify(item, known):
+    def fake_classify(item):
         calls["n"] += 1
         raise AssertionError("미리 분류된 항목엔 classify 호출 금지")
     def fake_synth(topic, items):
@@ -90,7 +90,7 @@ def test_run_wiki_builds_themes(tmp_path):
                 "orphans":[2],"related":["Claude"]}
     run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
              topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
-             classify=lambda it,k: it.categories, synthesize=fake_struct, resynth_threshold=1)
+             classify=lambda it: it.categories, synthesize=fake_struct, resynth_threshold=1)
     d = TopicStore(str(tmp_path/"t.json")).data["AI"]
     assert d["themes"][0]["name"] == "테마"
     assert d["themes"][0]["item_ids"] == ["id1"]
@@ -120,7 +120,7 @@ def test_run_wiki_empty_synth_does_not_overwrite(tmp_path):
         return {"overview":"", "themes":[], "orphans":[], "related":[]}
     run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
              topics_path=topics_path, out_dir=str(tmp_path/"topics"),
-             classify=lambda it,k: it.categories, synthesize=empty_synth,
+             classify=lambda it: it.categories, synthesize=empty_synth,
              resynth_threshold=1)
     d = TopicStore(topics_path).data["AI"]
     assert d["overview"] == "기존 좋은 개요"           # 덮어쓰이지 않음
@@ -143,9 +143,68 @@ def test_run_wiki_no_resynth_when_zero_themes(tmp_path):
         return {"overview":"개요","themes":[],"orphans":[],"related":[]}
     kw = dict(items_store=items_store, classified_state=str(tmp_path/"c.json"),
               topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
-              classify=lambda it,k: it.categories, synthesize=fake_struct,
+              classify=lambda it: it.categories, synthesize=fake_struct,
               resynth_threshold=99)   # needs_resynth 비활성
     run_wiki(**kw)
     assert calls["n"] == 1            # 첫 실행에 1회 합성
     run_wiki(**kw)
     assert calls["n"] == 1            # 두 번째 실행에선 재합성 안 함 (플래그 가드)
+
+
+# ── run_wiki 실패 경로 3종 (카드 F) ──────────────────────────────────────
+
+def _empty_synth(topic, items):
+    return {"overview": "", "themes": [], "orphans": [], "related": []}
+
+
+def test_run_wiki_classify_exception_not_marked_seen(tmp_path):
+    # (a) 분류 예외 → seen 미마킹 → 다음 실행에 재시도
+    import json
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk("a", "글")], items_store)
+    def boom(item):
+        raise RuntimeError("LLM down")
+    run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+             topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+             classify=boom, synthesize=_empty_synth, resynth_threshold=1)
+    cl = json.load(open(str(tmp_path/"c.json"), encoding="utf-8"))
+    assert "a" not in cl["seen"]
+
+
+def test_run_wiki_synth_exception_preserves_structure(tmp_path):
+    # (b) 합성 예외 → 기존 overview/themes 보존
+    from collector.topics import TopicStore
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk("a", "글", categories=["AI"])], items_store)
+    topics_path = str(tmp_path/"t.json")
+    pre = TopicStore(topics_path)
+    pre.add_item("AI", mk("a", "글"))
+    pre.data["AI"]["overview"] = "기존 좋은 개요"
+    pre.data["AI"]["themes"] = [{"name": "기존테마", "intro": "정리", "item_ids": ["a"]}]
+    pre.save()
+    def boom_synth(topic, items):
+        raise RuntimeError("synth down")
+    run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+             topics_path=topics_path, out_dir=str(tmp_path/"topics"),
+             classify=lambda it: it.categories, synthesize=boom_synth,
+             resynth_threshold=1)
+    d = TopicStore(topics_path).data["AI"]
+    assert d["overview"] == "기존 좋은 개요"
+    assert d["themes"][0]["name"] == "기존테마"
+
+
+def test_run_wiki_empty_classify_not_marked_seen(tmp_path):
+    # (c) 분류가 빈 리스트 → seen 미마킹 (영구 유실 방지, 버그 픽스)
+    import json
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk("a", "글")], items_store)
+    kw = dict(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+              topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+              synthesize=_empty_synth, resynth_threshold=1)
+    run_wiki(classify=lambda it: [], **kw)
+    cl = json.load(open(str(tmp_path/"c.json"), encoding="utf-8"))
+    assert "a" not in cl["seen"]                 # 유실 대신 재시도 대상으로 남는다
+    # 다음 실행에서 분류가 성공하면 정상 편입 + seen 마킹
+    run_wiki(classify=lambda it: ["AI"], **kw)
+    cl = json.load(open(str(tmp_path/"c.json"), encoding="utf-8"))
+    assert "a" in cl["seen"]

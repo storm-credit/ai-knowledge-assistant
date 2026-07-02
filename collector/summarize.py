@@ -1,4 +1,5 @@
 import json
+import re
 
 from .models import Item
 # LLM 호출은 게이트웨이(collector/llm.py)로 이동. 기존 import 경로 호환을 위한 재수출.
@@ -28,12 +29,34 @@ LEARNING_PROMPT = (
     "**코드·명령**\n(원문에 코드/명령/CLI가 있을 때만. ```로 감싼 코드펜스로 적어라. 없으면 이 섹션 전체를 생략)\n\n"
     "**실습 포인트**\n- (따라 할 수 있는 단계나 팁 2~4개)\n\n"
     "**한 줄 정리**\n(한 문장)\n\n"
-    "그 다음 마지막 줄에 '카테고리: '로 시작해 아래 목록 중 1개(최대 2개)만 쉼표로 적어라. 없으면 '개발·학습'.\n"
+    "그 다음 마지막 줄에 '카테고리: '로 시작해 아래 목록 중 1개(최대 2개)만 쉼표로 적어라.\n"
     "카테고리 목록: {categories}\n\n"
     "제목: {title}\n출처: {source}\n내용:\n{body}"
 )
 
 DEV_CATEGORY = "개발·학습"
+
+# '카테고리:' 표기의 변형 허용: 굵은 마커(**카테고리:**), 전각 콜론(：)
+_CATEGORY_LINE = re.compile(r"^\**\s*카테고리\s*[:：]\s*\**\s*(?P<rest>.*)$")
+
+
+def extract_category_line(text: str):
+    """마지막 비어있지 않은 줄에서만 '카테고리:' 표기를 분리한다.
+
+    본문 중간의 '카테고리:' 언급은 보존한다(요약 훼손 방지).
+    반환: (카테고리 줄을 제외한 본문, 카테고리 리스트). 없으면 (원문, [])."""
+    lines = text.splitlines()
+    for i in range(len(lines) - 1, -1, -1):
+        s = lines[i].strip()
+        if not s:
+            continue
+        m = _CATEGORY_LINE.match(s)
+        if not m:
+            break   # 마지막 실줄이 카테고리 표기가 아니면 그대로 반환
+        cats = [x.strip().lstrip("#").strip().rstrip("*").strip()
+                for x in m.group("rest").split(",")]
+        return "\n".join(lines[:i]).rstrip(), [c for c in cats if c]
+    return text, []
 
 # ── 배치 요약 (쿼터 절감: 뉴스 4건/콜, 학습 2건/콜) ──────────────────────
 NEWS_BATCH_SIZE = 4
@@ -186,15 +209,8 @@ def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-fla
         categories=", ".join(cats), title=item.title,
         source=item.source_name, body=body)}]
     text = complete_text(messages, client=client, clients=clients, model=model).strip()
-    summary_lines, found = [], []
-    for line in text.splitlines():
-        s = line.strip()
-        if s.startswith("카테고리:"):
-            found = [x.strip().lstrip("#").strip()
-                     for x in s[len("카테고리:"):].split(",")]
-        else:
-            summary_lines.append(line)
-    item.summary = "\n".join(summary_lines).strip()
+    summary, found = extract_category_line(text)
+    item.summary = summary.strip()
     valid = [p for p in found if p in cats][:2]
     if valid:
         item.categories = valid

@@ -1,5 +1,5 @@
 from collector.models import Item
-from collector.summarize import summarize_and_classify
+from collector.summarize import extract_category_line, summarize_and_classify
 
 class FakeResp:
     def __init__(self, c): self.choices=[type("C",(),{"message":type("M",(),{"content":c})})]
@@ -7,22 +7,56 @@ class FakeClient:
     def __init__(self, c): self._c=c; self.chat=type("Ch",(),{"completions":self})()
     def create(self, **k): return FakeResp(self._c)
 
+# 실제 categories.yaml에 결합되지 않도록 테스트 전용 목록 주입
+CATS = ["AI 모델·기술", "기타"]
+
 def _item():
     return Item(source_name="조코딩", source_type="youtube", id="x",
                 title="AI 에이전트 시대", link="l", published="", raw_text="원문")
 
 def test_summary_and_categories_parsed_and_filtered():
     fake = FakeClient("요약 첫줄\n요약 둘째줄\n카테고리: AI 모델·기술, 엉뚱")
-    out = summarize_and_classify(_item(), client=fake)
+    out = summarize_and_classify(_item(), client=fake, categories=CATS)
     assert "요약 첫줄" in out.summary
     assert "카테고리" not in out.summary
     assert out.categories == ["AI 모델·기술"]   # 유효하지 않은 카테고리 제거
 
 def test_no_valid_category_defaults_to_etc():
     fake = FakeClient("요약만 있고\n카테고리: 엉뚱한것")
-    out = summarize_and_classify(_item(), client=fake)
+    out = summarize_and_classify(_item(), client=fake, categories=CATS)
     assert "요약만 있고" in out.summary
     assert out.categories == ["기타"]
+
+
+# ── extract_category_line: 마지막 줄 '카테고리:' 표기 견고 파싱 ──────────
+
+def test_extract_handles_bold_category_marker():
+    body, cats = extract_category_line("요약 한 줄\n**카테고리:** AI 모델·기술")
+    assert body == "요약 한 줄"
+    assert cats == ["AI 모델·기술"]
+
+def test_extract_handles_fullwidth_colon():
+    body, cats = extract_category_line("요약 한 줄\n카테고리： AI 모델·기술, 기타")
+    assert body == "요약 한 줄"
+    assert cats == ["AI 모델·기술", "기타"]
+
+def test_extract_only_splits_last_line_keeps_midbody_mention():
+    text = "- 카테고리: 지정 방법을 설명한다\n- 둘째 포인트\n카테고리: AI 모델·기술"
+    body, cats = extract_category_line(text)
+    assert "- 카테고리: 지정 방법을 설명한다" in body   # 본문 중간 언급은 보존
+    assert "둘째 포인트" in body
+    assert cats == ["AI 모델·기술"]
+
+def test_extract_no_category_line_returns_empty():
+    body, cats = extract_category_line("요약만 있음\n- 포인트")
+    assert body == "요약만 있음\n- 포인트"
+    assert cats == []
+
+def test_summarize_parses_bold_category_line():
+    fake = FakeClient("- 포인트\n**카테고리:** AI 모델·기술")
+    out = summarize_and_classify(_item(), client=fake, categories=CATS)
+    assert "카테고리" not in out.summary
+    assert out.categories == ["AI 모델·기술"]
 
 def test_categories_yaml_drives_validation(tmp_path, monkeypatch):
     # categories.yaml의 커스텀 카테고리가 검증을 주도해야 한다 (production path)
@@ -53,7 +87,7 @@ def test_combined_keeps_multiline_bullet_summary():
     it = Item(source_name="노정석", source_type="youtube", id="x",
               title="EP100", link="l", published="2026-06-27", raw_text="원문")
     fake = FC("- 포인트 하나\n- 포인트 둘\n- 포인트 셋\n카테고리: AI 모델·기술")
-    out = summarize_and_classify(it, client=fake)
+    out = summarize_and_classify(it, client=fake, categories=CATS)
     assert "포인트 하나" in out.summary and "포인트 셋" in out.summary
     assert "카테고리" not in out.summary          # 카테고리 줄은 요약서 제외
     assert out.categories == ["AI 모델·기술"]

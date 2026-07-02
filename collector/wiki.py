@@ -15,20 +15,21 @@ def run_wiki(items_store: str = "state/items.jsonl",
     items = load_items(items_store)
     seen = StateStore(classified_state)
     store = TopicStore(topics_path)
-    known = store.topic_names()
 
     new = [it for it in items if seen.is_new(it.id)]
     for it in new:
         try:
             # 파이프라인 결합 호출로 이미 분류된 항목은 LLM 재호출 없이 재사용
-            topics = it.categories if it.categories else classify(it, known)
+            topics = it.categories if it.categories else classify(it)
         except Exception as e:
             print(f"[skip] 분류 실패 {it.title[:30]}: {e}")
             continue
+        if not topics:
+            # 빈 분류 결과를 seen 처리하면 항목이 어떤 주제에도 없이 영구 유실됨
+            print(f"[retry-later] 분류 결과 없음 {it.title[:30]} — 다음 실행에 재시도")
+            continue
         for tp in topics:
             store.add_item(tp, it)
-            if tp not in known:
-                known.append(tp)
         seen.mark_seen(it.id)
 
     for tp in store.topic_names():

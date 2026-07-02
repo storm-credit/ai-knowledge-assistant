@@ -25,7 +25,7 @@ CLASSIFY_PROMPT = (
     "카테고리: {categories}\n제목: {title}\n요약: {summary}"
 )
 
-def classify_item(item: Item, known_topics: List[str], client=None, clients=None,
+def classify_item(item: Item, client=None, clients=None,
                   model: str = "gemini-2.5-flash-lite") -> List[str]:
     cats = load_categories()
     body = (item.summary or item.raw_text or item.title or "")[:500]
@@ -34,6 +34,11 @@ def classify_item(item: Item, known_topics: List[str], client=None, clients=None
         title=item.title, summary=body)
     text = complete_text([{"role": "user", "content": prompt}],
                          client=client, clients=clients, model=model).strip()
-    parts = [p.strip().lstrip("#").strip() for p in text.replace("\n", ",").split(",")]
+    # 모델이 '카테고리: X' 형식으로 답해도 공용 헬퍼로 파싱 (summarize와 통일)
+    from .summarize import extract_category_line
+    _, parts = extract_category_line(text)
+    if not parts:
+        parts = [p.strip().lstrip("#").strip()
+                 for p in text.replace("\n", ",").split(",")]
     valid = [p for p in parts if p in cats][:2]
     return valid or ["기타"]
