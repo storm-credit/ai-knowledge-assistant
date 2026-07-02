@@ -2,7 +2,7 @@
 
 > [!abstract] 개요
 > AI 비즈니스 및 투자는 AI 기술 발전과 함께 급격히 변화하고 있습니다. AI 네이티브 기업의 등장, AI를 활용한 비즈니스 혁신, 그리고 AI 인프라 구축에 대한 관심이 높아지고 있습니다. 이러한 흐름 속에서 인재 확보, 새로운 기술 표준, 그리고 투자 전략에 대한 논의가 활발히 이루어지고 있습니다.
-> 📌 6개 출처 · 40건
+> 📌 6개 출처 · 47건
 
 ## AI 네이티브와 기업의 AI 전환
 AI 시대를 맞아 기업들은 AI 네이티브로의 전환과 AI 기술 도입을 통해 경쟁력을 강화하고 있습니다. 이는 조직 구조 변화, 인재상 재정의, 그리고 새로운 비즈니스 모델 개발을 포함합니다.
@@ -198,6 +198,13 @@ SaaStr · 2026-06-27
 - [팔란티어 CEO가 OpenAI를 비난한 진짜 이유](https://www.youtube.com/shorts/IAEJ9qWPjeE) · 안될공학 · 2026-06-30
 - [AI는 회사에 정말 도움이 될까? with 팔란티어 CEO](https://www.youtube.com/shorts/jN5xMaqN6Yk) · 안될공학 · 2026-06-30
 - [The Agent Playbooks from Salesforce, Snowflake, Databricks, Harvey, and Lovable: Inside SaaStr AI 2026](https://www.saastr.com/the-agent-playbooks-from-salesforce-snowflake-databricks-harvey-lovable-and-monaco-inside-saastr-ai-annual-2026/) · SaaStr · Tue, 30 Ju
+- [헤르메스 에이전트 + 클로드코드 활용법 (대표님, 1인 사업가 AX 전 필수 시청) | 목요일 저녁 8시 윤자동 라이브](https://www.youtube.com/watch?v=C-4wZ0IejBg) · 윤자동 · 2026-06-30
+- [AI가 주도하는 취향 위임과 구매 전환의 비밀 (박준영 크로스IMC 대표)](https://www.youtube.com/watch?v=Ai0W7cDfIdM) · TTimesTV · 2026-07-01
+- [GPU 있어도 에너지가 없다... SemiAnalysis AI 인프라 전격 진단 | AI 데이터센터가 발전소를 짓는 이유 | 전력 병목의 모든 것](https://www.youtube.com/watch?v=7DltyKQJpbc) · 안될공학 · 2026-07-01
+- [The Agents Is Back. Outbound Isn’t Dead. Our Agents Are Collapsing Into Each Other. And Collections Just Went on Autopilot.](https://www.saastr.com/the-agents-is-back-outbound-isnt-dead-our-agents-are-collapsing-into-each-other-and-collections-just-went-on-autopilot/) · SaaStr · Wed, 01 Ju
+- [Figma Grows 46% and Trades at 6x. Everyone Else Growing 30%+ Trades at 15-36x.](https://www.saastr.com/figma-grows-46-and-trades-at-6x-everyone-else-growing-30-trades-at-15-36x/) · SaaStr · Wed, 01 Ju
+- [The #1 Reason CMOs Fail](https://www.saastr.com/when-you-need-a-cmo-and-the-1-reason-cmos-fail/) · SaaStr · Wed, 28 De
+- [Dear SaaStr: What Are Your Top Tips to Building Your First Sales Team?](https://www.saastr.com/dear-saastr-what-are-your-top-tips-to-building-your-first-sales-team/) · SaaStr · Tue, 22 Ju
 
 ## ✍️ 내 메모
 <!-- memo:start -->
