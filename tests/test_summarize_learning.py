@@ -37,6 +37,14 @@ def test_learning_item_uses_learning_prompt():
     assert "헤딩" in fake.seen  # 헤딩 금지 지시가 프롬프트에 있어야
 
 
+def test_learning_prompt_excludes_promotional_content():
+    # 광고·쿠폰·수강권유 등 판촉성 내용 제외 지시가 프롬프트에 있어야
+    fake = RecClient("**핵심 개념**\n- a\n카테고리: 개발·학습")
+    summarize_and_classify(_item(True), client=fake, categories=CATS)
+    assert "쿠폰" in fake.seen
+    assert "제외" in fake.seen
+
+
 def test_non_learning_item_uses_news_prompt():
     fake = RecClient("- 포인트\n카테고리: AI 모델·기술")
     summarize_and_classify(_item(False), client=fake, categories=CATS)
