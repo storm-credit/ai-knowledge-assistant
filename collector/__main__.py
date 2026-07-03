@@ -25,8 +25,17 @@ def main():
         run_wiki(resynth_threshold=threshold)   # 수집 후 위키 갱신
     elif cmd == "wiki":
         run_wiki(resynth_threshold=threshold)
+    elif cmd == "learn":
+        # 적용형 학습 노트 (docs/14): python -m collector learn "하네스 엔지니어링"
+        concept = next((a for a in args[1:] if not a.startswith("-")), None)
+        if not concept:
+            print('사용법: python -m collector learn "<개념>"')
+            return 1
+        from .learn import run_learn
+        if run_learn(concept, date=today) is None:
+            return 1   # 예산 부족 등으로 미룸
     else:
-        print(f"알 수 없는 명령: {cmd} (run | wiki)")
+        print(f"알 수 없는 명령: {cmd} (run | wiki | learn)")
         return 1
     return 0
 

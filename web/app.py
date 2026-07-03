@@ -102,7 +102,7 @@ LAYOUT = """<!doctype html>
 <body>
 <div class="topbar"><div class="inner">
   <a class="brand" href="/">🧠 AI 지식 비서 <span>wiki</span></a>
-  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="{{ today_href }}">오늘</a></nav>
+  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="/learn">학습노트</a><a href="{{ today_href }}">오늘</a></nav>
 </div></div>
 <div class="wrap">{{ content|safe }}</div>
 </body></html>"""
@@ -183,6 +183,40 @@ def daily_index():
     entries = render.list_dailies()
     content = render_template_string(DAILY_INDEX, entries=entries)
     return _page("데일리", content)
+
+
+LEARN_INDEX = """
+<h1 class="page">🎓 학습 노트</h1>
+<div class="sub">개념 하나를 정리+학습경로+내 적용법으로. 생성:
+<code>python -m collector learn "&lt;개념&gt;"</code></div>
+{% if entries %}
+<ul class="daily-list">
+{% for e in entries %}
+  <li><a href="/learn/{{ e.name|urlencode }}"><span>{{ e.title }}</span></a></li>
+{% endfor %}
+</ul>
+{% else %}
+<div class="sub">아직 학습 노트가 없습니다.</div>
+{% endif %}
+"""
+
+
+@app.route("/learn")
+def learn_index():
+    # render.LEARN_DIR를 매 요청 명시 전달 — 기본값의 def-시점 바인딩 함정 회피(테스트 주입 가능)
+    entries = render.list_learn_notes(render.LEARN_DIR)
+    content = render_template_string(LEARN_INDEX, entries=entries)
+    return _page("학습 노트", content)
+
+
+@app.route("/learn/<name>")
+def learn_note(name):
+    result = render.load_learn_note(name, render.LEARN_DIR)
+    if result is None:
+        abort(404)
+    heading, body = result
+    content = render_template_string(DOC, heading=heading, sub="", body=body)
+    return _page(heading, content)
 
 
 @app.route("/daily/<date>")

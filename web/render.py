@@ -227,6 +227,39 @@ def load_topic(name: str, topics_dir: Path = TOPICS_DIR) -> Optional[Tuple[str, 
     return title or safe, render_markdown(body)
 
 
+LEARN_DIR = ROOT / "notes" / "learn"
+
+
+@dataclass
+class LearnEntry:
+    name: str    # 파일명(stem) = 라우트 키
+    title: str
+
+
+def list_learn_notes(learn_dir: Path = LEARN_DIR) -> List[LearnEntry]:
+    """적용형 학습 노트 목록, 최근 생성(mtime) 순."""
+    if not learn_dir.exists():
+        return []
+    entries: List[LearnEntry] = []
+    for path in sorted(learn_dir.glob("*.md"),
+                       key=lambda p: p.stat().st_mtime, reverse=True):
+        title, _ = _split_title(path.read_text(encoding="utf-8-sig"))
+        entries.append(LearnEntry(name=path.stem, title=title or path.stem))
+    return entries
+
+
+def load_learn_note(name: str, learn_dir: Path = LEARN_DIR) -> Optional[Tuple[str, str]]:
+    """Return (title, html) for a learn note, or None if missing/unsafe."""
+    safe = _safe_name(name)
+    if safe is None:
+        return None
+    path = learn_dir / f"{safe}.md"
+    if not path.exists():
+        return None
+    title, body = _split_title(path.read_text(encoding="utf-8-sig"))
+    return title or safe, render_markdown(body)
+
+
 def list_dailies(daily_dir: Path = DAILY_DIR) -> List[DailyEntry]:
     """Daily notes, newest first."""
     entries: List[DailyEntry] = []

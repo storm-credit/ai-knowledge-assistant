@@ -20,7 +20,7 @@
 웹 뷰어 (다크 UI, 로컬 Flask)   ✅ 빌드 (python -m web.app → :5000)
 개발·학습 콘텐츠 (학습 카드)    ✅ 가동 중 (07-02 cron 확인, 광고필터 적용)
 전문가 패널 작업계획서 (13)     ✅ Batch 1 완료 (쿼터예산·내구성·보안·웹, pytest 141)
-적용형 학습 노트 (14 스펙)      🔜 다음 (Batch 1 후, eval 트랙 첫 도입)
+적용형 학습 노트 (14)          ✅ 빌드 (collector learn·웹 /learn·eval 골든셋 2/2)
 모델 doc 변경 감시기 ⭐         💡 그 다음 (쿼터 해결 의존)
 Q&A(RAG) 웹                    ⏸️ 보류 — 승격 조건: 노트 30일치 축적
 ```
@@ -41,7 +41,7 @@ Q&A(RAG) 웹                    ⏸️ 보류 — 승격 조건: 노트 30일치
 | [`11`](11-wiki-v2.1-plan.md) v2.1 plan | 메모보존 + categories.yaml | ✅ 가동 중 |
 | [`12`](12-learning-content-plan.md) 학습 카드 | 학습형 출처 + LEARNING_PROMPT | ✅ 가동 중 |
 | [`13`](13-expert-panel-workplan.md) 전문가 패널 작업계획서 | 45소견→24항목·3배치 | ✅ Batch 1 완료 |
-| [`14`](14-applied-learning-note-spec.md) 적용형 학습 노트 spec | 개념→정리+학습경로+내 적용 | 📝 스펙 |
+| [`14`](14-applied-learning-note-spec.md) 적용형 학습 노트 | 개념→정리+학습경로+내 적용 | ✅ 빌드 |
 | [`BACKLOG`](BACKLOG.md) | 아카이브·웹공개·Q&A·검증 등 | 💡 |
 | [`PLAYBOOK`](PLAYBOOK.md) | 재사용 템플릿 | ✅ |
 
