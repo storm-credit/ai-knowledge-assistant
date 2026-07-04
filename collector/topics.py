@@ -33,9 +33,11 @@ class TopicStore:
         return self.data.get(topic, {}).get("new_since_synth", 0) >= threshold
 
     def set_structure(self, topic: str, overview: str, themes: list,
-                      orphans: list, related: list) -> None:
+                      orphans: list, related: list, window: list = None) -> None:
+        """window: 합성에 실제로 넘긴 항목 리스트. 응답의 번호는 이 리스트 기준으로 매핑
+        (미지정 시 전체 items — 윈도우 없이 합성한 기존 경로 호환)."""
         t = self.data[topic]
-        items = t["items"]
+        items = window if window is not None else t["items"]
         def to_ids(idxs):
             return [items[i-1]["id"] for i in idxs if isinstance(i, int) and 1 <= i <= len(items)]
         t["overview"] = overview
@@ -44,7 +46,19 @@ class TopicStore:
         t["orphans"] = to_ids(orphans)
         t["related"] = related
         t["new_since_synth"] = 0
+        t["synth_fail"] = 0          # 성공 → 실패 카운터 리셋
         t["synthesized"] = True
+
+    def record_synth_failure(self, topic: str) -> None:
+        """합성이 빈 구조를 반환한 실패 1회 기록. 2회 연속이면 new_since_synth를
+        리셋해 threshold만큼 새 항목이 쌓일 때까지 재시도를 미룬다 (콜 낭비 방지)."""
+        t = self.data[topic]
+        t["synth_fail"] = t.get("synth_fail", 0) + 1
+        if t["synth_fail"] >= 2:
+            t["new_since_synth"] = 0
+
+    def synth_backoff(self, topic: str) -> bool:
+        return self.data.get(topic, {}).get("synth_fail", 0) >= 2
 
     def save(self) -> None:
         os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
@@ -127,13 +141,17 @@ def render_page(topic: str, t: dict) -> str:
         lines += ["## 관련 주제", " · ".join(f"[[{r}]]" for r in t["related"]), ""]
     return "\n".join(lines).rstrip() + "\n"
 
+def page_filename(topic: str) -> str:
+    """주제명 → 페이지 파일명. Windows 금지문자를 _로 치환 (웹측 링크 생성과 공유)."""
+    safe = _re.sub(r'[\\/:*?"<>|]', "_", topic).strip() or "untitled"
+    return f"{safe}.md"
+
 def write_pages(store: "TopicStore", out_dir: str) -> list:
     os.makedirs(out_dir, exist_ok=True)
     paths = []
     current = set()
     for topic, t in store.data.items():
-        safe = _re.sub(r'[\\/:*?"<>|]', "_", topic).strip() or "untitled"
-        fname = f"{safe}.md"
+        fname = page_filename(topic)
         current.add(fname)
         p = os.path.join(out_dir, fname)
         content = render_page(topic, t)

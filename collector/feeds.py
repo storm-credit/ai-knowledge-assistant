@@ -1,3 +1,5 @@
+import hashlib
+
 import feedparser
 from typing import List
 from .config import Source
@@ -9,6 +11,13 @@ def parse_feed(source_or_xml, src: Source) -> List[Item]:
     items: List[Item] = []
     for e in parsed.entries:
         item_id = getattr(e, "id", None) or getattr(e, "link", "") or e.get("title", "")
+        if not item_id:
+            # id·link·title 전부 없으면 빈 id로 dedup이 오염됨 → 해시 대체 id
+            material = f"{e.get('title', '')}{e.get('published', '')}"
+            if not material.strip():
+                print(f"[warn] {src.name}: id·link·제목·날짜가 모두 없는 엔트리 skip")
+                continue
+            item_id = "sha1:" + hashlib.sha1(material.encode("utf-8")).hexdigest()
         items.append(Item(
             source_name=src.name,
             source_type=src.type,

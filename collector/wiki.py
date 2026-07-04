@@ -3,7 +3,7 @@ from .store import load_items
 from .state import StateStore
 from .topics import TopicStore, write_pages, write_index
 from .classify import classify_item
-from .wikisynth import synthesize_structure
+from .wikisynth import synthesize_structure, SYNTH_WINDOW
 
 def run_wiki(items_store: str = "state/items.jsonl",
              classified_state: str = "state/classified.json",
@@ -33,14 +33,23 @@ def run_wiki(items_store: str = "state/items.jsonl",
         seen.mark_seen(it.id)
 
     for tp in store.topic_names():
-        if store.needs_resynth(tp, resynth_threshold) or not store.data[tp].get("synthesized"):
-            try:
-                r = synthesize(tp, store.data[tp]["items"])
-                if r.get("overview") or r.get("themes"):
-                    store.set_structure(tp, r["overview"], r["themes"], r["orphans"], r["related"])
-                # else: 기존 데이터 보존, synthesized 미표시 → 다음 실행에 재시도
-            except Exception as e:
-                print(f"[skip] 구조 합성 실패 {tp}: {e}")
+        needs = store.needs_resynth(tp, resynth_threshold)
+        if not needs and store.data[tp].get("synthesized"):
+            continue
+        if not needs and store.synth_backoff(tp):
+            continue   # 2회 연속 빈 합성 → 새 항목이 threshold만큼 쌓일 때까지 스킵
+        try:
+            # 응답의 번호 → id 매핑이 윈도우 기준이 되도록 같은 슬라이스를 양쪽에 사용
+            window = store.data[tp]["items"][-SYNTH_WINDOW:]
+            r = synthesize(tp, window)
+            if r.get("overview") or r.get("themes"):
+                store.set_structure(tp, r["overview"], r["themes"], r["orphans"],
+                                    r["related"], window=window)
+            else:
+                # 기존 데이터 보존, synthesized 미표시 + 실패 기록 (백오프용)
+                store.record_synth_failure(tp)
+        except Exception as e:
+            print(f"[skip] 구조 합성 실패 {tp}: {e}")
 
     store.save()
     seen.save()

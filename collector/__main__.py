@@ -8,13 +8,11 @@ for _s in (sys.stdout, sys.stderr):
         pass
 
 from .config import load_sources
-from .state import StateStore
+from .state import StateStore, acquire_lock, release_lock
 from .pipeline import run
 from .wiki import run_wiki
 
-def main():
-    args = sys.argv[1:]
-    cmd = args[0] if args and not args[0].startswith("-") else "run"
+def _dispatch(cmd, args):
     force_resynth = "--resynth" in args
     threshold = 0 if force_resynth else 5   # 0 → 모든 주제 개요 강제 재합성
     today = datetime.date.today().isoformat()
@@ -34,10 +32,22 @@ def main():
         from .learn import run_learn
         if run_learn(concept, date=today) is None:
             return 1   # 예산 부족 등으로 미룸
-    else:
+    return 0
+
+def main():
+    args = sys.argv[1:]
+    cmd = args[0] if args and not args[0].startswith("-") else "run"
+    if cmd not in ("run", "all", "wiki", "learn"):
         print(f"알 수 없는 명령: {cmd} (run | wiki | learn)")
         return 1
-    return 0
+    # 동시 실행 방지 (#18): cron과 수동 실행이 겹치면 state 파일이 서로 깨진다
+    if not acquire_lock():
+        print("다른 실행 진행 중 (state/.lock) — 종료")
+        return 1
+    try:
+        return _dispatch(cmd, args)
+    finally:
+        release_lock()
 
 if __name__ == "__main__":
     sys.exit(main())

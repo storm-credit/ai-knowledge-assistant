@@ -193,6 +193,71 @@ def test_run_wiki_synth_exception_preserves_structure(tmp_path):
     assert d["themes"][0]["name"] == "기존테마"
 
 
+def test_run_wiki_synth_backoff_after_two_consecutive_failures(tmp_path):
+    # (#14) 빈 합성 2회 연속 → threshold만큼 새 항목이 쌓일 때까지 스킵 (콜 낭비 방지)
+    calls = {"n": 0}
+    def empty_synth(topic, items):
+        calls["n"] += 1
+        return {"overview": "", "themes": [], "orphans": [], "related": []}
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk("a", "글", categories=["AI"])], items_store)
+    kw = dict(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+              topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+              classify=lambda it: it.categories, synthesize=empty_synth,
+              resynth_threshold=2)
+    run_wiki(**kw)          # 실패 1
+    run_wiki(**kw)          # 실패 2
+    assert calls["n"] == 2
+    run_wiki(**kw)          # 백오프 → 스킵
+    assert calls["n"] == 2
+    # 새 항목이 threshold(2)만큼 쌓이면 재시도
+    append_items([mk("b", "글b", categories=["AI"]), mk("c", "글c", categories=["AI"])],
+                 items_store)
+    run_wiki(**kw)
+    assert calls["n"] == 3
+
+
+def test_run_wiki_synth_success_resets_fail_counter(tmp_path):
+    # (#14) 성공하면 synth_fail 리셋 → 이후 미합성 재시도 경로 정상 동작
+    from collector.topics import TopicStore
+    responses = [{"overview": "", "themes": [], "orphans": [], "related": []},
+                 {"overview": "좋은 개요", "themes": [], "orphans": [], "related": []}]
+    def synth(topic, items):
+        return responses.pop(0)
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk("a", "글", categories=["AI"])], items_store)
+    kw = dict(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+              topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+              classify=lambda it: it.categories, synthesize=synth,
+              resynth_threshold=2)
+    run_wiki(**kw)          # 실패 1
+    run_wiki(**kw)          # 성공 → 카운터 리셋
+    d = TopicStore(str(tmp_path/"t.json")).data["AI"]
+    assert d["overview"] == "좋은 개요"
+    assert d.get("synth_fail", 0) == 0
+
+
+def test_run_wiki_windowed_synth_maps_indexes_to_recent_items(tmp_path):
+    # (#14) 26개 이상이면 최근 25개만 합성에 넘기고, 응답 번호도 그 윈도우 기준으로 매핑
+    from collector.topics import TopicStore
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk(f"id{i:02d}", f"글{i}", categories=["AI"]) for i in range(30)],
+                 items_store)
+    got = {}
+    def synth(topic, items):
+        got["items"] = list(items)
+        return {"overview": "개요", "themes": [{"name": "테마", "intro": "", "indexes": [1]}],
+                "orphans": [25], "related": []}
+    run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+             topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+             classify=lambda it: it.categories, synthesize=synth, resynth_threshold=1)
+    assert len(got["items"]) == 25                    # 최근 25개만 전달
+    assert got["items"][0]["id"] == "id05"
+    d = TopicStore(str(tmp_path/"t.json")).data["AI"]
+    assert d["themes"][0]["item_ids"] == ["id05"]     # 번호 1 = 윈도우 첫 항목
+    assert d["orphans"] == ["id29"]                   # 번호 25 = 최신 항목
+
+
 def test_run_wiki_empty_classify_not_marked_seen(tmp_path):
     # (c) 분류가 빈 리스트 → seen 미마킹 (영구 유실 방지, 버그 픽스)
     import json

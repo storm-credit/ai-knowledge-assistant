@@ -121,11 +121,12 @@ def _module_budget() -> CallBudget:
     return _default_budget
 
 
-def _create_with_overload_retry(c, model, messages, sleep, backoff, retries) -> str:
+def _create_with_overload_retry(c, model, messages, sleep, backoff, retries, **create_kwargs) -> str:
     """한 클라이언트(키)로 호출. 503/과부하면 backoff 후 같은 키로 재시도 (429 로테이션과 분리)."""
     for attempt in range(retries + 1):
         try:
-            return c.chat.completions.create(model=model, messages=messages).choices[0].message.content or ""
+            return c.chat.completions.create(model=model, messages=messages,
+                                             **create_kwargs).choices[0].message.content or ""
         except Exception as e:
             if _is_overload_error(e) and not _is_quota_error(e) and attempt < retries:
                 sleep(backoff)
@@ -136,12 +137,13 @@ def _create_with_overload_retry(c, model, messages, sleep, backoff, retries) -> 
 def complete_text(messages, client=None, clients=None, model: str = "gemini-2.5-flash-lite",
                   budget=None, breaker=None,
                   sleep=time.sleep, overload_backoff: float = 2.0,
-                  overload_retries: int = 2) -> str:
+                  overload_retries: int = 2, **create_kwargs) -> str:
     """키 로테이션으로 chat completion을 실행하고 응답 텍스트를 반환한다.
     후보 클라이언트: 주입 client 우선 → clients → 환경의 모든 키. 후보가 비면 RuntimeError.
     - 429: 다음 키로 로테이션. 전 키 소진 시 QuotaExhausted + 서킷브레이커 작동.
     - 503/과부하: 같은 키에서 backoff 후 재시도. 다른 에러는 즉시 전파.
-    - 예산·브레이커는 클라이언트 미주입(실제 실행) 시 모듈 기본값 적용, 파라미터로 주입 가능."""
+    - 예산·브레이커는 클라이언트 미주입(실제 실행) 시 모듈 기본값 적용, 파라미터로 주입 가능.
+    - 추가 kwargs(response_format 등)는 create()로 그대로 전달."""
     injected = client is not None or clients is not None
     if budget is None and not injected:
         budget = _module_budget()
@@ -164,7 +166,8 @@ def complete_text(messages, client=None, clients=None, model: str = "gemini-2.5-
     for c in cands:
         try:
             text = _create_with_overload_retry(c, model, messages, sleep,
-                                               overload_backoff, overload_retries)
+                                               overload_backoff, overload_retries,
+                                               **create_kwargs)
         except Exception as e:
             last = e
             if _is_quota_error(e):

@@ -39,6 +39,18 @@ def test_complete_text_no_candidates_raises_runtimeerror():
         complete_text([{"role": "user", "content": "hi"}], clients=[])
 
 
+def test_complete_text_forwards_extra_create_kwargs():
+    # #14: response_format 등 추가 kwargs가 create()까지 전달돼야 한다
+    class RecClient:
+        def __init__(s): s.seen = None; s.chat = type("Ch", (), {"completions": s})()
+        def create(s, **k): s.seen = k; return FakeResp("ok")
+    fake = RecClient()
+    out = complete_text([{"role": "user", "content": "hi"}], client=fake,
+                        response_format={"type": "json_object"})
+    assert out == "ok"
+    assert fake.seen["response_format"] == {"type": "json_object"}
+
+
 def test_complete_text_non_quota_error_propagates_immediately():
     class BoomClient:
         def __init__(s): s.chat = type("Ch", (), {"completions": s})()

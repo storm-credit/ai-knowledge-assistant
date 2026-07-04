@@ -60,11 +60,20 @@ def _parse_struct_json(text: str) -> dict:
     return {"overview": overview, "themes": themes,
             "orphans": _ints(data.get("orphans")), "related": related[:4]}
 
+# 문자 단위 [:8000] 절단은 최신 항목을 통째로 잘라먹고 번호 참조를 깨뜨림 →
+# 항목 단위 truncation: 항목별 summary 400자 캡 + 최근 25개만 포함.
+# 응답의 번호 → id 매핑이 이 윈도우 기준이므로 호출부(run_wiki)도 같은 윈도우를 써야 한다.
+SYNTH_WINDOW = 25
+SUMMARY_CAP = 400
+
 def synthesize_structure(topic: str, items: List[dict], client=None, clients=None,
                          model: str = "gemini-2.5-flash-lite") -> dict:
-    numbered = "\n".join(f"[{i+1}] {it.get('title','')} — {it.get('summary','')}"
-                         for i, it in enumerate(items))[:8000]
+    window = items[-SYNTH_WINDOW:]
+    numbered = "\n".join(
+        f"[{i+1}] {it.get('title','')} — {(it.get('summary') or '')[:SUMMARY_CAP]}"
+        for i, it in enumerate(window))
     prompt = SYNTH_STRUCT_PROMPT.format(topic=topic, items=numbered)
     text = complete_text([{"role": "user", "content": prompt}],
-                         client=client, clients=clients, model=model).strip()
+                         client=client, clients=clients, model=model,
+                         response_format={"type": "json_object"}).strip()
     return _parse_struct_json(text)
