@@ -10,6 +10,7 @@ from __future__ import annotations
 import html
 import re
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import List, Optional, Tuple
 from urllib.parse import quote
@@ -40,6 +41,7 @@ _CALLOUT_ICON = {"abstract": "📄", "note": "📝", "info": "ℹ️", "tip": "�
 class TopicCard:
     name: str
     count: str  # free-form label, e.g. "42건 · 7개 출처"
+    updated_today: bool = False  # 주제 md의 mtime이 오늘(로컬)이면 True
 
 
 @dataclass
@@ -197,6 +199,11 @@ def _split_title(text: str) -> Tuple[str, str]:
     return "", text
 
 
+def _updated_today(path: Path) -> bool:
+    """파일 mtime의 로컬 날짜가 오늘이면 True (없는 파일은 False)."""
+    return path.exists() and date.fromtimestamp(path.stat().st_mtime) == date.today()
+
+
 def list_topics(topics_dir: Path = TOPICS_DIR) -> List[TopicCard]:
     """Topics in 목차 order; falls back to scanning the directory."""
     toc = topics_dir / f"{_TOC_NAME}.md"
@@ -205,13 +212,18 @@ def list_topics(topics_dir: Path = TOPICS_DIR) -> List[TopicCard]:
         for line in toc.read_text(encoding="utf-8").split("\n"):
             m = _TOC_LINE.match(line.strip())
             if m:
-                cards.append(TopicCard(name=m.group("name"), count=m.group("body").strip()))
+                name = m.group("name")
+                cards.append(TopicCard(
+                    name=name, count=m.group("body").strip(),
+                    updated_today=_updated_today(topics_dir / f"{name}.md"),
+                ))
     if cards:
         return cards
     for path in sorted(topics_dir.glob("*.md")):
         if path.stem == _TOC_NAME:
             continue
-        cards.append(TopicCard(name=path.stem, count=""))
+        cards.append(TopicCard(name=path.stem, count="",
+                               updated_today=_updated_today(path)))
     return cards
 
 
@@ -269,6 +281,73 @@ def list_dailies(daily_dir: Path = DAILY_DIR) -> List[DailyEntry]:
         title, _ = _split_title(path.read_text(encoding="utf-8"))
         entries.append(DailyEntry(date=path.stem, title=title or path.stem))
     return entries
+
+
+# --- #19 노트 전체 검색 (인덱스 없는 풀스캔 — 파일 수십 개 수준이라 충분) ---
+
+@dataclass
+class SearchHit:
+    kind: str      # "topic" | "daily" | "learn"
+    name: str      # 파일명(stem) = 상세 라우트 키
+    title: str     # 노트 제목 (없으면 stem)
+    snippet: str   # 매칭 줄, 매칭어 앞뒤로 ~160자
+
+
+_SNIPPET_WIDTH = 160   # 스니펫 최대 길이(말줄임 제외)
+_MAX_PER_FILE = 3      # 파일당 최대 히트
+_MAX_TOTAL = 50        # 전체 최대 히트
+
+
+def _make_snippet(line: str, idx: int, qlen: int) -> str:
+    """매칭 위치를 중심으로 ~160자만 남긴다 — 매칭어는 원문 그대로 유지."""
+    if len(line) <= _SNIPPET_WIDTH:
+        return line
+    start = max(0, idx - (_SNIPPET_WIDTH - qlen) // 2)
+    end = min(len(line), start + _SNIPPET_WIDTH)
+    start = max(0, end - _SNIPPET_WIDTH)
+    head = "…" if start > 0 else ""
+    tail = "…" if end < len(line) else ""
+    return f"{head}{line[start:end]}{tail}"
+
+
+def _search_file(path: Path, kind: str, needle: str) -> List[SearchHit]:
+    """한 파일에서 줄 단위 대소문자 무시 부분일치 — 최대 3히트."""
+    text = path.read_text(encoding="utf-8-sig")   # BOM 안전
+    title, _ = _split_title(text)
+    hits: List[SearchHit] = []
+    for raw in text.split("\n"):
+        line = raw.strip()
+        idx = line.lower().find(needle)
+        if idx < 0:
+            continue
+        hits.append(SearchHit(kind=kind, name=path.stem, title=title or path.stem,
+                              snippet=_make_snippet(line, idx, len(needle))))
+        if len(hits) >= _MAX_PER_FILE:
+            break
+    return hits
+
+
+def search_notes(query: str, topics_dir: Path = TOPICS_DIR,
+                 daily_dir: Path = DAILY_DIR,
+                 learn_dir: Path = LEARN_DIR) -> List[SearchHit]:
+    """세 노트 디렉터리(.md) 전체 검색. 빈/공백 쿼리는 빈 리스트."""
+    needle = query.strip().lower()
+    if not needle:
+        return []
+    results: List[SearchHit] = []
+    for kind, dir_ in (("topic", topics_dir), ("daily", daily_dir),
+                       ("learn", learn_dir)):
+        if not dir_.exists():
+            continue
+        for path in sorted(dir_.glob("*.md")):
+            if kind == "topic" and path.stem == _TOC_NAME:
+                continue   # 목차는 카드 목록의 복제라 노이즈
+            if kind == "daily" and not _DAILY_FILE.match(path.stem):
+                continue   # 날짜 형식이 아니면 상세 라우트가 없다
+            results.extend(_search_file(path, kind, needle))
+            if len(results) >= _MAX_TOTAL:
+                return results[:_MAX_TOTAL]
+    return results
 
 
 def load_daily(date: str, daily_dir: Path = DAILY_DIR) -> Optional[Tuple[str, str]]:

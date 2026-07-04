@@ -6,8 +6,9 @@ dark UI. Run with:  ``python -m web.app``  then open http://127.0.0.1:5000
 from __future__ import annotations
 
 import os
+from urllib.parse import quote
 
-from flask import Flask, abort, render_template_string
+from flask import Flask, abort, render_template_string, request
 
 from web import render
 
@@ -47,6 +48,30 @@ h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
   opacity:.9;margin-bottom:12px}
 .card .t{font-size:17px;font-weight:650;color:var(--text)}
 .card .m{color:var(--muted);font-size:13px;margin-top:6px}
+/* #20 오늘 업데이트 뱃지 — 학습 뱃지(초록)와 구분되는 파랑 */
+.badge-new{font-size:10px;font-weight:700;letter-spacing:.5px;color:#7aa2f7;
+  background:rgba(122,162,247,.14);border:1px solid rgba(122,162,247,.4);
+  border-radius:99px;padding:1px 7px;margin-left:8px;vertical-align:2px}
+/* #19 topbar 검색 */
+.searchbox{display:flex}
+.searchbox input{background:var(--panel-2);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;padding:5px 10px;
+  width:140px;outline:none}
+.searchbox input:focus{border-color:var(--accent)}
+.searchbox input::placeholder{color:var(--muted)}
+@media (max-width:600px){
+  .topbar .inner{gap:10px}
+  .nav{gap:10px}
+  .searchbox input{width:84px}
+}
+/* #19 검색 결과 목록 */
+.hits{list-style:none;padding:0;margin:0}
+.hits li{border-bottom:1px solid var(--border)}
+.hits a{display:block;padding:13px 4px;color:var(--text)}
+.hits a:hover{text-decoration:none}
+.hits a:hover .ht{color:var(--link)}
+.hits .ht{font-weight:650;font-size:15px}
+.hits .hs{color:var(--muted);font-size:13.5px;margin-top:3px;overflow-wrap:anywhere}
 .daily-list{list-style:none;padding:0;margin:0}
 .daily-list li{border-bottom:1px solid var(--border)}
 .daily-list a{display:flex;gap:14px;align-items:baseline;padding:13px 4px;color:var(--text)}
@@ -103,6 +128,9 @@ LAYOUT = """<!doctype html>
 <div class="topbar"><div class="inner">
   <a class="brand" href="/">🧠 AI 지식 비서 <span>wiki</span></a>
   <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="/learn">학습노트</a><a href="{{ today_href }}">오늘</a></nav>
+  <form class="searchbox" action="/search" method="get">
+    <input type="search" name="q" placeholder="검색" value="{{ q }}" aria-label="노트 검색">
+  </form>
 </div></div>
 <div class="wrap">{{ content|safe }}</div>
 </body></html>"""
@@ -114,7 +142,7 @@ INDEX = """
 {% for c in cards %}
   <a class="card" href="/topic/{{ c.name|urlencode }}" style="--accent:{{ c.accent }}">
     <div class="dot"></div>
-    <div class="t">{{ c.name }}</div>
+    <div class="t">{{ c.name }}{% if c.updated_today %}<span class="badge-new">NEW</span>{% endif %}</div>
     <div class="m">{{ c.count }}</div>
   </a>
 {% endfor %}
@@ -150,10 +178,10 @@ def _today_href():
     return f"/daily/{entries[0].date}" if entries else "/daily"
 
 
-def _page(title, content, extra_css=""):
+def _page(title, content, extra_css="", q=""):
     return render_template_string(
         LAYOUT, title=title, css=BASE_CSS, extra_css=extra_css,
-        content=content, today_href=_today_href(),
+        content=content, today_href=_today_href(), q=q,
     )
 
 
@@ -161,7 +189,8 @@ def _page(title, content, extra_css=""):
 def index():
     cards = list(render.list_topics())
     view = [
-        {"name": c.name, "count": c.count, "accent": ACCENTS[i % len(ACCENTS)]}
+        {"name": c.name, "count": c.count, "accent": ACCENTS[i % len(ACCENTS)],
+         "updated_today": c.updated_today}
         for i, c in enumerate(cards)
     ]
     content = render_template_string(INDEX, cards=view)
@@ -217,6 +246,45 @@ def learn_note(name):
     heading, body = result
     content = render_template_string(DOC, heading=heading, sub="", body=body)
     return _page(heading, content)
+
+
+# #19 노트 전체 검색 — 스니펫·쿼리 echo 모두 오토이스케이프(|safe 금지)로 XSS 안전
+SEARCH = """
+<h1 class="page">🔎 검색</h1>
+<div class="sub">{% if q %}"{{ q }}" — {{ hits|length }}건{% else %}topbar 검색창에 찾을 말을 입력하세요.{% endif %}</div>
+{% if hits %}
+<ul class="hits">
+{% for h in hits %}
+  <li><a href="{{ h.href }}">
+    <div class="ht">{{ h.icon }} {{ h.title }}</div>
+    <div class="hs">{{ h.snippet }}</div>
+  </a></li>
+{% endfor %}
+</ul>
+{% elif q %}
+<div class="sub">결과가 없습니다.</div>
+{% endif %}
+"""
+
+# kind → (아이콘, 상세 라우트 접두사)
+_KIND_VIEW = {"topic": ("📚", "/topic/"), "daily": ("🗓️", "/daily/"),
+              "learn": ("🎓", "/learn/")}
+
+
+@app.route("/search")
+def search():
+    q = request.args.get("q", "")
+    # 디렉터리를 매 요청 명시 전달 — 기본값의 def-시점 바인딩 함정 회피(테스트 주입 가능)
+    hits = render.search_notes(q, topics_dir=render.TOPICS_DIR,
+                               daily_dir=render.DAILY_DIR,
+                               learn_dir=render.LEARN_DIR)
+    view = []
+    for h in hits:
+        icon, prefix = _KIND_VIEW[h.kind]
+        view.append({"icon": icon, "href": prefix + quote(h.name),
+                     "title": h.title, "snippet": h.snippet})
+    content = render_template_string(SEARCH, q=q.strip(), hits=view)
+    return _page("검색", content, q=q.strip())
 
 
 @app.route("/daily/<date>")

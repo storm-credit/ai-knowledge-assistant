@@ -112,6 +112,40 @@ def test_load_daily_validates_date_format(tmp_path):
     assert render.load_daily("bad", tmp_path) is None
 
 
+# --- #20 주제 카드 '오늘 업데이트' 뱃지 ---
+
+def test_list_topics_marks_updated_today(tmp_path):
+    import os, time
+    _write(tmp_path, "00-목차.md",
+           "# 📚 목차\n- [[오늘것]] — 3건\n- [[옛날것]] — 5건\n- [[파일없음]] — 1건\n")
+    _write(tmp_path, "오늘것.md", "# 오늘것\n")           # 방금 씀 → 오늘
+    _write(tmp_path, "옛날것.md", "# 옛날것\n")
+    past = time.time() - 3 * 86400                        # 3일 전으로
+    os.utime(tmp_path / "옛날것.md", (past, past))
+    flags = {c.name: c.updated_today for c in render.list_topics(tmp_path)}
+    assert flags == {"오늘것": True, "옛날것": False, "파일없음": False}
+
+
+def test_list_topics_scan_fallback_marks_updated_today(tmp_path):
+    import os, time
+    _write(tmp_path, "Alpha.md", "# Alpha\n")
+    past = time.time() - 86400
+    os.utime(tmp_path / "Alpha.md", (past, past))
+    _write(tmp_path, "Beta.md", "# Beta\n")
+    flags = {c.name: c.updated_today for c in render.list_topics(tmp_path)}
+    assert flags == {"Alpha": False, "Beta": True}
+
+
+def test_index_shows_new_badge_only_for_updated_today(monkeypatch):
+    from web import app as webapp
+    fake = [render.TopicCard(name="오늘것", count="3건", updated_today=True),
+            render.TopicCard(name="옛날것", count="5건")]
+    monkeypatch.setattr(webapp.render, "list_topics", lambda: fake)
+    body = webapp.app.test_client().get("/").get_data(as_text=True)
+    assert body.count('class="badge-new"') == 1
+    assert ".badge-new" in webapp.BASE_CSS
+
+
 # --- 카드 D: 렌더 HTML sanitize (XSS 차단) ---
 
 def test_raw_script_tag_is_stripped():
