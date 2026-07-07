@@ -45,6 +45,15 @@ LEARNING_PROMPT = (
 
 DEV_CATEGORY = "개발·학습"
 
+# 불릿 마커 정규화: 모델이 '- ' 대신 '* '/'•'로 낼 때가 있어 위키 일관성 위해 '- '로 통일.
+# '**굵은 라벨**'(학습 카드)은 '**' 뒤에 공백이 없어 매칭 안 됨.
+_BULLET_MARKER = re.compile(r"(?m)^(\s*)[*•]\s+")
+
+
+def normalize_bullets(text: str) -> str:
+    return _BULLET_MARKER.sub(r"\1- ", text)
+
+
 # '카테고리:' 표기의 변형 허용: 굵은 마커(**카테고리:**), 전각 콜론(：)
 _CATEGORY_LINE = re.compile(r"^\**\s*카테고리\s*[:：]\s*\**\s*(?P<rest>.*)$")
 
@@ -133,7 +142,7 @@ def _apply_batch_entry(item: Item, entry, cats) -> bool:
     summary = entry.get("summary")
     if not isinstance(summary, str) or not summary.strip():
         return False
-    item.summary = summary.strip()
+    item.summary = normalize_bullets(summary.strip())
     found = entry.get("categories") or []
     valid = [c for c in found if isinstance(c, str) and c in cats][:2]
     if valid:
@@ -221,7 +230,7 @@ def summarize_and_classify(item: Item, client=None, model: str = "gemini-2.5-fla
         source=item.source_name, body=body)}]
     text = complete_text(messages, client=client, clients=clients, model=model).strip()
     summary, found = extract_category_line(text)
-    item.summary = summary.strip()
+    item.summary = normalize_bullets(summary.strip())
     valid = [p for p in found if p in cats][:2]
     if valid:
         item.categories = valid

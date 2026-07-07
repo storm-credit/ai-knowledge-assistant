@@ -67,3 +67,19 @@ def test_learning_defaults_to_dev_category_when_none_found():
     fake = RecClient("**핵심 개념**\n- a\n**한 줄 정리**\n요약")  # 카테고리 줄 없음
     out = summarize_and_classify(_item(True), client=fake, categories=CATS)
     assert out.categories == ["개발·학습"]
+
+
+def test_bullet_markers_normalized_to_dash():
+    # 모델이 '* '/'•'로 불릿을 내면 '- '로 통일 (위키 일관성). eval 07-07 실전 발견.
+    fake = RecClient("*   포인트 하나\n•  포인트 둘\n카테고리: AI 모델·기술")
+    out = summarize_and_classify(_item(False), client=fake, categories=CATS)
+    assert "- 포인트 하나" in out.summary
+    assert "- 포인트 둘" in out.summary
+    assert "* " not in out.summary
+
+
+def test_normalize_does_not_touch_bold_labels():
+    # 학습 카드의 '**핵심 개념**'은 '**' 뒤 공백 없어 정규화 대상 아님
+    fake = RecClient("**핵심 개념**\n- a\n카테고리: 개발·학습")
+    out = summarize_and_classify(_item(True), client=fake, categories=CATS)
+    assert "**핵심 개념**" in out.summary
