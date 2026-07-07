@@ -102,5 +102,7 @@ Batch 3 (나중) : #24
 - [x] Wave A 카드 H `c6a5cc4` — #14 synth 최근25윈도우+JSON모드+백오프, #15 주입방어(<content>), #16 page_filename 추출, #17 feed-id 폴백, #18 실행 락 (테스트 +22)
 - [x] Wave A 카드 I `e558153` — #19 전문검색 /search, #20 주제 NEW 뱃지, #22 라우트 traversal 테스트 (테스트 +20)
 - [x] #13 eval 골든셋 `e37a9b9` — 실 10건(학습5·뉴스5, 광고 3건 포함) 실 API 실행 9/10 통과. 발견: 모델이 `- ` 대신 `* `/`•` 불릿 드리프트 → normalize_bullets()로 대시 통일(굵은 라벨 보존). RUN_LLM_EVAL 게이트, 스냅샷 커밋.
-- [ ] #16 웹측 연결(load_topic이 page_filename 공유), #21 홈 '오늘 중심', #23 스토리지 로테이션 — Wave B
-- pytest **201 passed** (+ llm eval 12 gated)
+- [x] Wave B `cec0813`,`179b14c` — #21 홈 '오늘 중심'(최신 데일리 배너+주제 그리드), #16 웹 load_topic이 topics.page_filename 공유(금지문자 주제 404 방지), #23 스토리지 성장관리(opt-in: load 상한·오래된 항목 아카이브·주제 prune, 기존 호출부 무수정)
+- pytest **215 passed** (+ llm eval 12 gated)
+
+**Batch 2 정리:** Wave A(H·I) + #13 eval + Wave B 완료. 미착수: #21의 완전한 홈 대시보드(수집 현황 표시)는 백로그 푸시 알림과 묶어 나중. **다음 로드맵 = ⭐ 모델 doc 변경 감시기.**
