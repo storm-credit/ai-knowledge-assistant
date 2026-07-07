@@ -101,6 +101,6 @@ Batch 3 (나중) : #24
 
 - [x] Wave A 카드 H `c6a5cc4` — #14 synth 최근25윈도우+JSON모드+백오프, #15 주입방어(<content>), #16 page_filename 추출, #17 feed-id 폴백, #18 실행 락 (테스트 +22)
 - [x] Wave A 카드 I `e558153` — #19 전문검색 /search, #20 주제 NEW 뱃지, #22 라우트 traversal 테스트 (테스트 +20)
-- [ ] #13 eval 골든셋 12건 — 쿼터 리셋(내일 아침) 직후 실행 예정
+- [x] #13 eval 골든셋 `e37a9b9` — 실 10건(학습5·뉴스5, 광고 3건 포함) 실 API 실행 9/10 통과. 발견: 모델이 `- ` 대신 `* `/`•` 불릿 드리프트 → normalize_bullets()로 대시 통일(굵은 라벨 보존). RUN_LLM_EVAL 게이트, 스냅샷 커밋.
 - [ ] #16 웹측 연결(load_topic이 page_filename 공유), #21 홈 '오늘 중심', #23 스토리지 로테이션 — Wave B
-- pytest **199 passed** 기준
+- pytest **201 passed** (+ llm eval 12 gated)
