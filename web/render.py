@@ -18,6 +18,9 @@ from urllib.parse import quote
 import markdown as _md
 import nh3
 
+# 주제 파일명 치환 규칙은 저장측(collector)과 반드시 동일해야 함 → 함수 공유
+from collector.topics import page_filename
+
 # sanitize 허용목록: nh3 기본값 + 렌더가 쓰는 class(콜아웃·기사 카드·코드 언어)와 헤딩 id
 _ALLOWED_ATTRIBUTES = {**nh3.ALLOWED_ATTRIBUTES, "*": {"class"}}
 for _h in ("h1", "h2", "h3"):
@@ -229,10 +232,12 @@ def list_topics(topics_dir: Path = TOPICS_DIR) -> List[TopicCard]:
 
 def load_topic(name: str, topics_dir: Path = TOPICS_DIR) -> Optional[Tuple[str, str]]:
     """Return (title, html) for a topic, or None if missing/unsafe."""
-    safe = _safe_name(name)
+    safe = _safe_name(name)   # traversal(/, \, ..) 먼저 거부
     if safe is None:
         return None
-    path = topics_dir / f"{safe}.md"
+    # 저장 파일명은 collector.topics.page_filename 규칙(금지문자 :*?"<>|→"_")을 따른다.
+    # traversal 문자(/, \)는 위에서 이미 걸러졌으므로 순서가 중요하다.
+    path = topics_dir / page_filename(safe)
     if not path.exists():
         return None
     title, body = _split_title(path.read_text(encoding="utf-8"))

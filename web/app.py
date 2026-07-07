@@ -40,6 +40,15 @@ a:hover{text-decoration:underline}
 .nav a:hover{color:var(--text);text-decoration:none}
 h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
 .sub{color:var(--muted);font-size:14px;margin-bottom:26px}
+/* #21 홈 상단 '오늘' 하이라이트 배너 */
+.today-banner{display:block;background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:14px;
+  padding:16px 20px;margin:4px 0 28px;transition:border-color .12s ease}
+.today-banner:hover{border-color:var(--accent);text-decoration:none}
+.today-banner .tb-label{color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.3px;
+  font-variant-numeric:tabular-nums}
+.today-banner .tb-title{color:var(--text);font-size:18px;font-weight:650;margin:5px 0 8px;line-height:1.4}
+.today-banner .tb-more{color:var(--muted);font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 .card{display:block;background:var(--panel);border:1px solid var(--border);
   border-radius:14px;padding:18px 18px 16px;transition:transform .12s ease,border-color .12s ease}
@@ -136,6 +145,13 @@ LAYOUT = """<!doctype html>
 </body></html>"""
 
 INDEX = """
+{% if daily %}
+<a class="today-banner" href="/daily/{{ daily.date }}">
+  <div class="tb-label">🗓️ 오늘 · {{ daily.date }}</div>
+  <div class="tb-title">{{ daily.title }}</div>
+  <div class="tb-more">데일리 {{ daily_count }}일치 · 전체 보기 →</div>
+</a>
+{% endif %}
 <h1 class="page">📚 주제</h1>
 <div class="sub">매일 05:00 자동 수집·요약·분류. 카드를 눌러 정리형 위키로 이동.</div>
 <div class="grid">
@@ -193,7 +209,11 @@ def index():
          "updated_today": c.updated_today}
         for i, c in enumerate(cards)
     ]
-    content = render_template_string(INDEX, cards=view)
+    # #21 '오늘 중심': 최신 데일리 하나를 상단 하이라이트로 (없으면 배너 생략)
+    dailies = render.list_dailies()
+    latest = dailies[0] if dailies else None
+    content = render_template_string(INDEX, cards=view,
+                                     daily=latest, daily_count=len(dailies))
     return _page("주제", content)
 
 

@@ -98,6 +98,25 @@ def test_load_topic_rejects_path_traversal(tmp_path):
     assert render.load_topic("a/b", tmp_path) is None
 
 
+# --- #16 웹측 파일명 공유: collector.topics.page_filename과 동일 치환 규칙 ---
+
+def test_load_topic_finds_file_with_substituted_name(tmp_path):
+    # 금지문자(:,*)가 있는 주제명은 page_filename 규칙으로 A_B_C.md에 저장된다
+    _write(tmp_path, "A_B_C.md", "# A:B*C\n\n## 테마\n내용\n")
+    result = render.load_topic("A:B*C", tmp_path)
+    assert result is not None
+    title, html = result
+    assert title == "A:B*C"
+    assert "<h2>테마</h2>" in html
+
+
+def test_load_topic_traversal_still_rejected_before_substitution(tmp_path):
+    # traversal 문자(/, \)는 치환 전에 _safe_name에서 먼저 걸러야 한다
+    _write(tmp_path, "GPT-4_Claude.md", "# GPT-4/Claude\n본문\n")
+    assert render.load_topic("GPT-4/Claude", tmp_path) is None
+    assert render.load_topic("..\\secret", tmp_path) is None
+
+
 def test_list_dailies_newest_first(tmp_path):
     _write(tmp_path, "2026-06-30.md", "# 2026-06-30 AI 요약\n")
     _write(tmp_path, "2026-07-01.md", "# 2026-07-01 AI 요약\n")
