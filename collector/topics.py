@@ -60,6 +60,24 @@ class TopicStore:
     def synth_backoff(self, topic: str) -> bool:
         return self.data.get(topic, {}).get("synth_fail", 0) >= 2
 
+    def prune_topic(self, topic: str, max_items: int = 200) -> int:
+        """(#23) 주제의 items가 max_items 초과 시 오래된 것부터(리스트 앞쪽) 잘라내고,
+        themes/orphans의 item_ids 중 사라진 id 참조도 정리한다. 명시 호출 전용(자동 실행 없음).
+        반환값: 잘라낸 항목 수."""
+        t = self.data.get(topic)
+        if not t:
+            return 0
+        items = t.get("items", [])
+        if len(items) <= max_items:
+            return 0
+        dropped = len(items) - max_items
+        t["items"] = items[-max_items:]
+        kept = {it["id"] for it in t["items"]}
+        for th in t.get("themes", []):
+            th["item_ids"] = [i for i in th.get("item_ids", []) if i in kept]
+        t["orphans"] = [i for i in t.get("orphans", []) if i in kept]
+        return dropped
+
     def save(self) -> None:
         os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
         with open(self.path, "w", encoding="utf-8") as f:

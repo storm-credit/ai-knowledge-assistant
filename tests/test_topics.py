@@ -61,6 +61,34 @@ def test_page_filename_replaces_forbidden_chars(tmp_path):
     assert os.path.basename(paths[0]) == page_filename("A/B:C") == "A_B_C.md"
 
 
+def test_prune_topic_trims_oldest_and_cleans_refs(tmp_path):
+    # (#23) max_items 초과 시 오래된 것부터 절삭, themes/orphans의 사라진 id 참조도 정리
+    s = TopicStore(str(tmp_path / "topics.json"))
+    for i in range(5):
+        s.add_item("AI", mk(f"id{i}", "s", f"글{i}"))
+    # id0(오래됨)을 테마에, id0+id4를 orphan에 참조시킨다
+    s.data["AI"]["themes"] = [{"name": "T", "intro": "", "item_ids": ["id0", "id3"]}]
+    s.data["AI"]["orphans"] = ["id0", "id4"]
+    s.prune_topic("AI", max_items=3)
+    d = s.data["AI"]
+    assert [it["id"] for it in d["items"]] == ["id2", "id3", "id4"]   # 오래된 id0,id1 절삭
+    assert d["themes"][0]["item_ids"] == ["id3"]                       # 사라진 id0 참조 제거
+    assert d["orphans"] == ["id4"]                                     # 사라진 id0 참조 제거
+
+def test_prune_topic_noop_when_under_limit(tmp_path):
+    # (#23) 상한 이하면 아무것도 바꾸지 않는다
+    s = TopicStore(str(tmp_path / "topics.json"))
+    for i in range(3):
+        s.add_item("AI", mk(f"id{i}", "s", f"글{i}"))
+    s.prune_topic("AI", max_items=10)
+    assert [it["id"] for it in s.data["AI"]["items"]] == ["id0", "id1", "id2"]
+
+def test_prune_topic_unknown_topic_is_safe(tmp_path):
+    # (#23) 없는 주제 prune은 크래시 없이 no-op
+    s = TopicStore(str(tmp_path / "topics.json"))
+    s.prune_topic("없음", max_items=5)
+
+
 def test_corrupt_topics_json_backs_up_and_starts_empty(tmp_path):
     # corrupt JSON이어도 크래시 없이 .bak 백업 후 빈 상태로 시작
     path = tmp_path / "topics.json"
