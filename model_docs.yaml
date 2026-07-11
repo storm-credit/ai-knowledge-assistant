@@ -1,0 +1,8 @@
+# 모델 문서 감시 대상 (docs/15). 추가/삭제는 여기 한 곳.
+providers:
+  - name: Gemini
+    url: https://ai.google.dev/gemini-api/docs/changelog   # 정적 검증됨
+  - name: OpenAI
+    url: https://platform.openai.com/docs/changelog        # 정적 검증됨
+  # - name: Claude
+  #   url: https://docs.anthropic.com/en/release-notes/api  # SPA(본문 JS 렌더) → BACKLOG

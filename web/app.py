@@ -136,7 +136,7 @@ LAYOUT = """<!doctype html>
 <body>
 <div class="topbar"><div class="inner">
   <a class="brand" href="/">🧠 AI 지식 비서 <span>wiki</span></a>
-  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="/learn">학습노트</a><a href="{{ today_href }}">오늘</a></nav>
+  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="/learn">학습노트</a><a href="/models">모델</a><a href="{{ today_href }}">오늘</a></nav>
   <form class="searchbox" action="/search" method="get">
     <input type="search" name="q" placeholder="검색" value="{{ q }}" aria-label="노트 검색">
   </form>
@@ -261,6 +261,38 @@ def learn_index():
 @app.route("/learn/<name>")
 def learn_note(name):
     result = render.load_learn_note(name, render.LEARN_DIR)
+    if result is None:
+        abort(404)
+    heading, body = result
+    content = render_template_string(DOC, heading=heading, sub="", body=body)
+    return _page(heading, content)
+
+
+MODELS_INDEX = """
+<h1 class="page">🛰️ 모델 업데이트</h1>
+<div class="sub">Claude·OpenAI·Gemini 공식 문서 변경을 매일 감지·요약. 날짜별 기록.</div>
+{% if entries %}
+<ul class="daily-list">
+{% for e in entries %}
+  <li><a href="/models/{{ e.date }}"><span class="d">{{ e.date }}</span><span>{{ e.title }}</span></a></li>
+{% endfor %}
+</ul>
+{% else %}
+<div class="sub">아직 감지된 변경이 없습니다. (매일 cron이 변경 시에만 기록)</div>
+{% endif %}
+"""
+
+
+@app.route("/models")
+def models_index():
+    entries = render.list_model_updates(render.MODEL_UPDATES_DIR)
+    content = render_template_string(MODELS_INDEX, entries=entries)
+    return _page("모델 업데이트", content)
+
+
+@app.route("/models/<date>")
+def model_update(date):
+    result = render.load_model_update(date, render.MODEL_UPDATES_DIR)
     if result is None:
         abort(404)
     heading, body = result

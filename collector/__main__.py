@@ -21,8 +21,16 @@ def _dispatch(cmd, args):
         state = StateStore("state/seen.json")
         run(cfg, state, out_dir="notes/daily", date=today)
         run_wiki(resynth_threshold=threshold)   # 수집 후 위키 갱신
+        from .watch import run_watch          # 모델 doc 변경 감시 (docs/15) — 변경 없으면 0콜
+        try:
+            run_watch(date=today)
+        except Exception as e:
+            print(f"[skip] 모델 doc 감시 실패: {str(e)[:60]}")
     elif cmd == "wiki":
         run_wiki(resynth_threshold=threshold)
+    elif cmd == "watch-docs":
+        from .watch import run_watch
+        run_watch(date=today)
     elif cmd == "learn":
         # 적용형 학습 노트 (docs/14): python -m collector learn "하네스 엔지니어링"
         concept = next((a for a in args[1:] if not a.startswith("-")), None)
@@ -37,8 +45,8 @@ def _dispatch(cmd, args):
 def main():
     args = sys.argv[1:]
     cmd = args[0] if args and not args[0].startswith("-") else "run"
-    if cmd not in ("run", "all", "wiki", "learn"):
-        print(f"알 수 없는 명령: {cmd} (run | wiki | learn)")
+    if cmd not in ("run", "all", "wiki", "learn", "watch-docs"):
+        print(f"알 수 없는 명령: {cmd} (run | wiki | learn | watch-docs)")
         return 1
     # 동시 실행 방지 (#18): cron과 수동 실행이 겹치면 state 파일이 서로 깨진다
     if not acquire_lock():

@@ -65,19 +65,22 @@ diff:
 {diff}
 ```
 
-## model_docs.yaml (초안 — 구현 시 URL 검증)
+## model_docs.yaml (URL 검증 완료 2026-07-11)
 
 ```yaml
 # 모델 문서 감시 대상. 추가/삭제는 여기 한 곳.
 providers:
-  - name: Claude
-    url: https://docs.anthropic.com/en/release-notes/api
-  - name: OpenAI
-    url: https://platform.openai.com/docs/changelog
   - name: Gemini
-    url: https://ai.google.dev/gemini-api/docs/changelog
+    url: https://ai.google.dev/gemini-api/docs/changelog   # ✅ 정적 검증됨
+  - name: OpenAI
+    url: https://platform.openai.com/docs/changelog        # ✅ 정적 검증됨
+  # - name: Claude
+  #   url: https://docs.anthropic.com/en/release-notes/api  # ⚠️ SPA(본문 JS 렌더) → v1 제외, BACKLOG
 ```
-(구현 단계에서 각 URL이 정적 HTML로 텍스트를 주는지 fetch 검증 — SPA면 대체 URL 탐색/BACKLOG.)
+
+**검증 결과:** Gemini(loading=0)·OpenAI(loading=2) 정적 HTML에 변경 콘텐츠 있음 → v1 대상.
+Claude 릴리스노트는 본문이 JS 렌더(`Loading...`)라 정적 fetch 불가 → **headless 렌더 필요, BACKLOG**.
+시스템이 model_docs.yaml 기반이라 Claude는 SPA 해결 시 한 줄로 추가 가능.
 
 ## 테스트 (TDD)
 

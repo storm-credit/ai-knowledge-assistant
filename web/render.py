@@ -277,6 +277,33 @@ def load_learn_note(name: str, learn_dir: Path = LEARN_DIR) -> Optional[Tuple[st
     return title or safe, render_markdown(body)
 
 
+MODEL_UPDATES_DIR = ROOT / "notes" / "model-updates"
+
+
+def list_model_updates(mu_dir: Path = MODEL_UPDATES_DIR) -> List[DailyEntry]:
+    """모델 업데이트 노트(날짜별), 최신순. 데일리와 같은 YYYY-MM-DD 패턴."""
+    entries: List[DailyEntry] = []
+    if not mu_dir.exists():
+        return entries
+    for path in sorted(mu_dir.glob("*.md"), reverse=True):
+        if not _DAILY_FILE.match(path.stem):
+            continue
+        title, _ = _split_title(path.read_text(encoding="utf-8-sig"))
+        entries.append(DailyEntry(date=path.stem, title=title or path.stem))
+    return entries
+
+
+def load_model_update(date: str, mu_dir: Path = MODEL_UPDATES_DIR) -> Optional[Tuple[str, str]]:
+    """Return (title, html) for a model-update note, or None if missing/invalid."""
+    if not _DAILY_FILE.match(date):
+        return None
+    path = mu_dir / f"{date}.md"
+    if not path.exists():
+        return None
+    title, body = _split_title(path.read_text(encoding="utf-8-sig"))
+    return title or date, render_markdown(body)
+
+
 def list_dailies(daily_dir: Path = DAILY_DIR) -> List[DailyEntry]:
     """Daily notes, newest first."""
     entries: List[DailyEntry] = []
