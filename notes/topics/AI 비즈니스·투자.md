@@ -1,68 +1,11 @@
 # AI 비즈니스·투자
 
 > [!abstract] 개요
-> 본 자료는 AI 비즈니스와 투자 관련 다양한 주제를 다룹니다. AI 기술 발전과 함께 기업들은 영업, 마케팅, 인재 채용 등 비즈니스 운영 전반에 걸쳐 혁신을 시도하고 있습니다. 특히, AI 기반 자동화와 에이전트 도입은 효율성 증대 및 새로운 성장 기회 창출에 핵심적인 역할을 하고 있습니다. 또한, AI 산업의 경쟁 심화와 함께 데이터센터, GPU, 전기 확보 경쟁도 가속화되고 있습니다.
-> 📌 7개 출처 · 77건
+> AI 기술은 다양한 산업 분야에서 혁신을 주도하며, 기업들은 AI 인재 확보와 AI 기반 서비스 개발에 집중하고 있습니다. 특히 회계, 증권, 로봇, 데이터센터 등 전통적인 산업에서도 AI 도입이 가속화되고 있으며, AI 스타트업들은 공격적인 성장과 수익 모델 구축에 힘쓰고 있습니다. 데이터센터 인프라 구축 경쟁, AI 에이전트의 역할 변화, 그리고 AI 기술 발전 속에서 발생하는 '인지 부채'와 같은 새로운 과제들도 주목받고 있습니다.
+> 📌 7개 출처 · 96건
 
-## AI 기반 비즈니스 혁신 및 운영 효율화
-AI를 활용하여 영업, 마케팅, 고객 성공 등 비즈니스 운영 전반의 효율성을 높이고 새로운 성장 동력을 확보하는 방안을 다룹니다.
-
-### [Vercel Took a 10-Person SDR Team Down to 1. The Whole Thing Costs $5,000 a Year. With Vercel’s COO Jeanne DeWitt Grosser.](https://www.saastr.com/vercel-took-a-10-person-sdr-team-down-to-1-the-whole-thing-costs-5000-a-year-with-vercels-coo-jeanne-dewitt-grosser/)
-SaaStr · Thu, 02 Ju
-
-- Vercel의 COO Jeanne DeWitt Grosser는 2025년 6월, GTM(Go-to-Market) 전반에 에이전트를 도입하는 것을 목표로 GTM 엔지니어링 팀을 구축했습니다.
-- 이 팀은 'GTM 엔지니어링'이라는 용어가 널리 사용되기 전에 설립되었습니다.
-- Vercel은 10명의 SDR(Sales Development Representative) 팀을 1명으로 축소했습니다.
-- SDR 팀 축소 및 자동화에 연간 총 5,000달러가 소요됩니다.
-- Jeanne DeWitt Grosser는 Vercel 합류 전 Google과 Stripe에서 각각 약 10년간의 성장 전략 경험을 쌓았습니다.
-
-### [Dear SaaStr:  Does It Make Sense to Have Post-Sales Functions Report into Sales?](https://www.saastr.com/large-company-activities-relating-post-sales-customer-support-fall-sales-operations/)
-SaaStr · Sat, 17 Au
-
-- 많은 SaaS 기업들이 성장 둔화에 직면하여 CS(Customer Success) 부서를 영업 부서로 통합하고 있습니다.
-- 이는 기존 고객 기반에서 더 많은 성장을 창출하려는 시도로 분석됩니다.
-- '세일즈' 부서 내에서 '세일즈 후(Post-Sales)' 기능을 관리하는 것이 합리적인지에 대한 논의가 활발합니다.
-- 고객 지원 및 관련 활동을 영업 운영에 포함시키는 방안에 대한 검토가 이루어지고 있습니다.
-
-### [Outbound Isn’t Dead. AI Just Radically Changed How It Works.](https://www.saastr.com/outbound-isnt-dead-ai-just-radically-changed-how-it-works/)
-SaaStr · Sat, 04 Ju
-
-- Sam Blond (Monaco 창립자 겸 CEO)를 초대하여 AI 기반 아웃바운드 영업의 변화에 대해 논의합니다.
-- Sam Blond는 Brex, Zenefits, EchoSign에서 아웃바운드 영업을 이끌었으며, Founders Fund의 파트너로도 활동했습니다.
-- AI가 아웃바운드 영업 방식에 근본적인 변화를 가져왔음을 강조합니다.
-- Monaco는 AI 네이티브 레버뉴 플랫폼이며, 실제 운영 중인 솔루션 중 하나입니다.
-
-### [Dear SaaStr: When Should I Pay Commission on B2B Sales that Close Themselves?](https://www.saastr.com/when-should-i-pay-the-commission-for-saas-sales-all-of-our-trial-signups-will-get-an-automatic-email-from-an-account-executive-how-do-we-decide-if-the-ae-was-responsible-for-the-sale-versus-the-sale/)
-SaaStr · Sun, 25 Au
-
-- SaaS 영업에서 발생하는 자동화된 판매에 대해 언제 커미션을 지급해야 하는지에 대한 질문이다.
-- 모든 체험판 가입자는 영업 담당자로부터 자동 이메일을 받게 된다.
-- 영업 담당자가 판매에 책임이 있었는지, 아니면 판매가 자체적으로 발생한 것인지 판단하는 기준을 논의한다.
-- 자체 해결 기능과 영업 주도 기능이 모두 있는 회사는 이러한 문제에 대해 고민한다.
-
-### [🧠 Community Wisdom: Quarterly planning and AI, cash vs. equity comp, paying for interview exercises, AI-powered outbound, compliance startup opportunities, and more](https://www.lennysnewsletter.com/p/community-wisdom-quarterly-planning)
-Lenny's Newsletter · Sat, 04 Ju
-
-- 커뮤니티 회원들의 지혜를 공유하는 게시물이다.
-- 주요 주제로는 분기별 계획과 AI, 현금 보상 대 주식 보상, 면접 연습 비용, AI 기반 아웃바운드, 규제 준수 스타트업 기회 등이 포함된다.
-
-### [Google Cloud’s VP of Growth on Building an AI-Native Marketing Team: 8 Takeaways from SaaStr AI 2026](https://www.saastr.com/google-clouds-vp-of-growth-on-building-an-ai-native-marketing-team-8-takeaways-from-saastr-ai-2026/)
-SaaStr · Sun, 05 Ju
-
-- Google Cloud의 글로벌 수요 및 성장 부문 VP인 Sarah Kennedy Ellis는 SaaStr AI 2026에서 AI 중심 마케팅팀 구축에 대한 인사이트를 공유했습니다.
-- 그녀는 Marketo(Adobe에 47.5억 달러에 매각됨)에서 마케팅을 담당했으며, Google 입사 전 Adobe의 엔터프라이즈 소프트웨어 부문 마케팅을 이끌었던 경험이 있습니다.
-- 이는 그녀가 여러 차례의 플랫폼 전환을 경험했음을 시사합니다.
-- 그녀의 핵심 주장은 Google Cloud가 AI를 활용하여 새로운 마케팅 전략을 추진한다는 것입니다.
-- 본 내용은 AI 시대에 마케팅 팀을 어떻게 구축하고 운영해야 하는지에 대한 8가지 주요 시사점을 제공합니다.
-
-### [Dear SaaStr: How Much Do B2B Sales People Make in Commission?](https://www.saastr.com/how-much-do-sales-people-make-in-commission/)
-SaaStr · Tue, 03 Ju
-
-- SaaStr는 B2B 영업 담당자가 받는 커미션 수익에 대해 다룬다.
-- 해당 글은 성공적인 영업팀 구축 및 팀원들의 높은 수익 창출 방안을 제시한다.
-- Lenny Rachitsky와 Jason Lemkin이 참여한 내용이 포함되어 있다.
-- SaaStr.Ai의 Jason Lemkin이 2024년 5월 20일에 해당 내용을 트윗했다.
-- SaaS 분야의 영업 수익 관련 근본적인 내용에 대해 언급하고 있다.
+## AI 인재 채용 및 조직 문화
+기업들은 AI 기술을 선도적으로 도입하고 문제를 해결할 수 있는 인재를 적극적으로 채용하고 있습니다. AX 인재 전쟁과 같은 프로그램을 통해 문제 해결 능력, 기획 의도, 접근 방식을 중시하며 AI 활용 전문가를 육성하고 있습니다.
 
 ### [국내 1위 회계 법인이 AI에 진심인 이유 | AX 인재전쟁 5화 PWC 삼일회계법인](https://www.youtube.com/watch?v=y0SsTKDt8tQ)
 조코딩 · 2026-07-06
@@ -82,129 +25,24 @@ SaaStr · Tue, 03 Ju
 - AX 인재전쟁 참가 신청 링크(https://hackathon.jocodingax.ai/)를 통해 지원 가능하다.
 - 채널톡이 AI 인재를 채용할 때 중요하게 보는 기준에 대한 내용이 요약의 핵심이다.
 
-## AI 시대의 기업 전략 및 인재상
-AI 기술의 도입이 기업의 장기적인 전략과 인재상에 미치는 영향을 분석하고, 이에 대비하는 방안을 제시합니다.
+### [투자 업계에서 AI를 활용하는 방법과 원하는 인재 | AX 인재전쟁 6화 카카오페이증권](https://www.youtube.com/watch?v=aBuoojGjyf4)
+조코딩 · 2026-07-07
 
-### [무신사의 AI 시대 전략과 인재상 | AX 인재전쟁 3화 무신사](https://www.youtube.com/watch?v=OLAWeIuiD5Y)
-조코딩 · 2026-07-03
+- 카카오페이증권은 초보 투자자를 돕는 국내에서 특이한 증권사이며, AI 상담 지원 시스템을 통해 응답률과 만족도를 개선했습니다.
+- AX 인재전쟁의 문제 스포는 초보 투자자의 매수·매도를 돕는 AI 개발이며, 평가 기준은 정답이 아닌 '설득의 과정' 설계 능력입니다.
+- 카카오페이증권의 인재상은 문제를 분석하고 AI로 해결하며 스스로 증명하는 사람입니다.
+- 5년 뒤 카카오페이증권은 별도의 앱 없이 사용자 경험에 스며드는 에이전트 형태가 될 것으로 예상됩니다.
+- AX 인재전쟁 참가 신청 링크가 제공되며, 본선 진출자는 채용 검토 대상이 됩니다.
 
-- 무신사의 AI 시대 전략 및 인재상을 다루는 "AX 인재전쟁 3화" 영상입니다.
-- 무신사는 "패션을 좋아하는 사람들이 만드는 패션·뷰티 플랫폼"으로 소개됩니다.
-- '원코어 멀티 플랫폼 전략'을 통해 기술 파편화 문제와 회원 통합을 해결하려 합니다.
-- AI 활용 측면에서 "AI로 트렌드·브랜드 찾기"를 문제 출제 의도로 제시합니다.
-- 무신사에게 AI는 "복잡도를 이기는 생존의 문제"로 정의됩니다.
-- 10년 후 비전으로 "글로벌 진출, AI 에이전트의 첫 번째 도구가 되는 무신사"를 언급합니다.
-- 현재 사용 중인 AI 모델로 '코덱스(Codex)' 사용 증가와 한글 표현의 직관성을 언급합니다.
-- 무신사가 추구하는 인재상은 "깊이 생각하고 결과를 만들고 도구는 뭐든 쓴다"입니다.
+### [국내 1위 회계법인이 PPT를 아예 버린 이유](https://www.youtube.com/shorts/XcxIjcnrfvI)
+조코딩 · 2026-07-07
 
-### [마이리얼트립이 직접 리드하는 AX 팀](https://www.youtube.com/shorts/VUFlbSKcTAE)
-조코딩 · 2026-07-03
+- 해당 콘텐츠는 '국내 1위 회계법인이 PPT를 아예 버린 이유'라는 제목을 가지고 있습니다.
+- AX 인재전쟁 참전 신청을 독려하며, 삼일회계법인이 직접 리드하는 AX 팀에 합류할 것을 제안합니다.
+- AX 인재전쟁 참가 신청 링크가 제공됩니다.
 
-- "AX 인재전쟁" 참가 신청 링크를 제공하며, "마이리얼트립이 직접 리드하는 AX 팀"을 소개합니다.
-- 참가자들은 "기업이 출제하는 문제를 풀고 팀에 동참"하게 됩니다.
-
-### [무신사가 AI에 올인한 진짜 이유](https://www.youtube.com/shorts/q2is2cLvias)
-조코딩 · 2026-07-04
-
-- 본 콘텐츠는 '무신사가 AI에 올인한 진짜 이유'를 다룬다. (내용 요약 불가)
-
-### [5 Interesting Learnings from Toast at $6.5 Billion Run-Rate: 22%+ Growth, Profitable, No Deceleration. But AI Is Just Getting Started](https://www.saastr.com/5-interesting-learnings-from-toast-at-billion-in-arr/)
-SaaStr · Fri, 03 Ju
-
-- Toast는 현재 약 65억 달러의 연간 매출 실행률을 기록하고 있으며 22% 이상의 성장률을 유지하고 있다.
-- Toast는 이익을 내고 있으며 성장 둔화는 보이지 않고 있다.
-- Toast의 핵심 비즈니스는 결제이며, 고마진 소프트웨어 사업, 핀테크 대출, 그리고 AI 에이전트 플랫폼을 통합하고 있다.
-- AI 기반 버티컬 SaaS 시장이 현재 주목받고 있으며, Toast는 AI 우선 기업으로 전환 중이다.
-
-### [우주 회사 '스페이스X'는 왜? 코딩 회사인 '커서'를 인수했을까 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=vDd6TMC-NuA)
-TTimesTV · 2026-07-04
-
-- AI 산업의 전장이 데이터센터, GPU, 전기 확보 경쟁으로 이동했습니다.
-- 빅테크 기업들은 GPU 공급난과 전력 한계 속에서 토큰 이코노미와 코딩 에이전트 분야에서 경쟁하고 있습니다.
-- 토큰 맥싱에 대한 회의론이 제기되며, 생산자와 소비자 모두 토큰 효율화에 집중하고 있습니다.
-- 30년 경력의 개발자인 박종천 지란지교소프트 CAIO가 급변하는 AI 시장을 분석했습니다.
-- 영상은 AI 레버리지 강좌 소개, 하이라이트, 반도체 및 전기 확보 경쟁, 모델 성능 경쟁에서 에이전트 성능 경쟁으로의 전환 등을 다룹니다.
-- 빅테크 기업들의 에이전트 전쟁 참여와 챗 전쟁, 코드 전쟁, 코워크 전쟁의 흐름을 짚습니다.
-- 구글, MS, 아마존, 스페이스X 등에서 누가 토큰을 가장 많이 만들지에 대한 논의가 포함되어 있습니다.
-
-### [EP 102. 샌프란시스코의 교훈: "사람들이 다 미쳤어요"](https://www.youtube.com/watch?v=SSIGI9mm0DU)
-노정석 · 2026-07-05
-
-- 노정석은 3주간 실리콘밸리를 방문하여 프론티어 랩, 스타트업, VC를 만나고 현장 보고를 공유했다.
-- AI 시장은 Time Gap과 Domain Gap으로 응축되며, OpenAI는 코딩, 리걸, 바이오 분야에 직접 진출할 계획이다.
-- 전문가의 암묵지를 흡수하는 'post-train 데이터'가 호황이며, 트레이닝 인프라 최적화와 벤치마크 달성의 현실적인 어려움이 있다.
-- AI x Bio 분야에서는 Doudna의 회의론과 함께 전통 연구와 foundational approach 간의 간극이 존재한다.
-- 20대 초반 창업자 사이에서 4천억 원의 밸류에이션이 일상이 되었으며, ARR 40억에 밸류에이션 4천억을 달성하는 스타트업이 등장했다.
-- 실리콘밸리의 연봉은 5백만 달러에 달하지만, acqui-hire를 통한 밸류에이션 회수 방안도 존재한다.
-- VC들은 젊어지고 있으며, 데이터센터, 칩, 인프라 분야에 투자하고 한국 칩 생태계에도 관심을 보이고 있다.
-
-### [By Year-End, Anthropic Will Out-Earn Every Public Software Company Except Microsoft](https://www.saastr.com/by-year-end-anthropic-will-out-earn-every-public-software-company-except-microsoft/)
-SaaStr · Mon, 06 Ju
-
-- 앤트로픽(Anthropic)의 성장률과 기업 가치가 놀라움을 안겨줍니다.
-- 2025년 말, 앤트로픽의 연간 반복 매출(run-rate revenue)은 약 90억 달러에 달했습니다.
-- 2026년 2월에는 140억 달러, 3월에는 190억 달러, 4월에는 300억 달러로 급증했습니다.
-- 연말까지 앤트로픽은 마이크로소프트(Microsoft)를 제외한 모든 상장 소프트웨어 기업을 능가하는 수익을 올릴 것으로 예상됩니다.
-
-## 고객 관계 및 영업 성과 관리
-고객 이탈 관리, 사용자 컨퍼런스 개최, 영업팀 목표 설정 및 성과 측정 등 고객과의 관계를 강화하고 영업 성과를 극대화하는 전략을 다룹니다.
-
-### [메모리값 폭등, 메모리 회사 탓이 아닌 이유](https://www.youtube.com/shorts/_MLy_ujhurQ)
-안될공학 · 2026-07-03
-
-- 메모리 가격의 급등은 메모리 회사 자체의 문제 때문이 아니라 다른 요인에 기인한다.
-
-### [Got 100 Customers?  Believe It Or Not, It’s Time for Your First User Conference](https://www.saastr.com/got-100-customers-believe-it-or-not-its-time-for-your-first-user-conference/)
-SaaStr · Thu, 11 Fe
-
-- B2B 사업을 처음 경험하는 CEO 입장에서 사용자 컨퍼런스는 꺼려지는 행사였다.
-- Salesforce와 같은 복잡한 제품의 경우, 긴 배포 주기, 전문 서비스, 전담 관리자 등으로 인해 드림포스(Dreamforce)와 같은 행사의 중요성을 이해하지만.
-- 100명의 고객을 확보했다면, 사용자 컨퍼런스를 고려해야 할 시점이다.
-
-### [Dear SaaStr: What’s The One Trait You Look for When Assessing an Inside Sales Candidate?](https://www.saastr.com/whats-one-key-trait-skill-experience-look-assessing-inside-sales-candidate-saas/)
-SaaStr · Mon, 22 Ja
-
-- 초기 단계에서 창업자/CEO가 직접 영업 담당자를 채용하고 관리할 때, 가장 중요한 기준은 본인 스스로 그들로부터 제품을 구매하고 싶다는 마음이 드는가 하는 점이다.
-- 창업 초기에는 영업 담당자가 제품의 가치와 잠재력을 이해하고, 이를 바탕으로 고객에게 판매할 수 있는 능력이 매우 중요하다.
-- 이 자질은 단순히 판매 기술을 넘어, 영업 담당자가 제품에 대한 깊은 확신과 열정을 가지고 있다는 것을 의미한다.
-- 이러한 확신은 고객에게 진정성 있게 전달되어, 구매 결정에 긍정적인 영향을 미칠 수 있다.
-- 궁극적으로, 영업 담당자가 스스로 구매하고 싶은 제품이라면, 고객 또한 그 제품의 가치를 인지하고 구매할 가능성이 높아진다.
-
-### [If Nothing Else – Segment Churn.  You’ll See Patterns and Learnings You Wouldn’t Otherwise](https://www.saastr.com/nothing-else-segment-churn/)
-SaaStr · Sat, 04 Ju
-
-- 고객 이탈(Churn)은 GAAP(일반회계원칙) 지표가 아니며 보편적인 정의가 존재하지 않는다.
-- 공개 기업과 스타트업 모두 고객 이탈을 다르게 정의하고 있으며, 부분적으로 숨기기도 한다.
-- B2B CEO로서 창업 초기 경험상, 동종 업계의 유일한 상장 기업과 비교하며 이탈률을 학습했던 경험이 있다.
-- SaaStr는 고객 이탈 패턴과 학습 내용을 파악하는 것의 중요성을 강조한다.
-
-### [Events Work.  Events Are Back. But Are They Worth the Big Expense?](https://www.saastr.com/events-are-they-worth-the-big-expense/)
-SaaStr · Sun, 02 Ma
-
-- SaaStr Annual 행사에서 만난 구매자와의 만남을 통해 45만 달러의 총 계약 가치(TCV) 딜을 성사시킨 CEO의 사례가 소개되었습니다.
-- 이는 AI 시대임에도 불구하고, 고객이 있는 곳에 참여하는 것의 중요성을 강조합니다.
-- 이벤트는 여전히 효과적이며, 다시 활기를 띠고 있음을 보여줍니다.
-- 이벤트 개최에는 상당한 비용이 수반되지만, 이러한 비용 지출이 가치가 있음을 증명하는 사례입니다.
-- 고객과의 직접적인 만남과 네트워킹이 비즈니스 성장에 여전히 중요한 역할을 합니다.
-
-### [Dear SaaStr:  What’s The Best Way to Set Targets for the Sales Team?](https://www.saastr.com/what-is-the-best-way-to-set-targets-for-saas-sales-people/)
-SaaStr · Mon, 06 Ju
-
-- SaaStr는 영업팀의 목표 설정 방법에 대한 질문에 답하며, CEO의 관점에서 자신감 수준(Confidence, C)에 따라 3가지 연간 계획(C-90, C-60, C-10)을 모델링하는 방법을 제안합니다.
-- 이 3가지 계획 모델은 영업팀뿐만 아니라 회사 전체에 적용될 수 있습니다.
-- 'C'는 목표 달성 가능성에 대한 CEO의 확신 정도를 나타냅니다.
-
-## 소프트웨어 시장 동향 및 투자
-소프트웨어 산업의 시장 규모, 지출 동향, 기업 생존율, 그리고 AI 스타트업의 투자 및 성장 가능성에 대한 분석을 제공합니다.
-
-### [Tired vs. Wired: Our Deep Dive on Why Software Spend Is Up Record Amounts … Yet Half of SaaS Is Still Dying](https://www.saastr.com/tired-vs-wired-our-deep-dive-on-why-software-spend-is-up-15-yet-half-of-saas-is-still-dying/)
-SaaStr · Sun, 05 Ju
-
-- B2B 소프트웨어 지출은 올해 15% 증가하여 10년 만에 최고치를 기록했으며, 작년 12.8%에서 상승했습니다.
-- Gartner는 전체 소프트웨어 시장 규모를 1조 2천억 달러에서 1조 4천억 달러로 예상하고 있습니다.
-- 동시에 퍼블릭 소프트웨어 기업들은 저평가된 상태로 거래되고 있습니다.
-- 소프트웨어 지출은 역대 최고 수준임에도 불구하고, SaaS 기업의 절반 가량이 여전히 어려움을 겪고 있습니다.
-- 이는 소프트웨어 산업 내에서 지출 증가와 기업 생존율 간의 역설적인 상황을 보여줍니다.
+## AI 스타트업 성장 전략 및 비즈니스 모델
+AI 스타트업들은 공격적인 성장 전략을 통해 단기간에 높은 매출을 달성하고 있으며, 수익 모델 구축과 지속 가능한 성장을 위한 다양한 전략을 모색하고 있습니다. VC의 투자 유치 및 고용 권장 사항을 신중하게 검토하는 것도 중요합니다.
 
 ### [By Year-End, Anthropic Will Out-Earn Every Public Software Company Except Microsoft](https://www.saastr.com/by-year-end-anthropic-will-out-earn-every-public-software-company-except-microsoft/)
 SaaStr · Mon, 06 Ju
@@ -220,8 +58,173 @@ SaaStr · Mon, 06 Ju
 - SaaStr는 잠재력 있는 VP(Vice President)를 발굴하고, 채용 시기, 면접 및 자격 검증 방법, 그리고 VP의 실제 역할에 대한 고전적인 콘텐츠를 다뤄왔습니다.
 - 과거 '내 VP, 세일즈가 90일 만에 매출을 두 배로 늘린 방법. 그리고 그것은 마법이 아니었습니다.'와 같은 제목의 콘텐츠를 통해 VP의 성과 창출 가능성을 제시했습니다.
 
+### [Dear SaaStr:  What’s The Best Way to Set Targets for the Sales Team?](https://www.saastr.com/what-is-the-best-way-to-set-targets-for-saas-sales-people/)
+SaaStr · Mon, 06 Ju
+
+- SaaStr는 영업팀의 목표 설정 방법에 대한 질문에 답하며, CEO의 관점에서 자신감 수준(Confidence, C)에 따라 3가지 연간 계획(C-90, C-60, C-10)을 모델링하는 방법을 제안합니다.
+- 이 3가지 계획 모델은 영업팀뿐만 아니라 회사 전체에 적용될 수 있습니다.
+- 'C'는 목표 달성 가능성에 대한 CEO의 확신 정도를 나타냅니다.
+
+### [Dear SaaStr: From 0 to $10m ARR, At What Point Do We Start Hiring and Whom?](https://www.saastr.com/dear-saastr-from-0-to-10m-arr-at-what-point-do-we-start-hiring-and-whom/)
+SaaStr · Tue, 07 Oc
+
+- 스타트업이 $0에서 $10M ARR(연간 반복 매출)까지 성장하는 과정에서 채용의 시점과 우선순위가 매우 중요하다.
+- $0에서 $1M ARR까지는 창업자가 모든 영업 활동을 주도해야 한다.
+- 모든 채용은 이 시기에 회사의 성장에 지대한 영향을 미친다.
+- 이 단계에서는 중복되는 역할이 거의 없어 각 직원의 역할이 매우 중요하다.
+
+### [Your Agents Should Beat Your Best Reps, Not Match Them. And 14 Other Hard Truths About B2B + AI Today, From Our SaaStr AI Annual AMA](https://www.saastr.com/your-agents-should-beat-your-best-rep-not-match-them-and-14-other-hard-truths-in-aib2b-today-from-our-saastr-ai-ama/)
+SaaStr · Wed, 08 Ju
+
+- SaaStr AI 2026 AMA의 주요 테마는 소프트웨어가 그 어느 때보다 역동적이며, 제품 변경 주기가 과거 몇 년에서 한 달로 단축되었다는 점입니다.
+- 기존의 B2B 영업 및 마케팅 전략은 너무 느려서 현재의 변화 속도를 따라가기 어렵습니다.
+- AI가 도입되면서 B2B 영업 에이전트의 성능이 최고 영업 사원을 능가해야 하며, 단순히 동등한 수준을 목표로 하는 것은 부족합니다.
+- 소프트웨어 제품은 지속적으로 변화하므로, AI 기반 솔루션 역시 이러한 변화에 맞춰 신속하게 업데이트되어야 합니다.
+- AI 도입은 B2B 분야의 기존 영업 및 마케팅 플레이북을 빠르게 구식으로 만들고 있습니다.
+
+### [Should You Discount to Save a Renewal? The NRR Trap Says No. You Probably Should Anyway.](https://www.saastr.com/should-you-discount-to-save-a-renewal-the-nrr-trap-says-no-you-probably-should-anyway/)
+SaaStr · Wed, 08 Ju
+
+- Adobe Marketo와의 계약 갱신을 앞두고 있으며, 필자는 Marketo의 초기 고객 중 한 명으로 거의 20년 가까이 사용해 왔습니다.
+- 필자는 오랫동안 Marketo의 레퍼런스 계정 역할을 해왔으며, 다른 B2B 고객에게 제품을 추천하는 활동도 해왔습니다.
+- 계약 갱신 시 할인을 제공하여 고객을 유지해야 하는지에 대한 논의가 있으며, 순수 반복 매출(NRR) 함정을 피하는 것이 중요합니다.
+- 필자는 Marketo를 이탈하기로 결정했으며, 이탈의 이유 중 하나는 할인 정책과 관련이 있을 수 있습니다.
+- 비록 NRR 함정이 존재하더라도, 실제로는 계약 갱신을 위해 할인을 제공하는 것이 고객 유지에 더 나은 선택일 수 있습니다.
+
+### [Dear SaaStr: What Happens if One Founder Wants to Quit When the Startup Has Just Raised VC Funding?](https://www.saastr.com/dear-saastr-what-happens-if-one-founder-wants-to-quit-when-the-startup/)
+SaaStr · Wed, 08 Ju
+
+- 스타트업이 VC 펀딩을 받은 직후 한 명의 창업자가 사임을 원하는 상황은 생각보다 흔하게 발생합니다.
+- 이러한 상황 발생 시, 가장 먼저 해야 할 일은 즉시 투자자에게 투명하게 상황을 알리는 것입니다.
+- 창업자의 이탈은 어려운 상황이지만, 이는 처음 겪는 일이 아니므로 투자자에게 알리고 해결 방안을 모색하고 있음을 전달해야 합니다.
+- 투자자는 스타트업의 성장에 중요한 역할을 하므로, 창업자의 갑작스러운 이탈에 대한 정보를 공유하는 것이 신뢰 유지에 필수적입니다.
+- 이탈하려는 창업자의 의사를 존중하면서도, 회사의 지속적인 운영과 투자자들의 이익을 보호하기 위한 방안을 논의해야 합니다.
+
+### [How Gamma Hit $100M ARR With a Team of 50: CEO Grant Lee’s Top 4 Lessons.  And Top 5 Mistakes](https://www.saastr.com/how-gamma-hit-100m-arr-with-a-team-of-50-grant-lees-4-lessons-at-saastr-ai-2026/)
+SaaStr · Thu, 09 Ju
+
+- Gamma는 '빈 페이지 문제' 해결을 목표로 창업하여 5년 만에 연간 반복 매출(ARR) 1억 달러를 달성했습니다.
+- 현재 5천만 명의 사용자, 60만 명의 유료 구독자를 확보했으며, 50명 규모의 팀으로 수익을 내고 있습니다.
+- 매출의 상당 부분을 영업 및 마케팅 비용 없이 달성했으며, 성장은 다른 방식으로 이루어졌습니다.
+
+### [Dear SaaStr: Our VC Is Encouraging Us to Hire Aggressively and Increase the Burn Rate. Should We Listen to Them?](https://www.saastr.com/our-vc-is-encouraging-us-to-hire-aggressively-and-increase-the-burn-rate-should-we-listen-to-them/)
+SaaStr · Thu, 09 Ju
+
+- VC는 종종 공격적인 고용과 소진율 증가를 권장하지만, 경험상 약 66~70%의 경우 이는 나쁜 조언입니다.
+- 특히 매우 큰 VC로부터 오는 권장 사항일 경우 더욱 그렇습니다.
+- 이러한 권장 사항을 따르기 전에 회사의 상황을 충분히 인지해야 합니다.
+
+### [5 Interesting Learnings from Vertical B2B Leader ServiceTitan at $1B+ in ARR.  Not Slowing Down, Growing 25%, Fintech Growing Fastest, 110% NRR](https://www.saastr.com/5-interesting-learnings-from-servicetitan-at-1b-in-arr/)
+SaaStr · Fri, 10 Ju
+
+- ServiceTitan은 HVAC, 배관, 전기, 지붕 공사 등 전문 서비스 분야를 위한 엔드투엔드 운영 시스템을 제공합니다.
+- 이 회사는 인수 합병 없이 25%의 성장률로 연간 반복 매출(ARR) 10억 달러를 돌파했습니다.
+- ServiceTitan은 지난 10년간 가장 중요한 수직 산업 소프트웨어 회사 중 하나로 자리매김했습니다.
+- 핀테크 부문이 가장 빠르게 성장하고 있는 분야입니다.
+- 110%의 순수익 유지율(NRR)을 기록했습니다.
+
+### [The Builder’s Economy: 10 Metrics from ICONIQ’s Newest 2026 State of AI Report](https://www.saastr.com/the-builders-economy-10-metrics-from-iconiqs-newest-2026-state-of-ai-report/)
+SaaStr · Fri, 10 Ju
+
+- ICONIQ는 "The Builder’s Economy"라는 부제를 가진 세 번째 "State of AI" 보고서를 발표했습니다.
+- 보고서는 AI 제품을 개발하는 소프트웨어 회사 임원 약 305명을 대상으로 한 2026년 2분기 설문 조사 결과를 기반으로 합니다.
+- 이전 보고서가 AI의 작동 증명에 초점을 맞췄다면, 이번 보고서는 AI의 수익 증명에 대한 내용을 다룹니다.
+- AI 제품 개발에 참여하는 소프트웨어 기업 경영진의 설문 조사가 이 보고서의 핵심입니다.
+- 이는 AI 기술 발전의 초점이 '작동'에서 '수익 창출'로 이동했음을 시사합니다.
+
+### [Dear SaaStr:  How Do We Reduce Churn?](https://www.saastr.com/dear-saastr-how-do-we-reduce-churn/)
+SaaStr · Fri, 10 Ju
+
+- 고객 이탈(Churn)은 소프트웨어 비즈니스에서 가장 중요하며, 성장률을 저해하는 '조용한 살인자' 역할을 합니다.
+- 높은 이탈률은 고객 확보 노력의 효과를 상쇄시키며, 효과적인 확장을 방해합니다.
+- 이탈은 결국 복리 효과를 무력화시켜 장기적인 성장을 어렵게 만듭니다.
+
+### [20VC x SaaStr: Washington Lifts the Fable 5 Ban, Sam Floats Handing the Government 5%, and Why Every Tech Giant Is Racing to Become the Next IBM](https://www.saastr.com/20vc-x-saastr-washington-lifts-the-fable-5-ban-sam-floats-handing-the-government-5-and-why-every-tech-giant-is-racing-to-become-the-next-ibm/)
+SaaStr · Thu, 09 Ju
+
+- 워싱턴이 Fable 5 금지를 해제했으며, 이는 향후 모델 출시를 위한 구조화된 사전 승인 절차의 의미를 시사합니다.
+- OpenAI는 모든 프런티어 연구소들이 미국 정부에 5%를 할당하는 아이디어를 제안했습니다.
+- 주요 기술 기업들이 차세대 IBM이 되기 위해 경쟁하고 있습니다.
+
+## AI 기술 발전과 인프라
+AI 기술의 발전은 데이터센터, GPU 등 인프라 구축 경쟁을 심화시키고 있으며, AI의 무분별한 사용으로 인한 '인지 부채'와 같은 새로운 문제들도 대두되고 있습니다. 중국 AI 모델에 대한 의존성 문제도 제기되고 있습니다.
+
+### [AI Agent 100명 고용해서 8개 채널 자동 운영하는 과정을 소개합니다](https://www.youtube.com/watch?v=2d_Fn1hN5ac)
+윤자동 · 2026-07-08
+
+- 클로드코드 $200 요금제 12개를 사용하여 월 2,400달러를 지출하며 AI 직원 12명을 고용하는 것과 유사한 효과를 냅니다.
+- URL 하나로 8개 채널에 콘텐츠가 자동 발행되는 전 과정을 시연하며, 에이전트 병렬 실행 화면을 공개합니다.
+- "딸깍하면 월천"과 같은 쉬운 수익 창출 방식은 99.9% 사기라고 지적하며, 실제 AI 운영에는 "엉덩이력"과 같은 노력이 필요함을 강조합니다.
+- 헤르메스 에이전트는 텔레그램 시연을 통해 첫 공개되었으며, 클로드코드를 회사처럼, 헤르메스를 개인 비서처럼 활용하는 방식을 설명합니다.
+- Make·n8n과 같은 도구를 사용하지 않고 헤르메스 에이전트를 구축한 이유를 설명하며, 하네스 엔지니어링을 통해 코드를 보지 않는 방식을 도입했습니다.
+- 투자 브리핑 및 유튜브 댓글 자동화 등 다양한 활용 사례를 제시하며, 콘텐츠 1건당 실제 비용은 거의 0원에 가깝다고 언급합니다.
+- AI 구독료 전체를 공개하며, AI 시대에 가장 중요한 능력으로 "엉덩이력"을 꼽습니다.
+
+### [기술부채보다 위험한 AI 인지부채 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=fwdIXO1DoTo)
+TTimesTV · 2026-07-08
+
+- 미국의 '페이블' 모델 수출 금지 사태로 인해 앤트로픽 최신 모델 사용에 제약이 발생했으며, 중국 AI 모델이 대안으로 주목받았습니다.
+- 이러한 상황은 여러 국가 및 기업에게 AI 종속 문제와 'AI 인지부채'에 대한 경각심을 일깨워주었습니다.
+- 'AI 인지부채'는 작동 원리를 모른 채 AI에 과도하게 의존할 경우 기업 운명에 부정적인 영향을 미칠 수 있습니다.
+- 30년 경력의 개발자이자 지란지교소프트 CAIO인 박종천은 AI 인지부채 해결 방안을 제시합니다.
+- 영상은 AI 레버리지 강좌, 앤트로픽 수출 통제, AI 의존도 리스크, 중국 AI 모델 규제, 암묵지 데이터화, 코딩 에이전트, 인지 부채 위험성, 토큰 생산 전쟁 등의 내용을 다룹니다.
+
+### [AI의 다음 전쟁터는 데이터센터 | SKT 15GW와 국가 인프라의 미래](https://www.youtube.com/watch?v=o-u9WgPBm4g)
+안될공학 · 2026-07-08
+
+- AI 인프라 경쟁 심화 속에서 한국은 SK그룹을 통해 2035년까지 15GW 규모의 AI 데이터센터를 구축하는 메가 프로젝트를 추진합니다.
+- GPU 확보를 넘어 전력, 냉각, 공간, 네트워크가 새로운 병목 현상으로 대두되고 있습니다.
+- 해당 프로젝트는 약 1,000조 원 규모로 예상되며, 미국, 대만, 프랑스 등 각국의 AI 인프라 경쟁 동향과 한국의 유리한 입지를 분석합니다.
+- SKT가 이 프로젝트를 주도하며, 울산 AWS 협력 프로젝트와 SK그룹의 반도체·에너지·냉각·통신·건설 밸류체인 연계를 설명합니다.
+- 이는 경부고속도로, 초고속 인터넷에 이은 '세 번째 국가 인프라'로서 AI 연산 기반의 국내 확보 중요성을 강조합니다.
+
+### [중국이 이걸 해냈다고???](https://www.youtube.com/shorts/fwiDNd2oe3c)
+조코딩 · 2026-07-09
+
+- '조코딩' 채널은 코딩 학습을 위한 자료를 https://jocoding.net/ 에서 제공한다.
+- 채널은 VVIP 멤버십 후원을 받고 있으며, 후원자 명단(그림자그림자, 차딩Chading TV 등 15명)을 공개하며 감사를 표했다.
+- VVIP 멤버십 후원 참여는 https://www.youtube.com/@jocoding/join 링크를 통해 가능하다.
+- 해당 영상은 중국의 AI 기술 관련 성과에 대한 놀라움을 표현하는 내용을 담고 있다.
+- 영상의 주요 해시태그는 #ai, #중국, #엔비디아 이다.
+
+### [누가 제일 잘 나갈까? 마이크로소프트, 앤트로픽, 엔비디아, 구글, 오픈AI, 스페이스X, 아마존, 애플 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=Xh6x_ZfDVyo)
+TTimesTV · 2026-07-09
+
+- 'MANGOS'라는 새로운 별칭이 마이크로소프트, 앤트로픽, 엔비디아, 구글, 오픈AI, 스페이스X를 지칭하며 AI 산업 패권을 놓고 경쟁하는 대표 기업으로 부상했습니다.
+- 아마존과 애플은 MANGOS에 포함되지 않았지만 여전히 AI 산업에서 중요한 역할을 하고 있습니다.
+- 본 콘텐츠는 AI 데이터센터, GPU, 에이전트 등 7대 항목별로 AI 기업들의 미래를 분석합니다.
+- 30년 경력의 박종천 지란지교소프트 CAIO가 직접 설계한 평가 프레임을 통해 각 기업의 강점을 평가합니다.
+- 영상은 생성형 AI를 활용한 엑셀 자동화 강좌 소개, FAANG 및 M7 대신 MANGOS 등장 배경, 각 기업별 강점 분석, 테슬라의 자비스화 가능성, 애플의 AI 전략, 데이터와 업무플로우의 AI 전환 중요성 등을 다룹니다.
+
+### [SKT가 15GW AI 데이터센터를 건설하려는 이유](https://www.youtube.com/shorts/JXtKnYUaVtg)
+안될공학 · 2026-07-09
+
+- SK그룹은 2035년까지 15GW 규모의 AI 데이터센터를 구축하겠다는 계획을 발표했습니다.
+- 이는 AI 시대의 연산 기반을 해외에 의존하지 않고 국내에 확보하기 위한 전략입니다.
+- '3대 메가 프로젝트' 중 하나로, 한국의 AI 인프라 경쟁력 확보를 목표로 합니다.
+- AI 시대의 데이터센터는 미래 국가 인프라의 핵심으로 간주됩니다.
+- 본 콘텐츠는 SKT의 지원 하에 제작되었습니다.
+
+## AI 기반 서비스 및 제품
+AI는 가정용 로봇, 투자 상담, 소프트웨어 대체 등 다양한 분야에서 혁신적인 서비스와 제품을 선보이며 시장의 반응을 얻고 있습니다. AI 에이전트를 활용한 콘텐츠 자동 발행 및 업무 효율화도 주목받고 있습니다.
+
+### [아이돌 외모의 중국 가정용 로봇 출시](https://www.youtube.com/shorts/tpJKwMsYFjI)
+안될공학 · 2026-07-06
+
+- 중국에서 약 2억 원 상당의 '반려로봇'이 출시되었으며, 아이돌 수준의 외모를 갖추고 있습니다.
+- 이 로봇은 가사 노동 지원과 정서적 교감 기능을 제공하며 폭발적인 반응을 얻고 있습니다.
+- 유비테크 창업자는 이 로봇의 제조 공정이 전례 없는 수준이며, 가사 노동 및 정서적 만족 가치를 고려할 때 2억 원의 가격은 경쟁력이 있다고 평가했습니다.
+
+### [5 Simple Reasons We Won’t All Vibe Code Our Own HubSpot or Salesforce](https://www.saastr.com/simple-reasons-we-wont-all-vibe-code-our-own-hubspot-or-salesforce-even-though-at-saastr-ourselves-we-sort-of-have/)
+SaaStr · Tue, 07 Ju
+
+- AI 에이전트가 기존의 HubSpot과 같은 서비스를 대체할 수 있다는 주장이 있다.
+- 실제로 AI 에이전트를 통해 HubSpot의 기능을 일부 구현한 경험이 있다.
+- AI 에이전트의 발전으로 인해 개인이 복잡한 비즈니스 소프트웨어를 직접 코딩하지 않고도 유사한 기능을 구현할 수 있게 되었다.
+- 이러한 추세는 기술적으로 능숙하지 않은 사람들에게도 해당된다.
+- 하지만 모든 사람이 자신만의 HubSpot이나 Salesforce를 구축하게 되지는 않을 것이다.
+
 ## 짚어둘 단신
-- [아이돌 외모의 중국 가정용 로봇 출시](https://www.youtube.com/shorts/tpJKwMsYFjI) · 안될공학 · 2026-07-06
 - [전세계 기업들을 관찰한 OpenAI 내부자가 알려주는 진짜 AX와 AI Native 되는 방법](https://www.youtube.com/watch?v=0l5oJsjCPus) · 조코딩 · 2026-06-27
 - [대한민국 최초 AI 채용 해커톤 AX인재전쟁 #ax인재전쟁 #조코딩 #workmore](https://www.youtube.com/shorts/EwT3OTGAAb8) · 조코딩 · 2026-06-27
 - [연차 상관없어요. AI 시대의 인재는 OO가 전부입니다. | AX 인재전쟁 2화 마이리얼트립](https://www.youtube.com/watch?v=qGMVO0tjjGE) · 조코딩 · 2026-06-27
@@ -274,6 +277,25 @@ SaaStr · Mon, 06 Ju
 - [무려 33조 원! 마이크론이 받은 선수금의 의미](https://www.youtube.com/shorts/q-3hSGhTE3Q) · 안될공학 · 2026-07-02
 - [마이크론 매출총이익률이 85%? 그 뒤에 숨겨진 진실](https://www.youtube.com/shorts/MWUN9-4obUw) · 안될공학 · 2026-07-02
 - [20VC x SaaStr: The Token ROI Crisis Comes for Everyone, Anthropic Wants Chinese Open Source Banned, and Microsoft Has Its Worst Month Since 2000](https://www.saastr.com/20vc-x-saastr-the-token-roi-crisis-comes-for-everyone-anthropic-wants-chinese-open-source-banned-and-microsoft-has-its-worst-month-since-2000/) · SaaStr · Thu, 02 Ju
+- [Vercel Took a 10-Person SDR Team Down to 1. The Whole Thing Costs $5,000 a Year. With Vercel’s COO Jeanne DeWitt Grosser.](https://www.saastr.com/vercel-took-a-10-person-sdr-team-down-to-1-the-whole-thing-costs-5000-a-year-with-vercels-coo-jeanne-dewitt-grosser/) · SaaStr · Thu, 02 Ju
+- [Dear SaaStr:  Does It Make Sense to Have Post-Sales Functions Report into Sales?](https://www.saastr.com/large-company-activities-relating-post-sales-customer-support-fall-sales-operations/) · SaaStr · Sat, 17 Au
+- [무신사의 AI 시대 전략과 인재상 | AX 인재전쟁 3화 무신사](https://www.youtube.com/watch?v=OLAWeIuiD5Y) · 조코딩 · 2026-07-03
+- [마이리얼트립이 직접 리드하는 AX 팀](https://www.youtube.com/shorts/VUFlbSKcTAE) · 조코딩 · 2026-07-03
+- [메모리값 폭등, 메모리 회사 탓이 아닌 이유](https://www.youtube.com/shorts/_MLy_ujhurQ) · 안될공학 · 2026-07-03
+- [Got 100 Customers?  Believe It Or Not, It’s Time for Your First User Conference](https://www.saastr.com/got-100-customers-believe-it-or-not-its-time-for-your-first-user-conference/) · SaaStr · Thu, 11 Fe
+- [Dear SaaStr: What’s The One Trait You Look for When Assessing an Inside Sales Candidate?](https://www.saastr.com/whats-one-key-trait-skill-experience-look-assessing-inside-sales-candidate-saas/) · SaaStr · Mon, 22 Ja
+- [무신사가 AI에 올인한 진짜 이유](https://www.youtube.com/shorts/q2is2cLvias) · 조코딩 · 2026-07-04
+- [Outbound Isn’t Dead. AI Just Radically Changed How It Works.](https://www.saastr.com/outbound-isnt-dead-ai-just-radically-changed-how-it-works/) · SaaStr · Sat, 04 Ju
+- [If Nothing Else – Segment Churn.  You’ll See Patterns and Learnings You Wouldn’t Otherwise](https://www.saastr.com/nothing-else-segment-churn/) · SaaStr · Sat, 04 Ju
+- [Dear SaaStr: When Should I Pay Commission on B2B Sales that Close Themselves?](https://www.saastr.com/when-should-i-pay-the-commission-for-saas-sales-all-of-our-trial-signups-will-get-an-automatic-email-from-an-account-executive-how-do-we-decide-if-the-ae-was-responsible-for-the-sale-versus-the-sale/) · SaaStr · Sun, 25 Au
+- [5 Interesting Learnings from Toast at $6.5 Billion Run-Rate: 22%+ Growth, Profitable, No Deceleration. But AI Is Just Getting Started](https://www.saastr.com/5-interesting-learnings-from-toast-at-billion-in-arr/) · SaaStr · Fri, 03 Ju
+- [🧠 Community Wisdom: Quarterly planning and AI, cash vs. equity comp, paying for interview exercises, AI-powered outbound, compliance startup opportunities, and more](https://www.lennysnewsletter.com/p/community-wisdom-quarterly-planning) · Lenny's Newsletter · Sat, 04 Ju
+- [우주 회사 '스페이스X'는 왜? 코딩 회사인 '커서'를 인수했을까 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=vDd6TMC-NuA) · TTimesTV · 2026-07-04
+- [Tired vs. Wired: Our Deep Dive on Why Software Spend Is Up Record Amounts … Yet Half of SaaS Is Still Dying](https://www.saastr.com/tired-vs-wired-our-deep-dive-on-why-software-spend-is-up-15-yet-half-of-saas-is-still-dying/) · SaaStr · Sun, 05 Ju
+- [Google Cloud’s VP of Growth on Building an AI-Native Marketing Team: 8 Takeaways from SaaStr AI 2026](https://www.saastr.com/google-clouds-vp-of-growth-on-building-an-ai-native-marketing-team-8-takeaways-from-saastr-ai-2026/) · SaaStr · Sun, 05 Ju
+- [Events Work.  Events Are Back. But Are They Worth the Big Expense?](https://www.saastr.com/events-are-they-worth-the-big-expense/) · SaaStr · Sun, 02 Ma
+- [Dear SaaStr: How Much Do B2B Sales People Make in Commission?](https://www.saastr.com/how-much-do-sales-people-make-in-commission/) · SaaStr · Tue, 03 Ju
+- [EP 102. 샌프란시스코의 교훈: "사람들이 다 미쳤어요"](https://www.youtube.com/watch?v=SSIGI9mm0DU) · 노정석 · 2026-07-05
 
 ## ✍️ 내 메모
 <!-- memo:start -->
