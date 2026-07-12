@@ -2,7 +2,7 @@
 
 > [!abstract] 개요
 > AI 활용 및 도구에 대한 다양한 콘텐츠를 다룹니다. 특히 AI 에이전트 구축 및 활용, Claude와 같은 AI 모델 성능 비교, B2B 산업에서의 AI 적용 사례, 데이터 처리 및 전송 방식의 변화, 그리고 AI 기술 발전이 가져오는 비즈니스 모델 혁신 등에 대한 내용을 포함합니다. 일부 콘텐츠는 특정 기업의 AI 도입 전략이나 채용 과정과 연관된 내용을 다루기도 합니다.
-> 📌 10개 출처 · 107건
+> 📌 10개 출처 · 111건
 
 ## AI 에이전트 및 자동화
 AI 에이전트의 구축, 활용, 그리고 이를 통한 업무 자동화 방법을 탐구합니다. 다양한 도구와 SDK를 활용하여 에이전트를 개발하고, 실제 업무에 적용하여 효율성을 높이는 사례를 다룹니다.
@@ -342,6 +342,10 @@ TTimesTV · 2026-07-07
 - [최대 30명 채용 채널톡이 AI 인재 보는 기준](https://www.youtube.com/shorts/UjDQvj2C0ss) · 조코딩 · 2026-07-06
 - [아이돌 외모의 중국 가정용 로봇 출시](https://www.youtube.com/shorts/tpJKwMsYFjI) · 안될공학 · 2026-07-06
 - [What Happens When You Hire the Wrong VP](https://www.saastr.com/what-happens-when-you-hire-the-wrong-vp/) · SaaStr · Mon, 06 Ju
+- [빅테크 어느 곳 하나 AI칩 안 만드는 곳이 없네? AI칩 전쟁](https://www.youtube.com/watch?v=iOIFL8aAOv4) · TTimesTV · 2026-07-10
+- [One Way to Build a Great AI Agent: Just Start With a Dashboard, Then Add the Agent](https://www.saastr.com/one-way-to-build-a-great-ai-agent-just-start-with-a-dashboard-then-add-the-agent/) · SaaStr · Sat, 11 Ju
+- [SaaStr AI App of the Week: Willingness to Pay. The Pricing Firm B2B + AI Companies Call When Per-Seat Stops Working](https://www.saastr.com/saastr-ai-app-of-the-week-willingness-to-pay-the-pricing-firm-b2b-ai-companies-call-when-per-seat-stops-working/) · SaaStr · Sat, 11 Ju
+- [🧠 Community Wisdom: Negative network effects, managing overconfident colleagues, developers sidestepping design decisions, keeping stakeholder meetings on track, and more](https://www.lennysnewsletter.com/p/community-wisdom-negative-network) · Lenny's Newsletter · Sat, 11 Ju
 
 ## ✍️ 내 메모
 <!-- memo:start -->

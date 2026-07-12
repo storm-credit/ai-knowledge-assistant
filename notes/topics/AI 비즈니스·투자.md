@@ -2,7 +2,7 @@
 
 > [!abstract] 개요
 > AI 기술은 다양한 산업 분야에서 혁신을 주도하며, 기업들은 AI 인재 확보와 AI 기반 서비스 개발에 집중하고 있습니다. 특히 회계, 증권, 로봇, 데이터센터 등 전통적인 산업에서도 AI 도입이 가속화되고 있으며, AI 스타트업들은 공격적인 성장과 수익 모델 구축에 힘쓰고 있습니다. 데이터센터 인프라 구축 경쟁, AI 에이전트의 역할 변화, 그리고 AI 기술 발전 속에서 발생하는 '인지 부채'와 같은 새로운 과제들도 주목받고 있습니다.
-> 📌 7개 출처 · 96건
+> 📌 7개 출처 · 98건
 
 ## AI 인재 채용 및 조직 문화
 기업들은 AI 기술을 선도적으로 도입하고 문제를 해결할 수 있는 인재를 적극적으로 채용하고 있습니다. AX 인재 전쟁과 같은 프로그램을 통해 문제 해결 능력, 기획 의도, 접근 방식을 중시하며 AI 활용 전문가를 육성하고 있습니다.
@@ -296,6 +296,8 @@ SaaStr · Tue, 07 Ju
 - [Events Work.  Events Are Back. But Are They Worth the Big Expense?](https://www.saastr.com/events-are-they-worth-the-big-expense/) · SaaStr · Sun, 02 Ma
 - [Dear SaaStr: How Much Do B2B Sales People Make in Commission?](https://www.saastr.com/how-much-do-sales-people-make-in-commission/) · SaaStr · Tue, 03 Ju
 - [EP 102. 샌프란시스코의 교훈: "사람들이 다 미쳤어요"](https://www.youtube.com/watch?v=SSIGI9mm0DU) · 노정석 · 2026-07-05
+- [빅테크 어느 곳 하나 AI칩 안 만드는 곳이 없네? AI칩 전쟁](https://www.youtube.com/watch?v=iOIFL8aAOv4) · TTimesTV · 2026-07-10
+- [SaaStr AI App of the Week: Willingness to Pay. The Pricing Firm B2B + AI Companies Call When Per-Seat Stops Working](https://www.saastr.com/saastr-ai-app-of-the-week-willingness-to-pay-the-pricing-firm-b2b-ai-companies-call-when-per-seat-stops-working/) · SaaStr · Sat, 11 Ju
 
 ## ✍️ 내 메모
 <!-- memo:start -->

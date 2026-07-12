@@ -2,7 +2,7 @@
 
 > [!abstract] 개요
 > AI 기술과 모델의 최신 동향을 다루는 여러 항목들을 분류했습니다. 주요 주제로는 AI 에이전트, AI 모델 성능 평가, AI 컴퓨팅 인프라와 하드웨어 혁신, 그리고 AI 기술의 경제적 영향 및 규제 등이 있습니다. 이러한 기술 발전은 AI 시대의 변화를 주도하며, 기업 전략과 미래 산업 생태계에 중대한 영향을 미칠 것으로 예상됩니다.
-> 📌 8개 출처 · 47건
+> 📌 8개 출처 · 48건
 
 ## AI 에이전트 및 코딩
 AI 에이전트는 AI 시대 변화의 핵심 요소로, 독립적으로 목표를 달성하는 시스템입니다. AI 에이전트 학습 및 코딩 기본기 강화는 AI 활용 능력 향상에 필수적입니다.
@@ -253,6 +253,7 @@ SaaStr · Thu, 09 Ju
 - [🎙️ How I AI: GLM-5.2 review & How Gusto built a new product line with Claude Code](https://www.lennysnewsletter.com/p/how-i-ai-glm-52-review-and-how-gusto) · Lenny's Newsletter · Mon, 29 Ju
 - [엔비디아의 800VDC 도입이 의미하는 것](https://www.youtube.com/shorts/CTNWEzFH2mk) · 안될공학 · 2026-07-01
 - [토큰맥싱 비판에 대한 OpenAI 최고 연구자의 답변은?](https://www.youtube.com/shorts/4tZKFu0NTRg) · 안될공학 · 2026-07-01
+- [One Way to Build a Great AI Agent: Just Start With a Dashboard, Then Add the Agent](https://www.saastr.com/one-way-to-build-a-great-ai-agent-just-start-with-a-dashboard-then-add-the-agent/) · SaaStr · Sat, 11 Ju
 
 ## ✍️ 내 메모
 <!-- memo:start -->
