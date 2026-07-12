@@ -19,8 +19,33 @@ def test_html_to_text_strips_tags_and_scripts():
     assert "<" not in t
 
 
-def test_html_to_text_normalizes_whitespace():
-    assert _html_to_text("a\n\n\n  b\t\tc") == "a b c"
+def test_html_to_text_preserves_block_lines():
+    # #1 수정: 블록마다 줄바꿈 보존 → 줄 단위 diff가 의미 있어야
+    t = _html_to_text("<p>첫 블록</p><p>둘째 블록</p><li>셋째</li>")
+    lines = t.splitlines()
+    assert "첫 블록" in lines and "둘째 블록" in lines and "셋째" in lines
+    assert len(lines) >= 3   # 한 줄로 뭉개지지 않음
+
+
+def test_html_to_text_collapses_within_line_whitespace():
+    # 줄 안의 연속 공백/탭만 하나로, 줄바꿈은 경계로 보존
+    assert _html_to_text("<p>a   b\t\tc</p>") == "a b c"
+
+
+def test_html_to_text_removes_comments():
+    # #4: 주석은 통째 제거 (첫 '>'에서 안 끊김)
+    t = _html_to_text("<p>본문</p><!-- 광고 > 조각 --><p>끝</p>")
+    assert "조각" not in t and "광고" not in t
+    assert "본문" in t and "끝" in t
+
+
+def test_change_diff_is_line_local_not_whole_page():
+    # #1 핵심: 한 블록만 바뀌면 그 블록만 diff에 나와야 (전체 페이지 아님)
+    old = _html_to_text("<p>공통1</p><p>공통2</p><p>공통3</p>")
+    new = _html_to_text("<p>공통1</p><p>신규 모델 출시</p><p>공통2</p><p>공통3</p>")
+    d = diff_text(old, new)
+    assert "신규 모델 출시" in d
+    assert "공통1" not in d and "공통3" not in d   # 안 바뀐 줄은 diff에 없음
 
 
 # ── diff ─────────────────────────────────────────────────────────────────
@@ -96,6 +121,29 @@ def test_change_summarizes_and_writes_note_then_updates_snapshot(tmp_path):
     assert "2026-07-11" in text
     assert "## Gemini" in text
     assert "Gemini 3.0 출시" in text
+
+
+def test_same_day_rerun_merges_sections(tmp_path):
+    # #2: 같은 날 재실행 시 앞서 쓴 provider 섹션이 유실되지 않고 병합돼야
+    env = _env(tmp_path, ["Gemini", "OpenAI"])
+    llm = FakeLLM("- 변경 요약")
+    # baseline 둘 다
+    run_watch(date="2026-07-12", fetch=lambda u: "<p>base</p>", client=llm, **env)
+    # 아침: Gemini만 변경
+    def f1(u): return "<p>base 그리고 Gemini 신규</p>" if u.endswith("Gemini") else "<p>base</p>"
+    run_watch(date="2026-07-12", fetch=f1, client=llm, **env)
+    # 저녁: OpenAI만 변경 (Gemini는 이제 diff 없음)
+    def f2(u): return "<p>base 그리고 Gemini 신규</p>" if u.endswith("Gemini") else "<p>base 그리고 OpenAI 신규</p>"
+    path = run_watch(date="2026-07-12", fetch=f2, client=llm, **env)
+    text = open(path, encoding="utf-8").read()
+    assert "## Gemini" in text and "## OpenAI" in text   # 둘 다 남아야 (덮어쓰기 X)
+
+
+def test_summarize_change_wraps_diff_in_delimiter():
+    # #3: 외부 텍스트 주입 방어 — diff를 구분자로 감싸고 "지시 아님" 명시
+    from collector.watch import WATCH_PROMPT
+    assert "<diff>" in WATCH_PROMPT and "</diff>" in WATCH_PROMPT
+    assert "지시" in WATCH_PROMPT   # delimiter 안은 데이터, 지시가 아니라는 문구
 
 
 def test_no_change_no_llm_no_note(tmp_path):
