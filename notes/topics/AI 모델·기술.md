@@ -1,78 +1,11 @@
 # AI 모델·기술
 
 > [!abstract] 개요
-> AI 기술과 모델의 최신 동향을 다루는 여러 항목들을 분류했습니다. 주요 주제로는 AI 에이전트, AI 모델 성능 평가, AI 컴퓨팅 인프라와 하드웨어 혁신, 그리고 AI 기술의 경제적 영향 및 규제 등이 있습니다. 이러한 기술 발전은 AI 시대의 변화를 주도하며, 기업 전략과 미래 산업 생태계에 중대한 영향을 미칠 것으로 예상됩니다.
-> 📌 8개 출처 · 48건
+> AI 기술의 최신 동향과 미래 전망을 다룬 다양한 뉴스 및 분석 기사를 종합한 내용입니다. 주요 주제로는 신규 AI 모델 업데이트, AI 모델 성능 경쟁, AI 데이터센터의 전력 확보 전략, AI 에이전트의 발전 및 활용, 그리고 AI 기술 발전에 따른 규제 및 산업 변화 등이 포함됩니다.
+> 📌 8개 출처 · 50건
 
-## AI 에이전트 및 코딩
-AI 에이전트는 AI 시대 변화의 핵심 요소로, 독립적으로 목표를 달성하는 시스템입니다. AI 에이전트 학습 및 코딩 기본기 강화는 AI 활용 능력 향상에 필수적입니다.
-
-### [지난주에 클로드를 삭제했어.](https://www.youtube.com/watch?v=PzqRRYHHpbw)
-노마드 코더 · 2026-05-07
-
-**핵심 개념**
-- AI 패러다임의 핵심은 '에이전트'이다.
-- AI Agents 학습을 통해 AI 시대 변화의 흐름을 주도할 수 있다.
-- AI Agents 마스터클래스는 5개 프레임워크와 10개 실전 프로젝트를 제공한다.
-- AI 활용 능력은 코딩 기본기에 따라 격차가 발생할 수 있다.
-
-**실습 포인트**
-- AI Agents 마스터클래스를 통해 AI Agents의 모든 것을 배운다.
-- AI 기초 탄탄 클럽을 통해 코딩 기본기를 다져 AI 활용 능력을 향상시킨다.
-
-**한 줄 정리**
-AI 에이전트와 코딩 기본기 학습으로 AI 시대 변화에 주도적으로 참여할 수 있습니다.
-
-### [우린 끝났어. 우린 대체될 거야.](https://www.youtube.com/watch?v=Yunpwh1Dxcg)
-노마드 코더 · 2026-05-16
-
-**핵심 개념**
-- AI 에이전트: AI 시대 변화의 핵심이 되는 요소로, 독립적으로 목표를 달성하기 위해 환경과 상호작용하는 시스템.
-
-### [우주 회사 '스페이스X'는 왜? 코딩 회사인 '커서'를 인수했을까 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=vDd6TMC-NuA)
-TTimesTV · 2026-07-04
-
-- AI 산업의 전장이 데이터센터, GPU, 전기 확보 경쟁으로 이동했습니다.
-- 빅테크 기업들은 GPU 공급난과 전력 한계 속에서 토큰 이코노미와 코딩 에이전트 분야에서 경쟁하고 있습니다.
-- 토큰 맥싱에 대한 회의론이 제기되며, 생산자와 소비자 모두 토큰 효율화에 집중하고 있습니다.
-- 30년 경력의 개발자인 박종천 지란지교소프트 CAIO가 급변하는 AI 시장을 분석했습니다.
-- 영상은 AI 레버리지 강좌 소개, 하이라이트, 반도체 및 전기 확보 경쟁, 모델 성능 경쟁에서 에이전트 성능 경쟁으로의 전환 등을 다룹니다.
-- 빅테크 기업들의 에이전트 전쟁 참여와 챗 전쟁, 코드 전쟁, 코워크 전쟁의 흐름을 짚습니다.
-- 구글, MS, 아마존, 스페이스X 등에서 누가 토큰을 가장 많이 만들지에 대한 논의가 포함되어 있습니다.
-
-### [5 Simple Reasons We Won’t All Vibe Code Our Own HubSpot or Salesforce](https://www.saastr.com/simple-reasons-we-wont-all-vibe-code-our-own-hubspot-or-salesforce-even-though-at-saastr-ourselves-we-sort-of-have/)
-SaaStr · Tue, 07 Ju
-
-- AI 에이전트가 기존의 HubSpot과 같은 서비스를 대체할 수 있다는 주장이 있다.
-- 실제로 AI 에이전트를 통해 HubSpot의 기능을 일부 구현한 경험이 있다.
-- AI 에이전트의 발전으로 인해 개인이 복잡한 비즈니스 소프트웨어를 직접 코딩하지 않고도 유사한 기능을 구현할 수 있게 되었다.
-- 이러한 추세는 기술적으로 능숙하지 않은 사람들에게도 해당된다.
-- 하지만 모든 사람이 자신만의 HubSpot이나 Salesforce를 구축하게 되지는 않을 것이다.
-
-### [\[LIVE\] OpenAI 내부자가 직접 알려주는 신규 업데이트 및 Codex 사용법](https://www.youtube.com/watch?v=8io9vuqtdPI)
-조코딩 · 2026-07-08
-
-- OpenAI 내부자가 직접 출연하여 신규 업데이트 내용을 공유합니다.
-- OpenAI의 Codex 사용법에 대한 정보를 제공합니다.
-
-### [기술부채보다 위험한 AI 인지부채 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=fwdIXO1DoTo)
-TTimesTV · 2026-07-08
-
-- 미국의 '페이블' 모델 수출 금지 사태로 인해 앤트로픽 최신 모델 사용에 제약이 발생했으며, 중국 AI 모델이 대안으로 주목받았습니다.
-- 이러한 상황은 여러 국가 및 기업에게 AI 종속 문제와 'AI 인지부채'에 대한 경각심을 일깨워주었습니다.
-- 'AI 인지부채'는 작동 원리를 모른 채 AI에 과도하게 의존할 경우 기업 운명에 부정적인 영향을 미칠 수 있습니다.
-- 30년 경력의 개발자이자 지란지교소프트 CAIO인 박종천은 AI 인지부채 해결 방안을 제시합니다.
-- 영상은 AI 레버리지 강좌, 앤트로픽 수출 통제, AI 의존도 리스크, 중국 AI 모델 규제, 암묵지 데이터화, 코딩 에이전트, 인지 부채 위험성, 토큰 생산 전쟁 등의 내용을 다룹니다.
-
-## AI 모델 성능 및 평가
-최신 AI 모델들의 성능을 평가하고 비교하는 내용을 다룹니다. 특히 Sonnet 5 모델에 대한 리뷰와 다양한 AI 모델 간의 벤치마크 결과가 포함됩니다.
-
-### [Sonnet 5 review: I ran 64 generations to find out if it's worth it](https://www.lennysnewsletter.com/p/sonnet-5-review-i-ran-64-generations)
-Lenny's Newsletter · Tue, 30 Ju
-
-*   'How I AI Bench'는 Claude Code를 사용하여 구축되었으며, 64회의 블라인드 프로토타입 생성, PRD(제품 요구사항 정의서), 에이전트 음성 테스트를 통해 64회의 테스트를 수행했습니다.
-*   테스트에는 5개의 최첨단(frontier) 모델이 포함되었으며, 그 결과는 작성자 본인에게도 놀라움을 안겨주었습니다.
-*   본 리뷰는 Sonnet 5 모델의 가치를 평가하기 위해 64회의 생성을 실행한 경험을 바탕으로 합니다.
+## AI 모델 및 기술 발전
+새로운 AI 모델의 출시, 업데이트 및 성능 비교, 그리고 AI 기술의 혁신적인 발전을 다룹니다.
 
 ### [IT뉴스 - Fable 5 복귀, Sonnet 5, OpenAI 미국에 지분 넘김, Codex shortcuts, 메타 클라우드, Gemini 업데이트, UBTech 로봇 등](https://www.youtube.com/watch?v=UJCKwYTUpMw)
 조코딩 · 2026-07-05
@@ -100,44 +33,83 @@ Lenny's Newsletter · Mon, 06 Ju
 - 'How I AI'는 Lenny's Podcast Network의 일부로, 사용자가 매주 들을 수 있는 콘텐츠를 제공합니다.
 - 이 콘텐츠는 Sonnet 5에 대한 리뷰를 포함하고 있습니다.
 
+### [\[LIVE\] OpenAI 내부자가 직접 알려주는 신규 업데이트 및 Codex 사용법](https://www.youtube.com/watch?v=8io9vuqtdPI)
+조코딩 · 2026-07-08
+
+- OpenAI 내부자가 직접 출연하여 신규 업데이트 내용을 공유합니다.
+- OpenAI의 Codex 사용법에 대한 정보를 제공합니다.
+
 ### [GPT-5.6 Sol vs. Claude Fable: Why OpenAI’s new model crushes my benchmark](https://www.lennysnewsletter.com/p/gpt-56-sol-vs-claude-fable-why-openais)
 Lenny's Newsletter · Thu, 09 Ju
 
 - GPT-5.6 Sol은 프로토타입, 제품 요구사항 정의서(PRD), 브라우저 사용 등 5가지 범주로 구성된 'How I AI' 벤치마크에서 Claude Fable을 능가했습니다.
 - 각 AI 모델이 어떤 부분에서 강점을 보이는지 구체적으로 분석한 결과입니다.
 
-## AI 컴퓨팅 인프라 및 하드웨어
-AI 기술 발전에 필수적인 컴퓨팅 인프라와 하드웨어 기술 동향을 조명합니다. GPU, 메모리 기술(DRAM, CXL, HBM), 실리콘 포토닉스, 데이터센터 전력 문제 등이 주요 내용입니다.
+### [20VC x SaaStr: Washington Lifts the Fable 5 Ban, Sam Floats Handing the Government 5%, and Why Every Tech Giant Is Racing to Become the Next IBM](https://www.saastr.com/20vc-x-saastr-washington-lifts-the-fable-5-ban-sam-floats-handing-the-government-5-and-why-every-tech-giant-is-racing-to-become-the-next-ibm/)
+SaaStr · Thu, 09 Ju
 
-### [메타가 DRAM 재활용 칩을 냈습니다... 메모리 수요 줄어들까? HBM 다음은 CXL?](https://www.youtube.com/watch?v=PDPcZ8ERWe4)
-안될공학 · 2026-07-02
+- 워싱턴이 Fable 5 금지를 해제했으며, 이는 향후 모델 출시를 위한 구조화된 사전 승인 절차의 의미를 시사합니다.
+- OpenAI는 모든 프런티어 연구소들이 미국 정부에 5%를 할당하는 아이디어를 제안했습니다.
+- 주요 기술 기업들이 차세대 IBM이 되기 위해 경쟁하고 있습니다.
 
-- 메타는 퇴역 서버의 DDR4 메모리를 회수하여 최신 서버에 재사용하기 위해 CXL Type-3 메모리 확장 칩인 Vistara를 직접 설계 및 배치했습니다.
-- Vistara 설계는 단순한 운용 방식이 아닌 실제 반도체 칩으로, 로컬 DDR5와 CXL DDR4의 대역폭 차이 및 서버당 메모리 구성 개선 결과를 보여줍니다.
-- 느린 DDR4 추가에도 불구하고 캐시와 ML 파라미터 서버 사례를 통해 서버 수와 처리 시간이 줄어든 이유를 설명합니다.
-- CXL은 HBM을 대체하는 기술이 아니라 DRAM 공급 부족을 해결하며, 직접 연결형 메모리 확장과 여러 서버가 공유하는 메모리 풀의 차이를 구분합니다.
-- 메모리 계층이 늘어남에 따라 운영체제와 AI 런타임 관리의 복잡성이 증가함을 시사합니다.
-- 삼성전자, SK하이닉스, 파네시아가 CXL 생태계에서 각자의 역할을 수행하고 있습니다.
-- HBM이 속도 경쟁이라면 CXL은 메모리 활용 효율성에 대한 경쟁입니다.
+### [EP 103. 이해가 병목이 될 때](https://www.youtube.com/watch?v=PYpRfmwo92E)
+노정석 · 2026-07-12
 
-### [충격적인 메타의 한 마디... GPU 가 남는다? 메타의 클라우드 사업 진출의 진짜 의미](https://www.youtube.com/watch?v=J_GYrqt5xr4)
-안될공학 · 2026-07-03
+- Fable AI 사용 시 작업에 따라 적절한 모델을 선택하고 서브에이전트에 역할을 분배하는 방법이 논의됨.
+- AI 사용량이 늘수록 사람의 이해가 병목 현상을 일으킬 수 있으며, 보고서, 퀴즈, 구현 노트 등이 인지 부채 감소에 기여할 수 있음.
+- 모든 하위 레이어를 이해할지, 일부를 블랙박스로 남기고 상위 레이어 판단에 집중할지에 대한 토론이 진행됨.
+- Claude, Codex, 사람 간의 협업 방식과 경험 기반의 경계 설정 기준이 공유됨.
+- Artificial Analysis와 LMArena를 통한 모델 평가의 의미와 한계, 벤치마크 및 인간 선호도 역시 최적화될 수 있다는 점이 언급됨.
+- 평가 데이터가 AI 산업의 중요한 사업 영역이 되며, 오디오 및 로보틱스 분야에서는 평가가 더욱 어려워질 수 있음.
 
-- 메타가 잉여 AI 컴퓨팅 자원을 외부 클라우드 사업을 통해 판매하는 방안을 검토 중이라는 보도가 있었습니다.
-- 이 소식은 메타 주가에는 긍정적이었으나, 국내외 반도체주 및 GPU 임대 기업에는 부정적인 영향을 미쳤습니다.
-- 시장에서는 AI 데이터센터 과잉으로 GPU가 남을 수 있다는 해석이 나왔지만, 메타는 올해 설비 투자 전망을 최대 1,450억 달러로 상향했습니다.
-- 메타는 구글, 코어위브 등 외부 사업자로부터도 상당한 컴퓨팅 용량을 구매하고 있습니다.
-- 영상에서는 GPU 개수와 실제 학습에 사용 가능한 컴퓨팅 용량의 차이를 기술적으로 설명합니다.
-- 메타의 클라우드 사업 구상이 현재의 과잉인지, 미래 위험 대비 보험인지 구분하여 분석합니다.
-- SK하이닉스, 삼성전자, HBM 수요에 미칠 수 있는 영향과 AI 인프라 과잉 여부 판단을 위한 지표들을 제시합니다.
+### [IT뉴스 - GPT-5.6, GPT‑Live, Work, Grok 4.5, Muse Spark 1.1, Lingbot-World-2, Google 커스텀 URL 등](https://www.youtube.com/watch?v=Xxuv8AkPS4Y)
+조코딩 · 2026-07-12
 
-### [왜 실리콘 포토닉스가 AI 반도체의 2막을 여는가 (박영준 라이팩 CTMO)](https://www.youtube.com/watch?v=jN29A92uusU)
-TTimesTV · 2026-07-03
+- IT 뉴스로 GPT-5.6, GPT‑Live, Work, Grok 4.5, Muse Spark 1.1, Lingbot-World-2, Google 커스텀 URL 등 다양한 AI 관련 업데이트 소식을 전함.
+- 조코딩 채널을 통해 코딩 공부를 할 수 있으며, 제보 메일을 받을 수 있음.
 
-- AI 반도체 시장에서 GPU 중심의 1막을 넘어, 데이터 전송 병목 현상을 해결할 '실리콘 포토닉스'가 새로운 주류 기술로 부상하고 있다.
-- 기존 구리선 통신 방식의 한계로 인해, 가까운 칩 간의 통신까지 광(光)으로 전환해야 하는 필요성이 대두되었다.
-- 실리콘 포토닉스는 데이터센터의 전력 소비를 줄이는 데 기여할 잠재력을 가지고 있다.
-- 라이팩 CTMO 박영준은 실리콘 포토닉스가 반도체 산업에 가져올 변화에 대해 설명한다.
+### [AI뉴스 - GPT-5.6, GPT‑Live, Work, Grok 4.5, Muse Spark 1.1, Lingbot-World-2, Google 커스텀 URL 등](https://www.youtube.com/watch?v=bnxXaSwtCfw)
+조코딩 · 2026-07-13
+
+- OpenAI는 GPT-5.6, GPT‑Live, ChatGPT Work를 공개했으며, 이는 GPT 모델의 발전과 새로운 기능 출시를 보여줍니다.
+- 메타는 Muse Spark 1.1, Muse Image, Muse Video를 공개하며 멀티모달 AI 분야에서의 경쟁력을 강화하고 있습니다.
+- 일론 머스크의 Grok 4.5가 공개되었으며, 샘 알트만과의 신경전이 언급되었습니다.
+- Google AI Studio는 커스텀 URL 기능을 도입하여 사용자 편의성을 높였습니다.
+- 중국 Lingbot-World-2가 오픈소스로 공개되었으며, 이는 언어 모델 분야의 오픈소스 생태계 확장에 기여합니다.
+- Wan-Streamer 0.2가 발표되었고, TTS 비교를 위한 TTS-bench가 소개되었습니다.
+- 인공지능으로 인한 노동 시장의 변화와 정책 방향에 대한 논의가 진행되었습니다.
+
+### [SaaStr Takes on This Week’s 20VC: Why OpenAI Giving the Govt 5% Might Make Sense, the Death of Block Risk, and Why Frontier Models Are the Cheapest](https://www.saastr.com/my-takes-on-this-weeks-20vc-why-openai-giving-the-govt-5-might-make-sense-the-death-of-block-risk-and-why-frontier-models-are-the-cheapest/)
+SaaStr · Sun, 12 Ju
+
+- 20VC x SaaStr 팟캐스트 내용을 바탕으로 심층 분석한 내용을 다룸.
+- 미국 정부의 Fable 5 금지 해제 논의와 샘 알트만(Sam Altman)이 정부에 5% 지분 제공을 제안한 내용 등을 다룸.
+- 블록 위험(Block Risk)의 종식과 프론티어 모델(Frontier Models)이 가장 저렴할 수 있다는 주장도 포함됨.
+- 해리 스테빙스(Harry Stebbings) 및 로리 오드리스콜(Rory O’Driscoll)과의 대화 내용을 기반으로 함.
+- AI 모델 및 정책 관련 민감한 주제를 다루고 있음.
+
+### [🎙️ How I AI: GPT-5.6 review, How a solo builder runs 24/7 local AI, and What an agent harness is and how to build one](https://www.lennysnewsletter.com/p/how-i-ai-gpt-56-review-how-a-solo)
+Lenny's Newsletter · Mon, 13 Ju
+
+- "How I AI"는 "Lenny's Podcast Network"의 일부로, 주간 AI 관련 내용을 다룸.
+- 이번 주 내용은 GPT-5.6 리뷰를 포함함.
+- 개인이 24시간 로컬 AI를 운영하는 방법에 대한 내용도 다뤄짐.
+- 에이전트 하네스(agent harness)가 무엇인지, 그리고 이를 구축하는 방법에 대한 설명도 포함됨.
+- AI 모델, AI 활용 및 개발에 대한 정보를 제공함.
+
+## AI 인프라 및 경쟁 환경
+AI 산업의 전장이 되는 데이터센터, GPU, 전기 확보 경쟁 및 이를 위한 새로운 기술 동향을 분석합니다.
+
+### [우주 회사 '스페이스X'는 왜? 코딩 회사인 '커서'를 인수했을까 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=vDd6TMC-NuA)
+TTimesTV · 2026-07-04
+
+- AI 산업의 전장이 데이터센터, GPU, 전기 확보 경쟁으로 이동했습니다.
+- 빅테크 기업들은 GPU 공급난과 전력 한계 속에서 토큰 이코노미와 코딩 에이전트 분야에서 경쟁하고 있습니다.
+- 토큰 맥싱에 대한 회의론이 제기되며, 생산자와 소비자 모두 토큰 효율화에 집중하고 있습니다.
+- 30년 경력의 개발자인 박종천 지란지교소프트 CAIO가 급변하는 AI 시장을 분석했습니다.
+- 영상은 AI 레버리지 강좌 소개, 하이라이트, 반도체 및 전기 확보 경쟁, 모델 성능 경쟁에서 에이전트 성능 경쟁으로의 전환 등을 다룹니다.
+- 빅테크 기업들의 에이전트 전쟁 참여와 챗 전쟁, 코드 전쟁, 코워크 전쟁의 흐름을 짚습니다.
+- 구글, MS, 아마존, 스페이스X 등에서 누가 토큰을 가장 많이 만들지에 대한 논의가 포함되어 있습니다.
 
 ### [AI 데이터센터가 발전소를 짓는 이유](https://www.youtube.com/shorts/o2T_nNt0VKw)
 안될공학 · 2026-07-05
@@ -157,6 +129,15 @@ TTimesTV · 2026-07-06
 - AI 시대 노동과 경쟁의 변화, 정부 정책 및 인재 육성 방향에 대한 논의도 포함됩니다.
 - 한국 반도체의 위상에 대한 내용도 언급됩니다.
 
+### [중국이 이걸 해냈다고???](https://www.youtube.com/shorts/fwiDNd2oe3c)
+조코딩 · 2026-07-09
+
+- '조코딩' 채널은 코딩 학습을 위한 자료를 https://jocoding.net/ 에서 제공한다.
+- 채널은 VVIP 멤버십 후원을 받고 있으며, 후원자 명단(그림자그림자, 차딩Chading TV 등 15명)을 공개하며 감사를 표했다.
+- VVIP 멤버십 후원 참여는 https://www.youtube.com/@jocoding/join 링크를 통해 가능하다.
+- 해당 영상은 중국의 AI 기술 관련 성과에 대한 놀라움을 표현하는 내용을 담고 있다.
+- 영상의 주요 해시태그는 #ai, #중국, #엔비디아 이다.
+
 ### [화웨이 아직 멀었다! 칩 성능 개선의 진실](https://www.youtube.com/shorts/4r-ZCvjhCkM)
 안될공학 · 2026-07-10
 
@@ -174,18 +155,49 @@ TTimesTV · 2026-07-06
 - 애플은 기존의 프로세서 위 D램 적층 방식에서 벗어나, 프로세서와 D램을 옆으로 배치하는 새로운 패키징 방식을 검토하고 있습니다.
 - 삼성전자, SK하이닉스, 마이크론의 LPDDR6, 애플의 메모리 컨트롤러, TSMC의 2나노 공정 및 패키징 기술이 어떻게 연계되는지 정리하며, 아직 공식 발표되지 않은 유출 정보와 확인된 기술을 구분하여 분석합니다.
 
-## AI 경제 및 전략
-AI 기술 발전이 가져올 경제적 영향과 기업 전략, 그리고 관련 규제 및 정책 동향을 분석합니다. 한국의 AI 산업 전략, 빅테크 기업들의 경쟁, AI 규제 이슈 등이 포함됩니다.
+### [중국 무섭네요… 스페이스X 독점 끝나나 | 철 그물 통한 새로운 로켓 회수 방식 의미](https://www.youtube.com/watch?v=ZG_Jo88ciIs)
+안될공학 · 2026-07-13
 
-### [글로벌 빅테크가 눈독 들이는 K-데이터의 위력 (조용민 언바운드랩스 대표, 이용권 고릴라PE 파트너)](https://www.youtube.com/watch?v=iRm8SQvm38Y)
-TTimesTV · 2026-07-03
+- 중국이 발사한 로켓 1단을 바다 위의 거대한 그물로 포획하는 데 성공했습니다.
+- 이는 SpaceX의 Falcon 9처럼 착륙 다리를 이용하는 방식과 달리, 로켓 엔진 재점화가 어려운 상황에서 새로운 회수 방식을 제시합니다.
+- 중국은 창정 10B에 그물 회수 방식을 선택했으며, YF-100K 엔진의 재점화 기술도 함께 다루어졌습니다.
+- 로켓의 착륙 장비 일부를 해상 플랫폼으로 옮기는 것의 장점과 새로운 문제점도 분석됩니다.
+- 재사용 로켓에서 메탄 대신 1단에 케로신을 사용한 중국의 선택 이유를 짚어봅니다.
+- 로켓 회수와 반복 재사용은 다른 문제임을 강조하며, Falcon 9의 36번째 비행과 비교하여 현재 기술 격차를 확인했습니다.
+- 한국 차세대발사체의 재사용 계획과 80톤급 메탄 엔진 개발 방향도 논의되었습니다.
 
-- 한국은 자체적인 대규모 범용 AI 모델 개발보다, 글로벌 AI 기업들이 거쳐갈 수밖에 없는 메모리 및 인프라 허브 국가가 되는 전략을 제시합니다.
-- 정교한 한국의 데이터 생태계를 활용하여 세계 최고 AI 모델들이 한국에서 학습하도록 유도할 수 있다고 강조합니다.
-- 자체 파운데이션 모델 개발은 WWW나 ASML을 처음부터 다시 만드는 것과 같이 비효율적인 시도일 수 있다고 지적합니다.
-- 클로드 차단 사태는 이러한 인프라 전략의 중요성을 시사하는 예시로 언급됩니다.
-- K-앤트로픽과 같은 자체 모델 개발보다는 K-스케일AI, 즉 한국을 글로벌 AI 기업들의 확장 기지로 만드는 것을 지향해야 한다고 주장합니다.
-- AI 버블과 AI 슈퍼사이클에 대한 논의도 포함되어 있으며, 미래 유망 섹터 발굴 기준에 대한 내용도 다룹니다.
+## AI 에이전트와 활용
+AI 에이전트의 개발, 활용 전략 및 개인화된 서비스 구축 방안에 대한 내용을 다룹니다.
+
+### [5 Simple Reasons We Won’t All Vibe Code Our Own HubSpot or Salesforce](https://www.saastr.com/simple-reasons-we-wont-all-vibe-code-our-own-hubspot-or-salesforce-even-though-at-saastr-ourselves-we-sort-of-have/)
+SaaStr · Tue, 07 Ju
+
+- AI 에이전트가 기존의 HubSpot과 같은 서비스를 대체할 수 있다는 주장이 있다.
+- 실제로 AI 에이전트를 통해 HubSpot의 기능을 일부 구현한 경험이 있다.
+- AI 에이전트의 발전으로 인해 개인이 복잡한 비즈니스 소프트웨어를 직접 코딩하지 않고도 유사한 기능을 구현할 수 있게 되었다.
+- 이러한 추세는 기술적으로 능숙하지 않은 사람들에게도 해당된다.
+- 하지만 모든 사람이 자신만의 HubSpot이나 Salesforce를 구축하게 되지는 않을 것이다.
+
+### [One Way to Build a Great AI Agent: Just Start With a Dashboard, Then Add the Agent](https://www.saastr.com/one-way-to-build-a-great-ai-agent-just-start-with-a-dashboard-then-add-the-agent/)
+SaaStr · Sat, 11 Ju
+
+- AI 에이전트를 바로 구매하여 시작하는 것이 가능하다.
+- 시중에 훌륭한 AI 에이전트들이 있으며, 이를 시작점으로 삼는 것은 좋은 방법이다.
+- 사용자들은 제공된 AI 에이전트 스택을 복사하여 자체 개발에 활용할 수 있다.
+- 자체 AI 에이전트 개발 시, 대시보드로 시작하여 점진적으로 에이전트를 추가하는 간단한 방법을 제안한다.
+- 본문은 AI 에이전트 개발을 위한 "대시보드로 시작하여 에이전트를 추가하는" 방식을 중심으로 설명한다.
+
+### [This solo builder runs 24/7 local AI on his own hardware | Alex Finn](https://www.lennysnewsletter.com/p/this-solo-builder-runs-247-local)
+Lenny's Newsletter · Mon, 13 Ju
+
+- Alex Finn은 5대의 컴퓨터를 활용하여 24시간 연중무휴 로컬 AI 시스템을 구축했습니다.
+- Claude Code를 이용한 빌드 및 리뷰 루프를 통해 수면 중에도 기능 개발이 이루어집니다.
+- 무제한 로컬 AI 사용이 월 20달러 구독 서비스보다 우월하다는 점을 강조합니다.
+- 해당 시스템은 개인 하드웨어에서 직접 운영됩니다.
+- Alex Finn은 Lenny's Newsletter에서 이 시스템에 대해 자세히 설명했습니다.
+
+## AI 정책 및 시장 동향
+AI 규제, 정부 정책, 그리고 AI 산업의 수익화 및 기업 간 경쟁 구도를 분석합니다.
 
 ### [얼마나 규제가 싫은지 감도안옴](https://www.youtube.com/shorts/m9PV55tg9pU)
 조코딩 · 2026-07-07
@@ -195,14 +207,14 @@ TTimesTV · 2026-07-03
 - VVIP 멤버십 후원에 감사하며, 후원한 멤버들의 이름이 언급되었습니다.
 - 콘텐츠는 AI, 오픈AI, 규제, 트럼프와 관련된 해시태그를 포함하고 있습니다.
 
-### [중국이 이걸 해냈다고???](https://www.youtube.com/shorts/fwiDNd2oe3c)
-조코딩 · 2026-07-09
+### [기술부채보다 위험한 AI 인지부채 (박종천 지란지교소프트 CAIO)](https://www.youtube.com/watch?v=fwdIXO1DoTo)
+TTimesTV · 2026-07-08
 
-- '조코딩' 채널은 코딩 학습을 위한 자료를 https://jocoding.net/ 에서 제공한다.
-- 채널은 VVIP 멤버십 후원을 받고 있으며, 후원자 명단(그림자그림자, 차딩Chading TV 등 15명)을 공개하며 감사를 표했다.
-- VVIP 멤버십 후원 참여는 https://www.youtube.com/@jocoding/join 링크를 통해 가능하다.
-- 해당 영상은 중국의 AI 기술 관련 성과에 대한 놀라움을 표현하는 내용을 담고 있다.
-- 영상의 주요 해시태그는 #ai, #중국, #엔비디아 이다.
+- 미국의 '페이블' 모델 수출 금지 사태로 인해 앤트로픽 최신 모델 사용에 제약이 발생했으며, 중국 AI 모델이 대안으로 주목받았습니다.
+- 이러한 상황은 여러 국가 및 기업에게 AI 종속 문제와 'AI 인지부채'에 대한 경각심을 일깨워주었습니다.
+- 'AI 인지부채'는 작동 원리를 모른 채 AI에 과도하게 의존할 경우 기업 운명에 부정적인 영향을 미칠 수 있습니다.
+- 30년 경력의 개발자이자 지란지교소프트 CAIO인 박종천은 AI 인지부채 해결 방안을 제시합니다.
+- 영상은 AI 레버리지 강좌, 앤트로픽 수출 통제, AI 의존도 리스크, 중국 AI 모델 규제, 암묵지 데이터화, 코딩 에이전트, 인지 부채 위험성, 토큰 생산 전쟁 등의 내용을 다룹니다.
 
 ### [생각만 하면 텍스트가 써진다는 메타의 새로운 발표](https://www.youtube.com/shorts/J5b5jO5I5_8)
 조코딩 · 2026-07-09
@@ -222,20 +234,7 @@ SaaStr · Fri, 10 Ju
 - AI 제품 개발에 참여하는 소프트웨어 기업 경영진의 설문 조사가 이 보고서의 핵심입니다.
 - 이는 AI 기술 발전의 초점이 '작동'에서 '수익 창출'로 이동했음을 시사합니다.
 
-### [20VC x SaaStr: Washington Lifts the Fable 5 Ban, Sam Floats Handing the Government 5%, and Why Every Tech Giant Is Racing to Become the Next IBM](https://www.saastr.com/20vc-x-saastr-washington-lifts-the-fable-5-ban-sam-floats-handing-the-government-5-and-why-every-tech-giant-is-racing-to-become-the-next-ibm/)
-SaaStr · Thu, 09 Ju
-
-- 워싱턴이 Fable 5 금지를 해제했으며, 이는 향후 모델 출시를 위한 구조화된 사전 승인 절차의 의미를 시사합니다.
-- OpenAI는 모든 프런티어 연구소들이 미국 정부에 5%를 할당하는 아이디어를 제안했습니다.
-- 주요 기술 기업들이 차세대 IBM이 되기 위해 경쟁하고 있습니다.
-
 ## 짚어둘 단신
-- [아이폰 18 해킹 유출에서 드러난 사실… 미국판만 퀄컴 모뎀 쓴다? 애플이 아직 못 넘은 mmWave 5G 기술](https://www.youtube.com/watch?v=U2aKDEsGBYg) · 안될공학 · 2026-07-04
-- [EP 100. Claude Mythos, Fable 5, 그리고 다음 국면은?](https://www.youtube.com/watch?v=kh03_wOGvJ0) · 노정석 · 2026-06-27
-- [EP 99. Opus 4.8 출시, 요즘 AI 경쟁과 인간의 일](https://www.youtube.com/watch?v=5CaOXPstq_8) · 노정석 · 2026-06-27
-- [EP 97. AI Psychosis 시대의 사람들](https://www.youtube.com/watch?v=cUc8iK6LG0k) · 노정석 · 2026-06-27
-- [명함 자동화](https://www.youtube.com/shorts/fJS2SnpRSwA) · 윤자동 · 2026-06-27
-- [전세계 기업들을 관찰한 OpenAI 내부자가 알려주는 진짜 AX와 AI Native 되는 방법](https://www.youtube.com/watch?v=0l5oJsjCPus) · 조코딩 · 2026-06-27
 - [애플 가격 역대급 인상이… 메모리 기업 탓? 마이크론, 뼈 있는 한 마디](https://www.youtube.com/watch?v=0GYTiMg41KE) · 안될공학 · 2026-06-27
 - [GLM 5.2: why I’m replacing Opus in Claude Code with this new model](https://www.lennysnewsletter.com/p/glm-52-why-im-replacing-opus-in-claude) · Lenny's Newsletter · Wed, 24 Ju
 - [EP 96. LLM 추론 인프라와 토큰 경제학](https://www.youtube.com/watch?v=V_Z-ydQJ54c) · 노정석 · 2026-06-27
@@ -253,7 +252,14 @@ SaaStr · Thu, 09 Ju
 - [🎙️ How I AI: GLM-5.2 review & How Gusto built a new product line with Claude Code](https://www.lennysnewsletter.com/p/how-i-ai-glm-52-review-and-how-gusto) · Lenny's Newsletter · Mon, 29 Ju
 - [엔비디아의 800VDC 도입이 의미하는 것](https://www.youtube.com/shorts/CTNWEzFH2mk) · 안될공학 · 2026-07-01
 - [토큰맥싱 비판에 대한 OpenAI 최고 연구자의 답변은?](https://www.youtube.com/shorts/4tZKFu0NTRg) · 안될공학 · 2026-07-01
-- [One Way to Build a Great AI Agent: Just Start With a Dashboard, Then Add the Agent](https://www.saastr.com/one-way-to-build-a-great-ai-agent-just-start-with-a-dashboard-then-add-the-agent/) · SaaStr · Sat, 11 Ju
+- [지난주에 클로드를 삭제했어.](https://www.youtube.com/watch?v=PzqRRYHHpbw) · 노마드 코더 · 2026-05-07
+- [Sonnet 5 review: I ran 64 generations to find out if it's worth it](https://www.lennysnewsletter.com/p/sonnet-5-review-i-ran-64-generations) · Lenny's Newsletter · Tue, 30 Ju
+- [메타가 DRAM 재활용 칩을 냈습니다... 메모리 수요 줄어들까? HBM 다음은 CXL?](https://www.youtube.com/watch?v=PDPcZ8ERWe4) · 안될공학 · 2026-07-02
+- [우린 끝났어. 우린 대체될 거야.](https://www.youtube.com/watch?v=Yunpwh1Dxcg) · 노마드 코더 · 2026-05-16
+- [글로벌 빅테크가 눈독 들이는 K-데이터의 위력 (조용민 언바운드랩스 대표, 이용권 고릴라PE 파트너)](https://www.youtube.com/watch?v=iRm8SQvm38Y) · TTimesTV · 2026-07-03
+- [충격적인 메타의 한 마디... GPU 가 남는다? 메타의 클라우드 사업 진출의 진짜 의미](https://www.youtube.com/watch?v=J_GYrqt5xr4) · 안될공학 · 2026-07-03
+- [왜 실리콘 포토닉스가 AI 반도체의 2막을 여는가 (박영준 라이팩 CTMO)](https://www.youtube.com/watch?v=jN29A92uusU) · TTimesTV · 2026-07-03
+- [아이폰 18 해킹 유출에서 드러난 사실… 미국판만 퀄컴 모뎀 쓴다? 애플이 아직 못 넘은 mmWave 5G 기술](https://www.youtube.com/watch?v=U2aKDEsGBYg) · 안될공학 · 2026-07-04
 
 ## ✍️ 내 메모
 <!-- memo:start -->
@@ -261,4 +267,4 @@ SaaStr · Thu, 09 Ju
 <!-- memo:end -->
 
 ## 관련 주제
-[[Claude]] · [[GPU]]
+[[Claude]] · [[GPU]] · [[OpenAI]] · [[Meta]]
