@@ -235,6 +235,54 @@ def test_url_in_code_not_linked():
     assert "<a " not in html
 
 
+# --- B: '짚어둘 단신' 접이식(<details>) ---
+
+def test_briefs_section_collapsed_into_details():
+    md = (
+        "## 테마\n설명\n\n"
+        "## 짚어둘 단신\n"
+        "- [a](http://a) · src · 2026-06-27\n"
+        "- [b](http://b) · src · 2026-06-28\n"
+        "- [c](http://c) · src · 2026-06-29\n\n"
+        "## 관련 주제\n[[Claude]]\n"
+    )
+    html = render.render_markdown(md)
+    assert '<details class="briefs">' in html
+    assert "<summary>" in html
+    assert "짚어둘 단신 (3건)" in html          # 항목 수 표기
+    assert "open" not in html.split("<summary>")[0].split('class="briefs"')[1]
+    # 링크는 그대로 살아있어야
+    assert '<a href="http://a">a</a>' in html
+    # 다른 섹션(테마·관련 주제)은 details 밖
+    assert "</details>" in html
+    assert html.index("</details>") < html.index("관련 주제")
+
+
+def test_briefs_details_not_default_open():
+    md = "## 짚어둘 단신\n- [a](http://a) · src · 2026-06-27\n"
+    html = render.render_markdown(md)
+    assert '<details class="briefs">' in html
+    assert "<details open" not in html          # 기본 접힘
+
+
+def test_no_briefs_section_no_details():
+    md = "## 테마\n설명\n\n### [기사](http://a)\n출처 · 2026-06-27\n\n요약\n"
+    html = render.render_markdown(md)
+    assert "<details" not in html
+
+
+def test_briefs_details_survives_sanitize():
+    # nh3.clean이 <details>/<summary>를 제거하면 안 된다
+    md = "## 짚어둘 단신\n- [a](http://a) · src · 2026-06-27\n"
+    html = render.render_markdown(md)
+    assert "<details" in html and "<summary>" in html
+
+
+def test_briefs_css_present():
+    from web.app import BASE_CSS
+    assert ".briefs" in BASE_CSS
+
+
 # --- 카드 E: '오늘' 바로가기 + 이전/다음 ---
 
 def _fake_entries():

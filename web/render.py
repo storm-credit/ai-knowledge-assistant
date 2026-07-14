@@ -183,6 +183,30 @@ def _wrap_articles(html: str) -> str:
     return "".join(out)
 
 
+_BRIEFS_H2 = re.compile(r"<h2\b[^>]*>짚어둘 단신</h2>")
+
+
+def _collapse_briefs(html: str) -> str:
+    """'짚어둘 단신' h2 섹션을 기본 접힘 <details>로 감싼다.
+
+    그 h2부터 다음 h2(또는 문서 끝) 직전까지가 한 섹션이며, 섹션 내
+    ``<li`` 수를 세어 ``<summary>짚어둘 단신 (N건)</summary>``로 표기한다.
+    섹션이 없으면 원문 그대로 반환 — 다른 섹션은 건드리지 않는다.
+    """
+    m = _BRIEFS_H2.search(html)
+    if not m:
+        return html
+    nxt = html.find("<h2", m.end())
+    end = nxt if nxt != -1 else len(html)
+    body = html[m.end() : end]         # h2 태그 자체는 summary로 대체
+    n = body.count("<li")
+    block = (
+        f'<details class="briefs"><summary>짚어둘 단신 ({n}건)</summary>'
+        f"{body}</details>"
+    )
+    return html[: m.start()] + block + html[end:]
+
+
 def render_markdown(text: str) -> str:
     """Obsidian markdown -> HTML (wikilinks + callouts handled)."""
     text = _replace_wikilinks(text)
@@ -190,6 +214,7 @@ def render_markdown(text: str) -> str:
     text = _transform_callouts(text)
     html = _md.markdown(text, extensions=["extra", "sane_lists"])
     html = _wrap_articles(html)
+    html = _collapse_briefs(html)
     # 피드·LLM 요약에 섞여 들어온 raw HTML(<script>, onerror 등)을 허용목록으로 차단
     return nh3.clean(html, attributes=_ALLOWED_ATTRIBUTES, link_rel=None)
 

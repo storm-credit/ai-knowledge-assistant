@@ -118,6 +118,15 @@ h1.page{font-size:26px;margin:8px 0 4px;letter-spacing:-.3px}
 .doc pre{background:#12151c;border:1px solid var(--border);border-radius:10px;
   padding:14px 16px;overflow-x:auto;margin:10px 0}
 .doc pre code{background:none;border:none;padding:0;color:#d6dae2;font-size:13px;line-height:1.6}
+/* B: '짚어둘 단신' 접이식 — 기본 접힘, 요약은 클릭 가능 */
+.briefs{margin:12px 0}
+.briefs summary{cursor:pointer;color:var(--muted);font-size:14px;font-weight:650;
+  list-style:none;padding:8px 0;user-select:none}
+.briefs summary::-webkit-details-marker{display:none}
+.briefs summary::before{content:"▸ ";color:var(--accent)}
+.briefs[open] summary::before{content:"▾ "}
+.briefs summary:hover{color:var(--text)}
+.briefs ul{margin:4px 0 8px}
 .callout{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--accent);
   border-radius:10px;padding:14px 16px;margin:14px 0}
 .callout-title{font-weight:650;font-size:14px;margin-bottom:6px}
