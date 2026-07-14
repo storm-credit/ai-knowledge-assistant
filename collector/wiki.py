@@ -5,6 +5,10 @@ from .topics import TopicStore, write_pages, write_index
 from .classify import classify_item
 from .wikisynth import synthesize_structure, SYNTH_WINDOW
 
+# 주제당 항목 상한. 테마는 최근 25건(SYNTH_WINDOW)으로 만들어지므로 50 유지 시
+# 테마에 남을 최근 항목은 보존되고 오래된 단신만 자동 정리된다.
+TOPIC_MAX_ITEMS = 50
+
 def run_wiki(items_store: str = "state/items.jsonl",
              classified_state: str = "state/classified.json",
              topics_path: str = "state/topics.json",
@@ -31,6 +35,11 @@ def run_wiki(items_store: str = "state/items.jsonl",
         for tp in topics:
             store.add_item(tp, it)
         seen.mark_seen(it.id)
+
+    # 합성/렌더 전에 주제별 상한 적용: 오래된 단신만 자르고 테마용 최근 항목은 보존.
+    # topics.json의 주제별 items만 자른다(items.jsonl 원본은 그대로).
+    for tp in store.topic_names():
+        store.prune_topic(tp, max_items=TOPIC_MAX_ITEMS)
 
     for tp in store.topic_names():
         needs = store.needs_resynth(tp, resynth_threshold)

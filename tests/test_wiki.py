@@ -258,6 +258,60 @@ def test_run_wiki_windowed_synth_maps_indexes_to_recent_items(tmp_path):
     assert d["orphans"] == ["id29"]                   # 번호 25 = 최신 항목
 
 
+def test_run_wiki_caps_topic_at_50_recent_items(tmp_path):
+    # (A/#23) 60건 넣으면 run_wiki 후 주제 items가 50건으로 줄고, 최근 50건만 남는다
+    from collector.topics import TopicStore
+    from collector.wiki import TOPIC_MAX_ITEMS
+    assert TOPIC_MAX_ITEMS == 50
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk(f"id{i:02d}", f"글{i}", categories=["AI"]) for i in range(60)],
+                 items_store)
+    def fake_synth(topic, items):
+        return {"overview": "개요", "themes": [], "orphans": [], "related": []}
+    run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+             topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+             classify=lambda it: it.categories, synthesize=fake_synth, resynth_threshold=1)
+    ids = [it["id"] for it in TopicStore(str(tmp_path/"t.json")).data["AI"]["items"]]
+    assert len(ids) == 50                         # 60 → 50으로 절삭
+    assert ids[0] == "id10" and ids[-1] == "id59" # 오래된 10건 빠지고 최근 50건 보존
+
+
+def test_run_wiki_prune_preserves_theme_refs(tmp_path):
+    # (A) prune 후에도 테마 item_ids가 살아있는 최근 항목만 참조(끊긴 참조 없음)
+    from collector.topics import TopicStore
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk(f"id{i:02d}", f"글{i}", categories=["AI"]) for i in range(60)],
+                 items_store)
+    def fake_synth(topic, items):
+        # 윈도우(최근 25건) 기준 번호 1(=id35), 25(=id59)를 테마/orphan에 배치
+        return {"overview": "개요", "themes": [{"name": "T", "intro": "", "indexes": [1]}],
+                "orphans": [25], "related": []}
+    run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+             topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+             classify=lambda it: it.categories, synthesize=fake_synth, resynth_threshold=1)
+    d = TopicStore(str(tmp_path/"t.json")).data["AI"]
+    kept = {it["id"] for it in d["items"]}
+    assert d["themes"][0]["item_ids"] == ["id35"]          # 최근 항목 참조 보존
+    assert all(i in kept for i in d["themes"][0]["item_ids"])  # 끊긴 참조 없음
+    assert all(i in kept for i in d["orphans"])
+
+
+def test_run_wiki_no_prune_when_under_cap(tmp_path):
+    # (A) 50건 이하 주제는 prune이 no-op — 항목 그대로
+    from collector.topics import TopicStore
+    items_store = str(tmp_path/"items.jsonl")
+    append_items([mk(f"id{i:02d}", f"글{i}", categories=["AI"]) for i in range(30)],
+                 items_store)
+    def fake_synth(topic, items):
+        return {"overview": "개요", "themes": [], "orphans": [], "related": []}
+    run_wiki(items_store=items_store, classified_state=str(tmp_path/"c.json"),
+             topics_path=str(tmp_path/"t.json"), out_dir=str(tmp_path/"topics"),
+             classify=lambda it: it.categories, synthesize=fake_synth, resynth_threshold=1)
+    ids = [it["id"] for it in TopicStore(str(tmp_path/"t.json")).data["AI"]["items"]]
+    assert len(ids) == 30
+    assert ids[0] == "id00" and ids[-1] == "id29"
+
+
 def test_run_wiki_empty_classify_not_marked_seen(tmp_path):
     # (c) 분류가 빈 리스트 → seen 미마킹 (영구 유실 방지, 버그 픽스)
     import json
