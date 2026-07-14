@@ -99,3 +99,16 @@ def test_corrupt_topics_json_backs_up_and_starts_empty(tmp_path):
     assert s.add_item("AI 에이전트", mk("a", "조코딩", "글a")) is True
     s.save()
     assert TopicStore(str(path)).topic_names() == ["AI 에이전트"]
+
+
+def test_prune_topic_recomputes_sources(tmp_path):
+    # 리뷰 #2: 절삭 후 sources가 남은 항목 기준으로 재계산돼야 (과대 표기 방지)
+    s = TopicStore(str(tmp_path / "t.json"))
+    for n in range(3):
+        s.add_item("T", mk(f"old{n}", "옛출처", f"g{n}"))   # 오래된 항목 = '옛출처'
+    for n in range(3):
+        s.add_item("T", mk(f"new{n}", "새출처", f"h{n}"))   # 최근 항목 = '새출처'
+    assert set(s.data["T"]["sources"]) == {"옛출처", "새출처"}
+    s.prune_topic("T", max_items=3)                          # 오래된 3건(옛출처) 잘림
+    assert [it["id"] for it in s.data["T"]["items"]] == ["new0", "new1", "new2"]
+    assert s.data["T"]["sources"] == ["새출처"]              # 옛출처는 제거됨

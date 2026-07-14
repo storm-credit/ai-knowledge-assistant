@@ -324,3 +324,21 @@ def test_daily_prev_next_nav(monkeypatch):
     body = client.get("/daily/2026-06-30").get_data(as_text=True)
     assert "2026-07-01 →" in body
     assert "←" not in body
+
+
+def test_collapse_briefs_ignores_theme_named_like_briefs():
+    # 리뷰 #1: LLM이 테마명을 '짚어둘 단신'으로 지어도, 기사 카드(h3) 있는 테마는 접지 않고
+    # 순수 링크 목록인 진짜 단신만 접는다.
+    md = (
+        "## 짚어둘 단신\n"                                   # LLM 테마명 (기사 카드 있음)
+        "### [기사X](http://x)\n출처 · 2026-07-01\n\n요약\n\n"
+        "## 짚어둘 단신\n"                                   # 진짜 단신 (링크 목록)
+        "- [a](http://a) · src · 2026-07-01\n"
+        "- [b](http://b) · src · 2026-07-01\n"
+    )
+    html = render.render_markdown(md)
+    assert '<div class="article">' in html                  # 테마 기사 카드는 살아있음
+    assert '<details class="briefs">' in html                # 진짜 단신만 접힘
+    assert "짚어둘 단신 (2건)" in html
+    # 기사 카드가 details 안으로 숨지 않았는지: details 앞에 article이 있어야
+    assert html.index('<div class="article">') < html.index('<details class="briefs">')

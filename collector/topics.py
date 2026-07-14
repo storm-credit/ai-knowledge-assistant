@@ -76,6 +76,9 @@ class TopicStore:
         for th in t.get("themes", []):
             th["item_ids"] = [i for i in th.get("item_ids", []) if i in kept]
         t["orphans"] = [i for i in t.get("orphans", []) if i in kept]
+        # 남은 항목 기준으로 sources 재계산 — 잘려나간 출처가 '📌 N개 출처'에 남지 않게
+        remaining = {it["source"] for it in t["items"]}
+        t["sources"] = [s for s in t.get("sources", []) if s in remaining]
         return dropped
 
     def save(self) -> None:

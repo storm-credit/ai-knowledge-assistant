@@ -191,20 +191,23 @@ def _collapse_briefs(html: str) -> str:
 
     그 h2부터 다음 h2(또는 문서 끝) 직전까지가 한 섹션이며, 섹션 내
     ``<li`` 수를 세어 ``<summary>짚어둘 단신 (N건)</summary>``로 표기한다.
-    섹션이 없으면 원문 그대로 반환 — 다른 섹션은 건드리지 않는다.
+    LLM이 테마명을 우연히 '짚어둘 단신'으로 지을 수 있으므로, **순수 링크 목록**
+    (``<li`` 있고 기사 카드 ``<h3`` 없음)인 진짜 단신 섹션만 접는다.
+    해당 섹션이 없으면 원문 그대로 반환 — 다른 섹션은 건드리지 않는다.
     """
-    m = _BRIEFS_H2.search(html)
-    if not m:
-        return html
-    nxt = html.find("<h2", m.end())
-    end = nxt if nxt != -1 else len(html)
-    body = html[m.end() : end]         # h2 태그 자체는 summary로 대체
-    n = body.count("<li")
-    block = (
-        f'<details class="briefs"><summary>짚어둘 단신 ({n}건)</summary>'
-        f"{body}</details>"
-    )
-    return html[: m.start()] + block + html[end:]
+    for m in _BRIEFS_H2.finditer(html):
+        nxt = html.find("<h2", m.end())
+        end = nxt if nxt != -1 else len(html)
+        body = html[m.end() : end]     # h2 태그 자체는 summary로 대체
+        if "<li" not in body or "<h3" in body:
+            continue                   # 테마 섹션(기사 카드)·빈 섹션은 건너뜀
+        n = body.count("<li")
+        block = (
+            f'<details class="briefs"><summary>짚어둘 단신 ({n}건)</summary>'
+            f"{body}</details>"
+        )
+        return html[: m.start()] + block + html[end:]
+    return html
 
 
 def render_markdown(text: str) -> str:
