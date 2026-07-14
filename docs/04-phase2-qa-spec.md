@@ -1,8 +1,38 @@
-# 04. 2단계 요구사항 정의서 — Q&A 웹 화면  ⏸️ 보류(DEFERRED)
+# 04. 2단계 요구사항 정의서 — Q&A 웹 화면  🔄 구현 중 (2026-07-14 착수)
 
-> **상태: 보류.** 위키는 옵시디언으로 이미 해결돼서, Q&A는 나중에 필요해지면 이 문서대로 진행.
-> PM 단계: 요구사항 정의 (2단계, 설계 완료·구현 보류). 작성 2026-06-27.
-> 1단계(수집·요약·저장)는 가동 중. 이건 그 위에 **질문/검색(Q&A)**을 얹는다.
+> **상태: 구현 중.** 원안(2026-06-27, 아래 §1~6)은 그대로 유효하되, 그동안 아키텍처가
+> 발전(web/ Flask 앱, collector/llm.py 게이트웨이+예산, render.search_notes)해서
+> **아래 §7 "현대화 구현 계약"대로** 기존 앱에 얹는다.
+
+## 7. 현대화 구현 계약 (2026-07-14)
+
+- **위치:** 별도 collector/web.py 대신 **기존 web/app.py에 `/ask` 라우트** 추가. 순수 로직은 `collector/qa.py`.
+- **LLM:** `collector/llm.py`의 `complete_text`(예산·서킷브레이커·키로테이션·503 재시도 내장) 사용. 질문당 1콜, 예산 부족 시 안내.
+- **검색:** 키워드(벡터DB 없음). topics+daily+learn 노트 스캔. `render.search_notes` 패턴 재사용/차용.
+
+### 인터페이스 (양 계층이 맞출 계약)
+```python
+# collector/qa.py
+QA_PROMPT: str   # 근거에만 기반·출처 인용·없으면 "근거 없음" 정직하게·지어내기 금지
+@dataclass
+class QAChunk: kind: str; name: str; title: str; href: str; text: str
+def retrieve(question, *, topics_dir, daily_dir, learn_dir, limit=8) -> list[QAChunk]  # LLM 0콜
+def answer(question, *, client=None, clients=None, budget=None, model="gemini-2.5-flash-lite") -> dict
+    # 반환: {"answer": str, "sources": [{"title","href","kind"}], "grounded": bool}
+    # 청크 0개 → {"answer":"관련 근거를 찾지 못했습니다.", "sources":[], "grounded":False} (LLM 0콜)
+    # 예산 소진(QuotaExhausted) → 그대로 전파(라우트가 안내 문구로 처리)
+```
+
+### 웹 `/ask`
+- GET `/ask` : 질문 입력창(+선택: 기간). nav에 "질문" 탭.
+- POST(or GET `?q=`) : `qa.answer(q)` → 답변 + 출처 링크 목록 렌더. 오토이스케이프(XSS 안전).
+
+### 성공 기준 (eval)
+- 관련 질문 → 근거 기반 한국어 답변 + 출처 링크 ≥1. 무관 질문 → "근거 없음" 정직.
+- `pytest -m llm` 골든 1~2건(예: "이번주 메모리 시장 동향?" → 근거·출처 존재).
+
+### 스코프 밖 (YAGNI)
+벡터DB 의미검색, 대화 히스토리·멀티턴, 공개 배포, 멀티유저.
 
 ## 1. 목적 & 범위
 
