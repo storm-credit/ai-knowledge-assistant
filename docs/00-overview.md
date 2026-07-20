@@ -22,7 +22,7 @@
 전문가 패널 작업계획서 (13)     ✅ Batch 1 완료 (쿼터예산·내구성·보안·웹, pytest 141)
 적용형 학습 노트 (14)          ✅ 빌드 (collector learn·웹 /learn·eval 골든셋 2/2)
 모델 doc 변경 감시기 ⭐         ✅ 빌드 (Gemini·OpenAI, 매일 감지·요약, /models)
-Q&A(RAG) 웹                    ⏸️ 보류 — 승격 조건: 노트 30일치 축적
+Q&A(RAG) 웹                    ✅ 빌드 (/ask, 근거기반+출처인용, 리뷰 6건 수정)
 ```
 > 로드맵 순서(전문가 패널 판정): **쿼터 → 적용형 학습 노트 → doc 감시기 → Q&A**. 근거는 [`13`](13-expert-panel-workplan.md).
 
@@ -33,7 +33,7 @@ Q&A(RAG) 웹                    ⏸️ 보류 — 승격 조건: 노트 30일치
 | [`01`](01-concept-and-architecture.md) 컨셉·아키텍처 | 전체 구조 | ✅ 확정 |
 | [`02`](02-requirements-spec.md) 요구사항(1단계) | 수집·요약 | ✅ 확정 |
 | [`03`](03-implementation-plan.md) 구현계획(수집기) | collector | ✅ 가동 중 |
-| [`04`](04-phase2-qa-spec.md) Q&A 웹 spec | 질문/검색 | ⏸️ 보류 |
+| [`04`](04-phase2-qa-spec.md) Q&A 웹 | 질문→근거답변+출처 | ✅ 빌드 (/ask) |
 | [`05`](05-wiki-v1-spec.md)·[`06`](06-wiki-v1-plan.md) 위키 v1 | 주제 자동분류 | ✅ 가동 중 |
 | [`07`](07-wiki-v2-spec.md) 위키 v2 spec | 내용+관리+**정리형 최종형식** | ✅ |
 | [`08`](08-wiki-v2.0-plan.md) v2.0 plan | 내용 표시 | ✅ 빌드(대체됨) |
