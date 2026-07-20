@@ -11,6 +11,8 @@ from urllib.parse import quote
 from flask import Flask, abort, render_template_string, request
 
 from web import render
+from collector import qa
+from collector.llm import QuotaExhausted
 
 app = Flask(__name__)
 
@@ -135,6 +137,16 @@ hr{border:none;border-top:1px solid var(--border);margin:24px 0}
 /* 데일리 이전/다음 내비 */
 .daynav{display:flex;justify-content:space-between;gap:12px;margin-top:32px;
   padding-top:16px;border-top:1px solid var(--border);font-size:14px}
+/* Q&A */
+.askform{display:flex;gap:8px;margin:0 0 24px}
+.askform input{flex:1;background:var(--panel-2);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);font-size:15px;padding:11px 14px;outline:none}
+.askform input:focus{border-color:var(--accent)}
+.askform button{background:var(--accent);color:#0f1115;border:none;border-radius:10px;
+  font-size:14px;font-weight:700;padding:0 18px;cursor:pointer}
+.answer{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--accent);
+  border-radius:12px;padding:16px 18px;white-space:pre-wrap;line-height:1.7;font-size:15px}
+.src-h{color:var(--muted);font-size:13px;font-weight:700;margin:22px 0 4px;letter-spacing:.3px}
 """
 
 LAYOUT = """<!doctype html>
@@ -145,7 +157,7 @@ LAYOUT = """<!doctype html>
 <body>
 <div class="topbar"><div class="inner">
   <a class="brand" href="/">🧠 AI 지식 비서 <span>wiki</span></a>
-  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="/learn">학습노트</a><a href="/models">모델</a><a href="{{ today_href }}">오늘</a></nav>
+  <nav class="nav"><a href="/">주제</a><a href="/daily">데일리</a><a href="/learn">학습노트</a><a href="/models">모델</a><a href="/ask">질문</a><a href="{{ today_href }}">오늘</a></nav>
   <form class="searchbox" action="/search" method="get">
     <input type="search" name="q" placeholder="검색" value="{{ q }}" aria-label="노트 검색">
   </form>
@@ -307,6 +319,53 @@ def model_update(date):
     heading, body = result
     content = render_template_string(DOC, heading=heading, sub="", body=body)
     return _page(heading, content)
+
+
+# Q&A (docs/04) — 질문/답변·출처. 질문·답변 모두 오토이스케이프(|safe 금지) XSS 안전.
+ASK = """
+<h1 class="page">💬 질문</h1>
+<div class="sub">쌓인 노트(주제·데일리·학습노트)에 근거해 답합니다. 근거 없으면 정직하게 "없음".</div>
+<form class="askform" action="/ask" method="get">
+  <input type="text" name="q" value="{{ q }}" placeholder="예: 최근 메모리 시장 동향 정리해줘" aria-label="질문" autofocus>
+  <button type="submit">질문</button>
+</form>
+{% if q %}
+  {% if error %}
+    <div class="sub">{{ error }}</div>
+  {% else %}
+    <div class="answer">{{ answer }}</div>
+    {% if sources %}
+    <div class="src-h">근거 출처 (답변의 [n]에 대응)</div>
+    <ul class="daily-list">
+    {% for s in sources %}
+      <li><a href="{{ s.href }}"><span class="d">[{{ s.n }}] {{ s.kind }}</span><span>{{ s.title }}</span></a></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  {% endif %}
+{% endif %}
+"""
+
+
+@app.route("/ask")
+def ask():
+    q = request.args.get("q", "").strip()
+    answer = error = None
+    sources = []
+    if q:
+        try:
+            result = qa.answer(q, topics_dir=render.TOPICS_DIR,
+                               daily_dir=render.DAILY_DIR, learn_dir=render.LEARN_DIR)
+            answer = result["answer"]
+            sources = result["sources"]
+        except QuotaExhausted:
+            error = "오늘 무료 쿼터를 다 써서 지금은 답할 수 없어요. 잠시 후 다시 시도해 주세요."
+        except Exception as e:            # 개별 실패 격리 — 앱이 죽지 않게
+            import traceback, sys
+            traceback.print_exc(file=sys.stderr)   # 상세는 서버 로그에만
+            error = "답변 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."
+    content = render_template_string(ASK, q=q, answer=answer, sources=sources, error=error)
+    return _page("질문", content)
 
 
 # #19 노트 전체 검색 — 스니펫·쿼리 echo 모두 오토이스케이프(|safe 금지)로 XSS 안전
